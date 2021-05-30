@@ -50,7 +50,7 @@
   <ItemGroup>
     <ProjectReference Include="..\nanoFramework.OpenThread\nanoFramework.OpenThread.nfproj" />
   </ItemGroup>
-  <Import Project="..\..\..\github-vgolovanov\CoAPDotNet\CoAPDotNet\CoAPDotNet.projitems" Label="Shared" />
+  <Import Project="..\CoAPDotNet\CoAPDotNet\CoAPDotNet.projitems" Label="Shared" />
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>
     <ProjectCapabilities>

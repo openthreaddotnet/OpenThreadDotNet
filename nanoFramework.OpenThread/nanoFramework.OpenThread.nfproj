@@ -57,7 +57,7 @@
       <SpecificVersion>True</SpecificVersion>
     </Reference>
   </ItemGroup>
-  <Import Project="..\..\OpenThreadDotNet\OpenThreadDotNet\OpenThreadDotNet.projitems" Label="Shared" />
+  <Import Project="..\OpenThreadDotNet\OpenThreadDotNet\OpenThreadDotNet.projitems" Label="Shared" />
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>
     <ProjectCapabilities>
