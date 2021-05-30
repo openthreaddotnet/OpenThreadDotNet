@@ -1,10 +1,15 @@
-﻿using nanoFramework.OpenThread.Net.IPv6;
-using System;
+﻿using System;
 using System.Threading;
 
-
+#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.Net.IPv6;
 namespace nanoFramework.OpenThread.Net.Sockets
 {
+#else
+using dotNETCore.OpenThread.Net.IPv6;
+namespace dotNETCore.OpenThread.Net.Sockets
+{
+#endif
     public enum SelectMode
     {
         SelectRead = 0,

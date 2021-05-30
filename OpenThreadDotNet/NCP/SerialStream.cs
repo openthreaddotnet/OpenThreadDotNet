@@ -1,8 +1,15 @@
 ﻿using System;
 using System.IO.Ports;
 
+#if (NANOFRAMEWORK_1_0)
+
 namespace nanoFramework.OpenThread.NCP
+{ 
+#else
+
+namespace dotNETCore.OpenThread.NCP
 {
+#endif
     internal class SerialStream : IStream
     {
         private SerialPort serialPort;

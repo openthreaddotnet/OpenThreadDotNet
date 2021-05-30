@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Collections;
 
+#if (NANOFRAMEWORK_1_0)
+
 namespace nanoFramework.OpenThread.NCP
+{ 
+#else
+
+namespace dotNETCore.OpenThread.NCP
 {
+#endif
     internal static class ArrayExtensions
     {
        

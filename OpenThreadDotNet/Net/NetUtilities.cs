@@ -1,11 +1,15 @@
-﻿using nanoFramework.OpenThread.NCP;
-using nanoFramework.OpenThread.Net.Sockets;
-using nanoFramework.OpenThread.Spinel;
-using System;
+﻿using System;
 using System.Collections;
 
+#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.Spinel;
 namespace nanoFramework.OpenThread.Net
+{ 
+#else
+using dotNETCore.OpenThread.Spinel;
+namespace dotNETCore.OpenThread.Net
 {
+#endif
     internal static class NetUtilities
     {
         /// <summary>

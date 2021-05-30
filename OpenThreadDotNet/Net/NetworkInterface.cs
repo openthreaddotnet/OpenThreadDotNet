@@ -1,10 +1,19 @@
-﻿using nanoFramework.OpenThread.Net.IPv6;
+﻿using System.Collections;
+
+#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.Net.IPv6;
 using nanoFramework.OpenThread.Net.Lowpan;
 using nanoFramework.OpenThread.Net.Sockets;
-using System.Collections;
-
 namespace nanoFramework.OpenThread.Net
+{ 
+#else
+using dotNETCore.OpenThread.Net.IPv6;
+using dotNETCore.OpenThread.Net.Lowpan;
+using dotNETCore.OpenThread.Net.Sockets;
+
+namespace dotNETCore.OpenThread.Net
 {
+#endif
     internal static class NetworkInterface
     {
         private static ushort currenEphemeraltPort = 0xC000;

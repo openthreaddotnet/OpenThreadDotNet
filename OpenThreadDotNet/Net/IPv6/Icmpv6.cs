@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Threading;
-using nanoFramework.OpenThread.Net.Sockets;
 
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.IPv6
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.IPv6
 {
+#endif
     public static class Icmpv6
     {     
         private static DateTime pingStart;     

@@ -4,8 +4,14 @@
 // See LICENSE file in the project root for full license information.
 //
 
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.Sockets
 {
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.Sockets
+{
+#endif
     /// <summary>
     /// Specifies the protocols that the <see cref='System.Net.Sockets.Socket'/> class supports.
     /// </summary>

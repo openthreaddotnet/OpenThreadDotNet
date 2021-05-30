@@ -1,5 +1,11 @@
-﻿namespace nanoFramework.OpenThread.Net.Lowpan
+﻿#if (NANOFRAMEWORK_1_0)
+namespace nanoFramework.OpenThread.Net.Lowpan
 {
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.Lowpan
+{
+#endif
     public delegate void onLowpanEnabledChanged(bool value);
     public delegate void onLowpanConnectedChanged(bool value);
     public delegate void onLowpanUpChanged(bool value);

@@ -1,8 +1,12 @@
-﻿using nanoFramework.OpenThread.Net.Sockets;
-using System;
+﻿using System;
 
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.IPv6
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.IPv6
 {
+#endif
     /// <summary>
     /// Indicates the next level IPv6 protocol used in the pyaload of the IPv6 datagram.
     /// </summary>

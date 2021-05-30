@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.IPv6
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.IPv6
 {
+#endif
     /// <summary>
     /// Class representing the ICMPv6 echo request header. Since the ICMPv6 protocol is
     /// used for a variety of different functions other than "ping", this header is

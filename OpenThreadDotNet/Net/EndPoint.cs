@@ -4,9 +4,13 @@
 
 using System;
 
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net
+{ 
+#else
+namespace dotNETCore.OpenThread.Net
 {
-
+#endif
     // Generic abstraction to identify network addresses
 
     /// <devdoc>

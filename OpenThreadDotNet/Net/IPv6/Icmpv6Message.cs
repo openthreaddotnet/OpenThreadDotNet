@@ -1,5 +1,11 @@
-﻿namespace nanoFramework.OpenThread.Net.IPv6
+﻿
+#if (NANOFRAMEWORK_1_0)
+namespace nanoFramework.OpenThread.Net.IPv6
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.IPv6
 {
+#endif
     public interface Icmpv6Message
     {
         /// <summary>
@@ -18,3 +24,4 @@
 
     }
 }
+

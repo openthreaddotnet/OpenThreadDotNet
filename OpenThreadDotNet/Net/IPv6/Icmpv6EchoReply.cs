@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.IPv6
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.IPv6
 {
+#endif
     public class Icmpv6EchoReply : Icmpv6Message
     {
         private static int Icmpv6EchoReplyLength = 4;

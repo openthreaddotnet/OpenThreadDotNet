@@ -3,12 +3,14 @@
 // Portions Copyright (c) Microsoft Corporation.  All rights reserved.
 // See LICENSE file in the project root for full license information.
 //
-
+using System;
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net
+{ 
+#else
+namespace dotNETCore.OpenThread.Net
 {
-    using nanoFramework.OpenThread.Net.Sockets;
-    using System;
-
+#endif
     /// <summary>
     /// Provides simple domain name resolution functionality.
     /// </summary>

@@ -1,7 +1,14 @@
 ﻿using System;
 
+#if (NANOFRAMEWORK_1_0)
+
 namespace nanoFramework.OpenThread.NCP
+{ 
+#else
+
+namespace dotNETCore.OpenThread.NCP
 {
+#endif
     internal static class Utilities
     {
         internal static int GetUID(uint PropertyId, byte Tid)

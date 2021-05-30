@@ -1,7 +1,13 @@
 ﻿using System;
 
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.Sockets
 {
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.Sockets
+{
+#endif
     public class SocketException : Exception
     {        
         public SocketException(string message) : base(message)

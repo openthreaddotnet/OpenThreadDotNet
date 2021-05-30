@@ -1,10 +1,16 @@
 
-using nanoFramework.OpenThread.Spinel;
 using System;
 using System.Text;
 
+#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.Spinel;
 namespace nanoFramework.OpenThread.Net
+{ 
+#else
+using dotNETCore.OpenThread.Spinel;
+namespace dotNETCore.OpenThread.Net
 {
+#endif
 
     public class HardwareAddress{
     

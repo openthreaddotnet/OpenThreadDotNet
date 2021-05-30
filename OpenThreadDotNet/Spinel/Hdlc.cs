@@ -1,10 +1,14 @@
-﻿namespace nanoFramework.OpenThread.Spinel
-{
-    using nanoFramework.OpenThread.NCP;
-    using System;
-    using System.Collections;
-    using System.Globalization;
+﻿using System.Collections;
 
+#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.NCP;
+namespace nanoFramework.OpenThread.Spinel
+{ 
+#else
+using dotNETCore.OpenThread.NCP;
+namespace dotNETCore.OpenThread.Spinel
+{
+#endif             
     public class Hdlc
     {
         internal const int HdlcCrcResetValue = 0xffff;

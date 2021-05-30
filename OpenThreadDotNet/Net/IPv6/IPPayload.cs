@@ -1,6 +1,11 @@
 ﻿
+#if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.IPv6
+{ 
+#else
+namespace dotNETCore.OpenThread.Net.IPv6
 {
+#endif
     /// <summary>
     /// The interface of a protocol layer immediately above IPv6.
     /// Examples are transport protocols such as TCP and UDP, control

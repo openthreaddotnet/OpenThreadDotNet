@@ -1,5 +1,12 @@
-﻿namespace nanoFramework.OpenThread.Spinel
+﻿#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.NCP;
+namespace nanoFramework.OpenThread.Spinel
+{ 
+#else
+using dotNETCore.OpenThread.NCP;
+namespace dotNETCore.OpenThread.Spinel
 {
+#endif  
     public class SpinelEUI48
     {
 

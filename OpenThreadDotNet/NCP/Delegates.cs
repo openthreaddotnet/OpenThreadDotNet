@@ -1,7 +1,16 @@
-﻿using nanoFramework.OpenThread.Spinel;
+﻿#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.Spinel;
 
 namespace nanoFramework.OpenThread.NCP
+{ 
+
+#else
+
+using dotNETCore.OpenThread.Spinel;
+
+namespace dotNETCore.OpenThread.NCP
 {
+#endif
     /// <summary>
     /// 
     /// </summary>

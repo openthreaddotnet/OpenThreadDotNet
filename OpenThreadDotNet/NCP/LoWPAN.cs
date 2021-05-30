@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
+
+#if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.Net;
 using nanoFramework.OpenThread.Net.Lowpan;
-using nanoFramework.OpenThread.Net.Sockets;
 using nanoFramework.OpenThread.Spinel;
 
 namespace nanoFramework.OpenThread.NCP
+{ 
+#else
+using dotNETCore.OpenThread.Net;
+using dotNETCore.OpenThread.Net.Lowpan;
+using dotNETCore.OpenThread.Spinel;
+
+namespace dotNETCore.OpenThread.NCP
 {
+#endif
+
     public class LoWPAN : ILowpanInterface
     {
         private WpanApi wpanApi;

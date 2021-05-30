@@ -1,8 +1,12 @@
-﻿using nanoFramework.OpenThread.NCP;
+﻿#if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.Spinel;
-
 namespace nanoFramework.OpenThread.Net.Lowpan
 {
+#else
+using dotNETCore.OpenThread.Spinel;
+namespace dotNETCore.OpenThread.Net.Lowpan
+{
+#endif
     public interface ILowpanInterface
     {
         Capabilities[] Capabilities { get; }

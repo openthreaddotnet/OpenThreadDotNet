@@ -1,7 +1,12 @@
-﻿//using static nanoFramework.OpenThread.WpanApi;
+﻿#if (NANOFRAMEWORK_1_0)
 
 namespace nanoFramework.OpenThread.NCP
+{ 
+#else
+
+namespace dotNETCore.OpenThread.NCP
 {
+#endif
     /// <summary>
     /// Interface for serial data stream.
     /// </summary>

@@ -5,10 +5,16 @@
 
 using System;
 using System.Text;
-using nanoFramework.OpenThread.Net.Sockets;
 
+#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.Net.Sockets;
 namespace nanoFramework.OpenThread.Net
+{ 
+#else
+using dotNETCore.OpenThread.Net.Sockets;
+namespace dotNETCore.OpenThread.Net
 {
+#endif
     /// <devdoc>
     ///    <para>Provides an internet protocol (IP) address.</para>
     /// </devdoc>

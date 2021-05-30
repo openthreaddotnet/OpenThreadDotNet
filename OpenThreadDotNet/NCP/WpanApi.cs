@@ -1,10 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
+
+#if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.Spinel;
 
 namespace nanoFramework.OpenThread.NCP
+{ 
+
+#else
+
+using dotNETCore.OpenThread.Spinel;
+
+namespace dotNETCore.OpenThread.NCP
 {
+#endif
+
     internal class WpanApi
     {
         private const byte SpinelHeaderFlag = 0x80;
