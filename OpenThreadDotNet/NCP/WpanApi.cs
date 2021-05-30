@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-using OpenThreadDotNet.Spinel;
+using nanoFramework.OpenThread.Spinel;
 
-namespace OpenThreadDotNet
+namespace nanoFramework.OpenThread.NCP
 {
-    public class WpanApi
+    internal class WpanApi
     {
         private const byte SpinelHeaderFlag = 0x80;
         private IStream stream;
@@ -18,13 +18,13 @@ namespace OpenThreadDotNet
         static object rxLocker = new object();
         static object txLocker = new object();
 
-        public event FrameReceivedEventHandler FrameDataReceived;
+        internal event FrameReceivedEventHandler FrameDataReceived;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WpanApi"/> class.
         /// </summary>
         /// <param name="stream"></param>
-        public WpanApi(IStream stream)
+        internal WpanApi(IStream stream)
         {
             this.stream = stream;
             this.hdlcInterface = new Hdlc(this.stream);
@@ -34,17 +34,17 @@ namespace OpenThreadDotNet
         /// <summary>
         ///
         /// </summary>
-        public void Open()
+        internal void Open()
         {
             stream.Open();
         }
 
-        public void DoReset()
+        internal void DoReset()
         {
             Transact(SpinelCommands.CMD_RESET);
         }
 
-        public int DoLastStatus()
+        internal int DoLastStatus()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_LAST_STATUS);
 
@@ -58,7 +58,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public uint[] DoProtocolVersion()
+        internal uint[] DoProtocolVersion()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_PROTOCOL_VERSION);
 
@@ -72,7 +72,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public string DoNCPVersion()
+        internal string DoNCPVersion()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_NCP_VERSION);
 
@@ -86,7 +86,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public string DoVendor()
+        internal string DoVendor()
         {
             FrameData frameData= PropertyGetValue(SpinelProperties.PROP_VENDOR_ID);
 
@@ -101,7 +101,7 @@ namespace OpenThreadDotNet
         }
 
 
-        public uint DoInterfaceType()
+        internal uint DoInterfaceType()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_INTERFACE_TYPE);
 
@@ -115,7 +115,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public Capabilities[] DoCaps()
+        internal Capabilities[] DoCaps()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_CAPS);
 
@@ -130,7 +130,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public string DoNetworkName()
+        internal string DoNetworkName()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME);
 
@@ -144,7 +144,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoNetworkName(string networkName)
+        internal bool DoNetworkName(string networkName)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME, networkName, "U");
 
@@ -158,7 +158,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public byte DoNetRole()
+        internal byte DoNetRole()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_ROLE );
 
@@ -172,7 +172,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoNetRole(byte role)
+        internal bool DoNetRole(byte role)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_ROLE, role, "C");
 
@@ -186,7 +186,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public byte DoPowerState()
+        internal byte DoPowerState()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MCU_POWER_STATE);
 
@@ -200,7 +200,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoPowerState(byte powerstate)
+        internal bool DoPowerState(byte powerstate)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MCU_POWER_STATE, powerstate, "C");
 
@@ -214,7 +214,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public byte DoChannel()
+        internal byte DoChannel()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_PHY_CHAN);
 
@@ -228,7 +228,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoChannel(byte channel)
+        internal bool DoChannel(byte channel)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.PROP_PHY_CHAN, channel, "C");
 
@@ -242,7 +242,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public byte[] DoChannels()
+        internal byte[] DoChannels()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_PHY_CHAN_SUPPORTED);
 
@@ -256,7 +256,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public byte[] DoChannelsMask()
+        internal byte[] DoChannelsMask()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_MASK);
 
@@ -270,7 +270,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoChannelsMask(byte[] channels)
+        internal bool DoChannelsMask(byte[] channels)
         {        
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_MASK, channels, "D");
 
@@ -284,7 +284,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public ushort DoPanId()
+        internal ushort DoPanId()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_PANID);
 
@@ -298,7 +298,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoPanId(ushort panId)
+        internal bool DoPanId(ushort panId)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_PANID, panId, "S");
 
@@ -312,7 +312,7 @@ namespace OpenThreadDotNet
             }          
         }
 
-        public byte[] DoXpanId()
+        internal byte[] DoXpanId()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_XPANID);
 
@@ -326,7 +326,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoXpanId(byte[] xpanId)
+        internal bool DoXpanId(byte[] xpanId)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_XPANID, xpanId, "D");
 
@@ -340,7 +340,7 @@ namespace OpenThreadDotNet
             }
         }
         
-        public SpinelIPv6Address[] DoIPAddresses()
+        internal SpinelIPv6Address[] DoIPAddresses()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ADDRESS_TABLE);
 
@@ -354,7 +354,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public SpinelIPv6Address DoIPLinkLocal64()
+        internal SpinelIPv6Address DoIPLinkLocal64()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_LL_ADDR);
 
@@ -368,7 +368,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public SpinelEUI64 DoExtendedAddress()
+        internal SpinelEUI64 DoExtendedAddress()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_LADDR);
 
@@ -382,7 +382,7 @@ namespace OpenThreadDotNet
             }
         }
      
-        public SpinelEUI64 DoPhysicalAddress()
+        internal SpinelEUI64 DoPhysicalAddress()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_HWADDR);
 
@@ -398,7 +398,7 @@ namespace OpenThreadDotNet
 
 
 
-        public SpinelIPv6Address DoIPMeshLocal64()
+        internal SpinelIPv6Address DoIPMeshLocal64()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ML_ADDR);
 
@@ -412,7 +412,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoInterfaceConfig()
+        internal bool DoInterfaceConfig()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP);
             try
@@ -425,7 +425,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoInterfaceConfig(bool interfaceState)
+        internal bool DoInterfaceConfig(bool interfaceState)
         {            
             FrameData frameData;
 
@@ -448,7 +448,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoThread()
+        internal bool DoThread()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP );
             try
@@ -461,7 +461,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoThread(bool threadState)
+        internal bool DoThread(bool threadState)
         {
             FrameData frameData;
 
@@ -484,7 +484,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public byte[] DoMasterkey()
+        internal byte[] DoMasterkey()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_MASTER_KEY);
 
@@ -498,7 +498,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public bool DoMasterkey(byte[] masterKey)
+        internal bool DoMasterkey(byte[] masterKey)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_MASTER_KEY, masterKey, "D");
 
@@ -512,7 +512,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public uint DoPartitionId()
+        internal uint DoPartitionId()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_PARTITION_ID);
             try
@@ -525,12 +525,12 @@ namespace OpenThreadDotNet
             }
         }
 
-        public void DoScan(byte ScanState)
+        internal void DoScan(byte ScanState)
         {                       
             PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_STATE, ScanState, "C");                      
         }
        
-        public bool DoProperty_NET_REQUIRE_JOIN_EXISTING(bool State)
+        internal bool DoProperty_NET_REQUIRE_JOIN_EXISTING(bool State)
         {
             FrameData frameData;
 
@@ -553,7 +553,7 @@ namespace OpenThreadDotNet
             }
         }
 
-        public void DoSendData(byte[] frame, bool waitResponse=true)
+        internal void DoSendData(byte[] frame, bool waitResponse=true)
         {
             byte[] dataCombined = mEncoder.EncodeDataWithLength(frame);
 
@@ -561,12 +561,12 @@ namespace OpenThreadDotNet
         }
 
 
-        public void DoCountersReset()
+        internal void DoCountersReset()
         {
             PropertySetValue(SpinelProperties.SPINEL_PROP_CNTR_RESET, 1 , "C");
         }
 
-        public ushort[] DoCountersMessageBuffer()
+        internal ushort[] DoCountersMessageBuffer()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MSG_BUFFER_COUNTERS);
 
@@ -580,18 +580,18 @@ namespace OpenThreadDotNet
             }
         }
 
-        public void Transact(int commandId, byte[] payload, byte tID = SpinelCommands.HEADER_DEFAULT)
+        internal void Transact(int commandId, byte[] payload, byte tID = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] packet = EncodePacket(commandId,tID,payload);
             StreamTx(packet);
         }
 
-        public void Transact(int commandId, byte tID = SpinelCommands.HEADER_DEFAULT)
+        internal void Transact(int commandId, byte tID = SpinelCommands.HEADER_DEFAULT)
         {
             Transact(commandId, null, tID);
         }
 
-        public byte[] EncodePacket(int commandId, byte tid = SpinelCommands.HEADER_DEFAULT, params byte[] payload)
+        internal byte[] EncodePacket(int commandId, byte tid = SpinelCommands.HEADER_DEFAULT, params byte[] payload)
         {
             byte[] tidBytes = new byte[1] { tid };
             byte[] commandBytes = mEncoder.EncodeValue(commandId);

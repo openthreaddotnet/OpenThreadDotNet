@@ -1,6 +1,6 @@
-﻿using OpenThreadDotNet.Spinel;
+﻿using nanoFramework.OpenThread.Spinel;
 
-namespace OpenThreadDotNet
+namespace nanoFramework.OpenThread.NCP
 {
     /// <summary>
     /// 
@@ -11,5 +11,5 @@ namespace OpenThreadDotNet
     /// 
     /// </summary>
     /// <param name="frameData"></param>
-    public delegate void FrameReceivedEventHandler(FrameData frameData);
+    internal delegate void FrameReceivedEventHandler(FrameData frameData);
 }

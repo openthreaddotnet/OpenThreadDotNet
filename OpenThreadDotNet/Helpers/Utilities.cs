@@ -1,20 +1,20 @@
 ﻿using System;
 
-namespace OpenThreadDotNet
+namespace nanoFramework.OpenThread.NCP
 {
-    public static class Utilities
+    internal static class Utilities
     {
-        public static int GetUID(uint PropertyId, byte Tid)
+        internal static int GetUID(uint PropertyId, byte Tid)
         {
             return GetUID((int)PropertyId, Tid);
         }
 
-        public static int GetUID(int PropertyId, byte Tid)
+        internal static int GetUID(int PropertyId, byte Tid)
         {
             return ((int)Tid << 24) | (int)PropertyId;
         }
 
-        public static byte[] HexToBytes(string HexString)
+        internal static byte[] HexToBytes(string HexString)
         {
             HexString = HexString.ToUpper();
 
@@ -28,7 +28,7 @@ namespace OpenThreadDotNet
             return data;
         }
 
-        public static byte[] CombineArrays(byte[] Array1, byte[] Array2)
+        internal static byte[] CombineArrays(byte[] Array1, byte[] Array2)
         {
             byte[] mergedArray = new byte[Array1.Length + Array2.Length];
 
@@ -38,7 +38,7 @@ namespace OpenThreadDotNet
             return mergedArray;
         }
 
-        public static byte[] CombineArrays(byte[] Array1, byte[] Array2, byte[] Array3)
+        internal static byte[] CombineArrays(byte[] Array1, byte[] Array2, byte[] Array3)
         {
             byte[] mergedArray = new byte[Array1.Length + Array2.Length+Array3.Length];
 
@@ -49,7 +49,7 @@ namespace OpenThreadDotNet
             return mergedArray;
         }
 
-        public static bool ByteArrayCompare(byte[] a1, byte[] a2)
+        internal static bool ByteArrayCompare(byte[] a1, byte[] a2)
         {
             if (a1.Length != a2.Length)
                 return false;
@@ -61,7 +61,7 @@ namespace OpenThreadDotNet
             return true;
         }
 
-        public static bool IsNumeric(string input)
+        internal static bool IsNumeric(string input)
         {
             //return int.TryParse(input, out _);
 

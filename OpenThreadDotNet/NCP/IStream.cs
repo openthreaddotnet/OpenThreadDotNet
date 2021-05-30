@@ -1,6 +1,6 @@
-﻿//using static OpenThreadDotNet.WpanApi;
+﻿//using static nanoFramework.OpenThread.WpanApi;
 
-namespace OpenThreadDotNet
+namespace nanoFramework.OpenThread.NCP
 {
     /// <summary>
     /// Interface for serial data stream.
@@ -10,7 +10,7 @@ namespace OpenThreadDotNet
         /// <summary>
         /// Public event for recieving serial data.
         /// </summary>
-        event SerialDataReceivedEventHandler SerialDataReceived;
+        public event SerialDataReceivedEventHandler SerialDataReceived;
 
         /// <summary>
         /// Gets a value indicating whether true if the data in buffer is available for reading.

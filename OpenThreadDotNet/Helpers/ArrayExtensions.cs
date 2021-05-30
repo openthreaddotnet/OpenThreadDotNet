@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
 
-namespace OpenThreadDotNet
+namespace nanoFramework.OpenThread.NCP
 {
-    public static class ArrayExtensions
+    internal static class ArrayExtensions
     {
        
-        public static void Reverse(this Array array)
+        internal static void Reverse(this Array array)
         {
             if (array == null)
                 throw new ArgumentNullException("array");
@@ -14,7 +14,7 @@ namespace OpenThreadDotNet
             Reverse(array, 0, array.Length);
         }
 
-        public static void Reverse(Array array, int index, int length)
+        internal static void Reverse(Array array, int index, int length)
         {
             if (array == null)
                 throw new ArgumentNullException("array");
@@ -37,6 +37,19 @@ namespace OpenThreadDotNet
                     j--;
                 }
             }
-        }     
+        }
+
+        internal static void AddRange(this ArrayList arrayList, ICollection c)
+        {
+#if NETCORE
+             arrayList.AddRange(c);
+#else
+            foreach (var value in c)
+            {
+                arrayList.Add(value);
+            }
+#endif
+
+        }
     }
 }
