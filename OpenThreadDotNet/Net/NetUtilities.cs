@@ -2,11 +2,11 @@
 using System.Collections;
 
 #if (NANOFRAMEWORK_1_0)
-using nanoFramework.OpenThread.Spinel;
+using nanoFramework.OpenThread.NCP;
 namespace nanoFramework.OpenThread.Net
 { 
 #else
-using dotNETCore.OpenThread.Spinel;
+using dotNETCore.OpenThread.NCP;
 namespace dotNETCore.OpenThread.Net
 {
 #endif
