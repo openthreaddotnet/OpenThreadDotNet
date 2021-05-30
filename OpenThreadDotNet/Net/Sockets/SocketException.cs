@@ -2,7 +2,6 @@
 
 #if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.Sockets
-{
 { 
 #else
 namespace dotNETCore.OpenThread.Net.Sockets
