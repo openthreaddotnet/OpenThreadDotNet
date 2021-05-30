@@ -2,7 +2,6 @@
 #if (NANOFRAMEWORK_1_0)
 namespace nanoFramework.OpenThread.Net.Lowpan
 {
-{ 
 #else
 namespace dotNETCore.OpenThread.Net.Lowpan
 {
