@@ -13,6 +13,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CoAPDotNet", "CoAPDotNet\Co
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OpenThreadDotNet", "OpenThreadDotNet\OpenThreadDotNet\OpenThreadDotNet.shproj", "{86FC8669-9CF3-478B-AD70-43E0F497EBF7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F8C73D6-8A99-485F-8B1A-055C4C5B7949}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		CoAPDotNet\CoAPDotNet\CoAPDotNet.projitems*{7b4e6ff2-742d-460e-bf0d-a5d41e610bbf}*SharedItemsImports = 13
