@@ -1,3 +1,4 @@
+using nanoFramework.Hardware.Esp32;
 using nanoFramework.OpenThread.NCP;
 using nanoFramework.OpenThread.Net;
 using nanoFramework.OpenThread.Net.Sockets;
@@ -24,7 +25,10 @@ namespace nanoFramework.OpenThread.Samples
         private static LoWPAN loWPAN = new LoWPAN("COM2");
 
         public static void Main()
-        {         
+        {
+            Configuration.SetPinFunction(Gpio.IO16, DeviceFunction.COM2_TX);
+            Configuration.SetPinFunction(Gpio.IO17, DeviceFunction.COM2_RX);
+
             loWPAN.Open();
 
             try
