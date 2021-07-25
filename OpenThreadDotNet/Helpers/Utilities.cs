@@ -9,19 +9,19 @@ namespace nanoFramework.OpenThread.NCP
 namespace dotNETCore.OpenThread.NCP
 {
 #endif
-    internal static class Utilities
+    public static class Utilities
     {
-        internal static int GetUID(uint PropertyId, byte Tid)
+        public static int GetUID(uint PropertyId, byte Tid)
         {
             return GetUID((int)PropertyId, Tid);
         }
 
-        internal static int GetUID(int PropertyId, byte Tid)
+        public static int GetUID(int PropertyId, byte Tid)
         {
             return ((int)Tid << 24) | (int)PropertyId;
         }
 
-        internal static byte[] HexToBytes(string HexString)
+        public static byte[] HexToBytes(string HexString)
         {
             HexString = HexString.ToUpper();
 
@@ -35,7 +35,7 @@ namespace dotNETCore.OpenThread.NCP
             return data;
         }
 
-        internal static byte[] CombineArrays(byte[] Array1, byte[] Array2)
+        public static byte[] CombineArrays(byte[] Array1, byte[] Array2)
         {
             byte[] mergedArray = new byte[Array1.Length + Array2.Length];
 
@@ -45,7 +45,7 @@ namespace dotNETCore.OpenThread.NCP
             return mergedArray;
         }
 
-        internal static byte[] CombineArrays(byte[] Array1, byte[] Array2, byte[] Array3)
+        public static byte[] CombineArrays(byte[] Array1, byte[] Array2, byte[] Array3)
         {
             byte[] mergedArray = new byte[Array1.Length + Array2.Length+Array3.Length];
 
@@ -56,7 +56,7 @@ namespace dotNETCore.OpenThread.NCP
             return mergedArray;
         }
 
-        internal static bool ByteArrayCompare(byte[] a1, byte[] a2)
+        public static bool ByteArrayCompare(byte[] a1, byte[] a2)
         {
             if (a1.Length != a2.Length)
                 return false;
@@ -68,7 +68,7 @@ namespace dotNETCore.OpenThread.NCP
             return true;
         }
 
-        internal static bool IsNumeric(string input)
+        public static bool IsNumeric(string input)
         {
             //return int.TryParse(input, out _);
 
