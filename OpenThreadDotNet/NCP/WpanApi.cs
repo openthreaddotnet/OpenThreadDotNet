@@ -55,13 +55,13 @@ namespace dotNETCore.OpenThread.NCP
             Transact(SpinelCommands.CMD_RESET);
         }
 
-        internal int DoLastStatus()
+        internal uint DoLastStatus()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.PROP_LAST_STATUS);
 
             try
             {
-                return (int)frameData.Response;
+                return (uint)frameData.Response;
             }
             catch
             {
