@@ -1,4 +1,40 @@
-﻿#if (NANOFRAMEWORK_1_0)
+﻿//*
+//*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//*
+//*Primitive Types
+//*
+//*+----------+----------------------+---------------------------------+
+//*   | Char | Name | Description |
+//*+----------+----------------------+---------------------------------+
+//*   | "." | DATATYPE_VOID | Empty data type.Used           |
+// *   |          |                      | internally.                     |
+// *   |   "b"    | DATATYPE_BOOL        | Boolean value. Encoded in       |
+// *   |          |                      | 8-bits as either 0x00 or 0x01.  |
+// *   |          |                      | All other values are illegal.   |
+// *   |   "C"    | DATATYPE_UINT8       | Unsigned 8-bit integer.         |
+// *   |   "c"    | DATATYPE_INT8        | Signed 8-bit integer.           |
+// *   |   "S"    | DATATYPE_UINT16      | Unsigned 16-bit integer.        |
+// *   |   "s"    | DATATYPE_INT16       | Signed 16-bit integer.          |
+// *   |   "L"    | DATATYPE_UINT32      | Unsigned 32-bit integer.        |
+// *   |   "l"    | DATATYPE_INT32       | Signed 32-bit integer.          |
+// *   |   "i"    | DATATYPE_UINT_PACKED | Packed Unsigned Integer.See    |
+// *   |          |                      | description below               |
+// *   |   "6"    | DATATYPE_IPv6ADDR    | IPv6 Address. (Big-endian)      |
+// *   | "E"      | DATATYPE_EUI64       | EUI - 64 Address. (Big - endian) |
+//*    | "e"      | DATATYPE_EUI48       | EUI - 48 Address. (Big - endian) |
+//*    | "D"      | DATATYPE_DATA        | Arbitrary data.See related     |
+// *   |          |                      | section below for details.      |
+// *   |   "d"    | DATATYPE_DATA_WLEN   | Arbitrary data with prepended   |
+// *   |          |                      | length. See below for details   |
+// *   |   "U"    | DATATYPE_UTF8        | Zero-terminated UTF8-encoded    |
+// *   |          |                      | string.                         |
+// *   | "t(...)" | DATATYPE_STRUCT      | Structured datatype with        |
+// *   |          |                      | prepended length.               |
+// *   | "A(...)" | DATATYPE_ARRAY       | Array of datatypes. Compound    |
+// *   |          |                      | type.                           |
+// *   +----------+----------------------+---------------------------------+
+
+#if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.NCP;
 namespace nanoFramework.OpenThread.Spinel
 { 
@@ -133,7 +169,15 @@ namespace dotNETCore.OpenThread.Spinel
         SPINEL_CAP_THREAD_SERVICE = (SPINEL_CAP_THREAD__BEGIN + 5),
         SPINEL_CAP_THREAD__END = 1152,     
     }
-   
+
+    public enum SpinelNetRole :byte
+    {
+        SPINEL_NET_ROLE_DETACHED = 0,
+        SPINEL_NET_ROLE_CHILD = 1,
+        SPINEL_NET_ROLE_ROUTER = 2,
+        SPINEL_NET_ROLE_LEADER = 3
+    }
+
     public class SpinelProperties
     {
         ////=========================================
@@ -194,7 +238,7 @@ namespace dotNETCore.OpenThread.Spinel
         public const int SPINEL_PROP_NET_ROLE = SPINEL_PROP_NET__BEGIN + 3;//< [C]
         public const int SPINEL_PROP_NET_NETWORK_NAME = SPINEL_PROP_NET__BEGIN + 4;//< [U]
         public const int SPINEL_PROP_NET_XPANID = SPINEL_PROP_NET__BEGIN + 5;//< [D]
-        public const int SPINEL_PROP_NET_MASTER_KEY = SPINEL_PROP_NET__BEGIN + 6;//< [D]
+        public const int SPINEL_PROP_NET_NETWORK_KEY = SPINEL_PROP_NET__BEGIN + 6;//< [D]
         public const int SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER = SPINEL_PROP_NET__BEGIN + 7;//< [L]
         public const int SPINEL_PROP_NET_PARTITION_ID = SPINEL_PROP_NET__BEGIN + 8;//< [L]
         public const int SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING = SPINEL_PROP_NET__BEGIN + 9;//< [b]        
@@ -205,7 +249,7 @@ namespace dotNETCore.OpenThread.Spinel
         public const int SPINEL_PROP_THREAD__BEGIN = 0x50;
         public const int SPINEL_PROP_THREAD_LEADER_ADDR = SPINEL_PROP_THREAD__BEGIN + 0;//< [6]
         public const int SPINEL_PROP_THREAD_PARENT = SPINEL_PROP_THREAD__BEGIN + 1;//< LADDR, SADDR [ES]
-        public const int SPINEL_PROP_THREAD_CHILD_TABLE = SPINEL_PROP_THREAD__BEGIN + 2;//< [A(t(ES))]
+        public const int SPINEL_PROP_THREAD_CHILD_TABLE = SPINEL_PROP_THREAD__BEGIN + 2;//< [A(t(ES))] /** Format: [A(t(ESLLCCcCc)] - Read only
         public const int SPINEL_PROP_THREAD_LEADER_RID = SPINEL_PROP_THREAD__BEGIN + 3;//< [C]
         public const int SPINEL_PROP_THREAD_LEADER_WEIGHT = SPINEL_PROP_THREAD__BEGIN + 4;//< [C]
         public const int SPINEL_PROP_THREAD_LOCAL_LEADER_WEIGHT = SPINEL_PROP_THREAD__BEGIN + 5;//< [C]
