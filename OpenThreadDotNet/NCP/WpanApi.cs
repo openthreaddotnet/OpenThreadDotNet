@@ -497,7 +497,7 @@ namespace dotNETCore.OpenThread.NCP
 
         internal byte[] DoMasterkey()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_MASTER_KEY);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY);
 
             try
             {
@@ -511,7 +511,7 @@ namespace dotNETCore.OpenThread.NCP
 
         internal bool DoMasterkey(byte[] masterKey)
         {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_MASTER_KEY, masterKey, "D");
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY, masterKey, "D");
 
             if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response , masterKey))
             {               
@@ -590,6 +590,346 @@ namespace dotNETCore.OpenThread.NCP
                 throw new SpinelProtocolExceptions("Buffer counters format violation");
             }
         }
+
+        //**********************************************************************
+        //
+        // Spinel NET Properties
+        //
+        //**********************************************************************
+
+        /// <summary>
+        /// Network Is Saved (Is Commissioned)
+        /// </summary>
+        /// <returns>true if there is a network state stored/saved.</returns>
+        internal bool GetNetSaved()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_SAVED);
+            try
+            {
+                return (bool)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel Net format violation");
+            }
+        }
+
+        /// <summary>
+        /// Network Interface Status
+        /// </summary>
+        /// <returns>Returns true if interface up and false if interface down</returns>
+        internal bool GetNetIfUp()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP);
+            try
+            {
+                return (bool)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel Net format violation");
+            }
+        }
+
+        /// <summary>
+        /// Network interface up/down status. Write true to bring interface up and false to bring interface down.     
+        /// </summary>
+        /// <param name="NetworkInterfaceStatus"></param>
+        /// <returns></returns>
+        internal bool SetNetIfUp(bool NetworkInterfaceStatus)
+        {
+            FrameData frameData;
+
+            if (NetworkInterfaceStatus)
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP, 1, "b");
+            }
+            else
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP, 0, "b");
+            }
+
+            if (frameData != null && (bool)(frameData.Response) == NetworkInterfaceStatus)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal bool GetNetStackUp()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP);
+            try
+            {
+                return (bool)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel stack up format violation");
+            }
+        }
+
+        internal bool SetNetStackUp(bool ThreadStackStatus)
+        {
+            FrameData frameData;
+
+            if (ThreadStackStatus)
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP, 1, "b");
+            }
+            else
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP, 0, "b");
+            }
+
+            if (frameData != null && (bool)(frameData.Response) == ThreadStackStatus)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal SpinelNetRole GetNetRole()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_ROLE);
+
+            try
+            {
+                return (SpinelNetRole)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Role id format violation");
+            }
+        }
+
+        internal bool SetNetRole(SpinelNetRole ThreadDeviceRole)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_ROLE, ((byte)ThreadDeviceRole), "C");
+
+            if (frameData != null && (SpinelNetRole)(frameData.Response) == ThreadDeviceRole)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal string GetNetNetworkName()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME);
+
+            try
+            {
+                return frameData.Response.ToString();
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Network name format violation");
+            }
+        }
+
+        internal bool SetNetNetworkName(string ThreadNetworkName)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME, ThreadNetworkName, "U");
+
+            if (frameData != null && frameData.Response.ToString() == ThreadNetworkName)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal byte[] GetNetXPANId()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_XPANID);
+
+            try
+            {
+                return (byte[])frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("XPan id format violation");
+            }
+        }
+
+        internal bool SetNetXPANId(byte[] ThreadNetworkExtendedPANId)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_XPANID, ThreadNetworkExtendedPANId, "D");
+
+            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, ThreadNetworkExtendedPANId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal byte[] GetNetNetworkKey()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY);
+
+            try
+            {
+                return (byte[])frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel network key format violation.");
+            }
+        }
+
+        internal bool SetNetNetworkKey(byte[] ThreadNetworkKey)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY, ThreadNetworkKey, "D");
+
+            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, ThreadNetworkKey))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+       
+        internal uint GetNetKeySequenceCounter()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER);
+
+            try
+            {
+                return (uint)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel Key Sequence Counter format violation.");
+            }
+        }
+
+        internal bool SetNetKeySequenceCounter(uint ThreadNetworkKeySequenceCounter)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER, ThreadNetworkKeySequenceCounter, "L");
+
+            if (frameData != null && ((uint)frameData.Response==ThreadNetworkKeySequenceCounter))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal uint GetNetPartitionId()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_PARTITION_ID);
+
+            try
+            {
+                return (uint)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel Key Sequence Counter format violation.");
+            }
+        }
+
+        internal bool SetNetPartitionId(uint ThreadNetworkPartitionId)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_PARTITION_ID, ThreadNetworkPartitionId, "L");
+
+            if (frameData != null && ((uint)frameData.Response == ThreadNetworkPartitionId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        internal bool GetNetRequireJoinExisting()
+        {
+            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
+            throw new NotImplementedException();
+        }
+
+        internal  bool SetNetRequireJoinExisting(bool RequireJoinExisting)
+        {
+            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
+            throw new NotImplementedException();
+        }
+
+        internal uint GetNetKeySwitchGuardtime()
+        {
+            //     SPINEL_PROP_NET_KEY_SWITCH_GUARDTIME
+            throw new NotImplementedException();
+        }
+
+        internal bool SetNetKeySwitchGuardtime(uint ThreadNetworkKeySwitchGuardTime)
+        {
+            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
+            throw new NotImplementedException();
+        }
+
+        internal byte[] GetNetNetworkPSKC()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_PSKC);
+
+            try
+            {
+                return (byte[])frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel network pskc format violation.");
+            }
+        }
+
+        internal bool SetNetNetworkPSKC(byte[] ThreadNetworkPSKc)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_PSKC, ThreadNetworkPSKc, "D");
+
+            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, ThreadNetworkPSKc))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //**********************************************************************
+        //
+        //      Spinel NET Properties
+        //
+        //**********************************************************************
+
+
+
+
+        //**********************************************************************
+        //
+        //      Spinel Thread Properties
+        //
+        //**********************************************************************
+
 
         internal void Transact(int commandId, byte[] payload, byte tID = SpinelCommands.HEADER_DEFAULT)
         {
@@ -935,7 +1275,7 @@ namespace dotNETCore.OpenThread.NCP
                     ncpResponse = mDecoder.ReadUint8();
                     break;
                   
-                case SpinelProperties.SPINEL_PROP_NET_MASTER_KEY:
+                case SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY:
                     ncpResponse = mDecoder.ReadData();
                     break;
                 case SpinelProperties.PROP_STREAM_NET:                    
@@ -997,6 +1337,13 @@ namespace dotNETCore.OpenThread.NCP
         }
 
         private FrameData PropertySetValue(int propertyId, string propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
+        {
+            byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
+
+            return PropertySetValue(propertyId, propertyValueArray, propertyFormat, tid);
+        }
+
+        private FrameData PropertySetValue(int propertyId, uint propertyValue, string propertyFormat = "L", byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
 
