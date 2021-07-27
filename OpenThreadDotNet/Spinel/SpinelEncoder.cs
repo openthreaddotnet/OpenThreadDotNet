@@ -45,8 +45,7 @@ namespace dotNETCore.OpenThread.Spinel
 
         public byte[] EncodeValue(uint PropertyValue, string PropertyFormat = "L")
         {
-            EncodeInt
-            return EncodeInt16(PropertyValue);
+            return EncodeInt32(PropertyValue);            
         }
 
         public byte[] EncodeValue(int PropertyValue, string PropertyFormat = "i")
