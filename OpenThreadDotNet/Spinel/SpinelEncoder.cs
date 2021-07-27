@@ -43,6 +43,12 @@ namespace dotNETCore.OpenThread.Spinel
             return EncodeInt16(PropertyValue);
         }
 
+        public byte[] EncodeValue(uint PropertyValue, string PropertyFormat = "L")
+        {
+            EncodeInt
+            return EncodeInt16(PropertyValue);
+        }
+
         public byte[] EncodeValue(int PropertyValue, string PropertyFormat = "i")
         {
             return EncodeUintPacked(PropertyValue);
@@ -87,7 +93,14 @@ namespace dotNETCore.OpenThread.Spinel
 
         private byte[] EncodeInt16(ushort PropertyValue)
         {
-            byte[] byteArray = new byte[2];
+          //  byte[] byteArray = new byte[2];
+
+            return BitConverter.GetBytes(PropertyValue);
+        }
+
+        private byte[] EncodeInt32(uint PropertyValue)
+        {
+           // byte[] byteArray = new byte[4];
 
             return BitConverter.GetBytes(PropertyValue);
         }
