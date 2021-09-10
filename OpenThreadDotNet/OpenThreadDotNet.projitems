@@ -9,6 +9,7 @@
     <Import_RootNamespace>OpenThreadDotNet</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Definitions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ArrayExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NCP\Delegates.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NCP\IStream.cs" />
@@ -24,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelDeclarations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelDecoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelEncoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelFrameDecoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelProtocolExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Utilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NCP\WpanApi.cs" />

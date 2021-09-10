@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
+using dotNETCore.OpenThread.Core;
 
 #if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.NCP;
@@ -183,24 +184,24 @@ namespace dotNETCore.OpenThread.Spinel
             return (int)ReadUint32();
         }
 
-        public SpinelIPv6Address ReadIp6Address()
+        public IPv6Address ReadIp6Address()
         {
-            SpinelIPv6Address ipAddress = new SpinelIPv6Address();
+            IPv6Address ipAddress = new IPv6Address();
             ipAddress.bytes = ReadItems(ipAddress.bytes.Length);
             return ipAddress;
         }
 
-        public SpinelEUI64 ReadEui64()
+        public EUI64 ReadEui64()
         {
-            SpinelEUI64 eui64 = new SpinelEUI64();
+            EUI64 eui64 = new EUI64();
 
             eui64.bytes = ReadItems(eui64.bytes.Length);
             return eui64;
         }
 
-        public SpinelEUI48 ReadEui48()
+        public EUI48 ReadEui48()
         {
-            SpinelEUI48 eui48 = new SpinelEUI48();
+            EUI48 eui48 = new EUI48();
             eui48.bytes = ReadItems(eui48.bytes.Length);
             return eui48;
         }

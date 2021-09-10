@@ -49,7 +49,7 @@ namespace dotNETCore.OpenThread.Net.Lowpan
         bool NetworkInterfaceDown();
         bool NetworkInterfaceUp();
         void OnHostWake();
-        void Open();        
+        void Open(string portName);        
         void Reset();
         LowpanBeaconInfo[] ScanBeacon();
         LowpanChannelInfo[] ScanEnergy();

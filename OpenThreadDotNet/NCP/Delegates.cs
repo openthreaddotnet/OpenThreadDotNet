@@ -20,5 +20,5 @@ namespace dotNETCore.OpenThread.NCP
     /// 
     /// </summary>
     /// <param name="frameData"></param>
-    internal delegate void FrameReceivedEventHandler(FrameData frameData);
+    public delegate void FrameReceivedEventHandler(FrameData frameData);
 }
