@@ -38,7 +38,7 @@ namespace dotNETCore.OpenThread.NCP
         ///
         /// </summary>
         public WpanApi()
-        {          
+        {
         }
 
         ///// <summary>

@@ -176,7 +176,7 @@ namespace dotNETCore.OpenThread.Spinel
                     ncpResponse = mDecoder.ReadFields("Cc");
                     break;
 
-            
+
 
                 case SpinelProperties.SPINEL_PROP_MSG_BUFFER_COUNTERS:
 
@@ -228,7 +228,7 @@ namespace dotNETCore.OpenThread.Spinel
                     }
 
                     break;
-           
+
                 case SpinelProperties.SPINEL_PROP_MAC_15_4_PANID:
                     ncpResponse = mDecoder.ReadUint16();
                     break;
@@ -271,8 +271,8 @@ namespace dotNETCore.OpenThread.Spinel
                     //    ncpResponse = mDecoder.ReadFields("6C");
                     //    break;
             }
-          
-            frameData = new FrameData(mDecoder.FramePropertyId, mDecoder.FrameHeader, mDecoder.GetFrameLoad(), ncpResponse);           
+
+            frameData = new FrameData(mDecoder.FramePropertyId, mDecoder.FrameHeader, mDecoder.GetFrameLoad(), ncpResponse);
         }
     }
 }
