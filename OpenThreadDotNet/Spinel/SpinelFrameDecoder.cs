@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+<<<<<<< HEAD
 using System.Collections.Generic;
 using System.Text;
 using dotNETCore.OpenThread.Core;
@@ -13,6 +14,21 @@ using dotNETCore.OpenThread.NCP;
 namespace dotNETCore.OpenThread.Spinel
 {
 #endif  
+=======
+using System.Text;
+
+#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.NCP;
+using nanoFramework.OpenThread.Core;
+namespace nanoFramework.OpenThread.Spinel
+{
+#else
+using dotNETCore.OpenThread.NCP;
+using dotNETCore.OpenThread.Core;
+namespace dotNETCore.OpenThread.Spinel
+{
+#endif
+>>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
     public static class SpinelFrameDecoder
     {
         private const byte SpinelHeaderFlag = 0x80;

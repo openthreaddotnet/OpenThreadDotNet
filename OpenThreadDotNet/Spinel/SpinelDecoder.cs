@@ -3,15 +3,19 @@ using System.Collections;
 using System.Text;
 using dotNETCore.OpenThread.Core;
 
+
 #if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.NCP;
+using nanoFramework.OpenThread.Core;
 namespace nanoFramework.OpenThread.Spinel
-{ 
+{
 #else
 using dotNETCore.OpenThread.NCP;
+using dotNETCore.OpenThread.Core;
 namespace dotNETCore.OpenThread.Spinel
+
 {
-#endif  
+#endif
     public class SpinelDecoder
     {
         private byte[] frameBuffer; // Frame buffer.

@@ -35,15 +35,24 @@
 // *   +----------+----------------------+---------------------------------+
 
 #if (NANOFRAMEWORK_1_0)
+<<<<<<< HEAD
 using nanoFramework.OpenThread.NCP;
 namespace nanoFramework.OpenThread.Spinel
 { 
 #else
 using dotNETCore.OpenThread.NCP;
+=======
+using System.Collections;
+
+namespace nanoFramework.OpenThread.Spinel
+{ 
+#else
+>>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
 using System.Collections;
 
 namespace dotNETCore.OpenThread.Spinel
 {
+<<<<<<< HEAD
 #endif  
     //public class SpinelEUI48
     //{
@@ -61,6 +70,9 @@ namespace dotNETCore.OpenThread.Spinel
     //    public byte[] bytes = new byte[16];
     //}
 
+=======
+#endif      
+>>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
     public class SpinelCommands
     {
         // Singular class that contains all Spinel constants. """

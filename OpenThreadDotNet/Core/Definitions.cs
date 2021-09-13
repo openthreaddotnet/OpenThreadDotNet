@@ -1,5 +1,8 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Collections.Generic;
+=======
+>>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
 using System.Text;
 
 #if (NANOFRAMEWORK_1_0)
