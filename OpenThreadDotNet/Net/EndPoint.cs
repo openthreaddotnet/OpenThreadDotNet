@@ -1,0 +1,31 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+using System;
+
+#if (NANOFRAMEWORK_1_0)
+namespace nanoFramework.OpenThread.Net
+{ 
+#else
+namespace dotNETCore.OpenThread.Net
+{
+#endif
+    // Generic abstraction to identify network addresses
+
+    /// <devdoc>
+    ///    <para>
+    ///       Identifies a network address.
+    ///    </para>
+    /// </devdoc>
+    [Serializable]
+    public abstract class EndPoint
+    {
+        public abstract SocketAddress Serialize();
+       // public abstract EndPoint Create(SocketAddress socketAddress);
+
+    }; // abstract class EndPoint
+
+} // namespace System.Net
+
+
