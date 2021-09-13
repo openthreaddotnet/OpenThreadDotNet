@@ -35,32 +35,16 @@
 // *   +----------+----------------------+---------------------------------+
 
 #if (NANOFRAMEWORK_1_0)
-using nanoFramework.OpenThread.NCP;
+using System.Collections;
+
 namespace nanoFramework.OpenThread.Spinel
 { 
 #else
-using dotNETCore.OpenThread.NCP;
 using System.Collections;
 
 namespace dotNETCore.OpenThread.Spinel
 {
-#endif  
-    //public class SpinelEUI48
-    //{
-
-    //    public byte[] bytes = new byte[6];
-    //}
-
-    //public class SpinelEUI64
-    //{
-    //    public byte[] bytes = new byte[8];
-    //}
-
-    //public class SpinelIPv6Address
-    //{
-    //    public byte[] bytes = new byte[16];
-    //}
-
+#endif      
     public class SpinelCommands
     {
         // Singular class that contains all Spinel constants. """

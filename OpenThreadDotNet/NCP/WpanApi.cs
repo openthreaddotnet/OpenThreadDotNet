@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-using dotNETCore.OpenThread.Core;
+
 
 #if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.Spinel;
+using nanoFramework.OpenThread.Core;
 
 namespace nanoFramework.OpenThread.NCP
-{ 
+{
 
 #else
 
 using dotNETCore.OpenThread.Spinel;
+using dotNETCore.OpenThread.Core;
 
 namespace dotNETCore.OpenThread.NCP
 {

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections;
-using dotNETCore.OpenThread.Core;
+
 
 #if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.NCP;
-using nanoFramework.OpenThread.Spinel;
+using nanoFramework.OpenThread.Core;
 namespace nanoFramework.OpenThread.Net
-{ 
+{
 #else
 using dotNETCore.OpenThread.NCP;
-using dotNETCore.OpenThread.Spinel;
+using dotNETCore.OpenThread.Core;
 namespace dotNETCore.OpenThread.Net
 {
 #endif
