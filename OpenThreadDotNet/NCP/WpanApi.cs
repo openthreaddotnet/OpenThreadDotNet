@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-using dotNETCore.OpenThread.Core;
 
 
 #if (NANOFRAMEWORK_1_0)
@@ -39,7 +38,7 @@ namespace dotNETCore.OpenThread.NCP
         ///
         /// </summary>
         public WpanApi()
-        {          
+        {
         }
 
         ///// <summary>
@@ -688,19 +687,11 @@ namespace dotNETCore.OpenThread.NCP
             try
             {
                 return (bool)frameData.Response;
-<<<<<<< HEAD
             }
             catch
             {
                 throw new SpinelProtocolExceptions("Spinel stack up format violation");
             }
-=======
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("Spinel stack up format violation");
-            }
->>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
         }
 
         protected bool SetNetStackUp(bool ThreadStackStatus)
@@ -843,19 +834,11 @@ namespace dotNETCore.OpenThread.NCP
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER);
 
             try
-<<<<<<< HEAD
             {
                 return (uint)frameData.Response;
             }
             catch
             {
-=======
-            {
-                return (uint)frameData.Response;
-            }
-            catch
-            {
->>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
                 throw new SpinelProtocolExceptions("Spinel Key Sequence Counter format violation.");
             }
         }
@@ -887,24 +870,6 @@ namespace dotNETCore.OpenThread.NCP
                 throw new SpinelProtocolExceptions("Spinel Partition Id format violation.");
             }
         }
-<<<<<<< HEAD
-
-        protected bool SetNetPartitionId(uint ThreadNetworkPartitionId)
-        {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_PARTITION_ID, ThreadNetworkPartitionId, "L");
-
-            if (frameData != null && ((uint)frameData.Response == ThreadNetworkPartitionId))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        protected bool GetNetRequireJoinExisting()
-=======
 
         protected bool SetNetPartitionId(uint ThreadNetworkPartitionId)
         {
@@ -926,14 +891,6 @@ namespace dotNETCore.OpenThread.NCP
             throw new NotImplementedException();
         }
 
-        protected bool SetNetRequireJoinExisting(bool RequireJoinExisting)
->>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
-        {
-            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
-            throw new NotImplementedException();
-        }
-
-<<<<<<< HEAD
         protected bool SetNetRequireJoinExisting(bool RequireJoinExisting)
         {
             //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
@@ -1082,150 +1039,6 @@ namespace dotNETCore.OpenThread.NCP
             throw new NotImplementedException();
         }
 
-=======
-        protected uint GetNetKeySwitchGuardtime()
-        {
-            //     SPINEL_PROP_NET_KEY_SWITCH_GUARDTIME
-            throw new NotImplementedException();
-        }
-
-        protected bool SetNetKeySwitchGuardtime(uint ThreadNetworkKeySwitchGuardTime)
-        {
-            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
-            throw new NotImplementedException();
-        }
-
-        protected byte[] GetNetNetworkPSKC()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_PSKC);
-
-            try
-            {
-                return (byte[])frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("Spinel network pskc format violation.");
-            }
-        }
-
-        protected bool SetNetNetworkPSKC(byte[] ThreadNetworkPSKc)
-        {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_PSKC, ThreadNetworkPSKc, "D");
-
-            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, ThreadNetworkPSKc))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        //**********************************************************************
-        //
-        //      Spinel Thread Properties
-        //
-        //**********************************************************************
-
-        protected IPv6Address[] GetThreadLeaderAddr()
-        {
-            //   SPINEL_PROP_THREAD_LEADER_ADDR
-            throw new NotImplementedException();
-        }
-
-        protected OpenThreadRouterInfo GetThreadLeaderParent()
-        {
-            //   SPINEL_PROP_THREAD_PARENT  /** Format: `ESLccCC` - Read only
-            throw new NotImplementedException();
-        }
-
-        protected OpenThreadChildInfo[] GetThreadChildTable()
-        {
-            //SPINEL_PROP_THREAD_CHILD_TABLE Format: [A(t(ESLLCCcCc)] - Read only         
-            throw new NotImplementedException();
-        }
-
-        protected byte GetThreadLeaderRid()
-        {
-            //SPINEL_PROP_THREAD_LEADER_RID Format `C` - Read only  
-            throw new NotImplementedException();
-        }
-
-        protected byte GetThreadLeaderWeight()
-        {
-            // SPINEL_PROP_THREAD_LEADER_WEIGHT Format `C` - Read only  
-            throw new NotImplementedException();
-        }
-
-        protected byte GetThreadLocalLeaderWeight()
-        {
-            // SPINEL_PROP_THREAD_LOCAL_LEADER_WEIGHT Format `C` - Read only  
-            throw new NotImplementedException();
-        }
-
-        protected byte[] GetThreadNetworkData()
-        {
-            // SPINEL_PROP_THREAD_NETWORK_DATA   /** Format `D` - Read only
-            throw new NotImplementedException();
-        }
-
-        protected byte GetThreadNetworkDataVersion()
-        {
-            // SPINEL_PROP_THREAD_NETWORK_DATA_VERSION Format `C` - Read only  
-            throw new NotImplementedException();
-        }
-
-        protected byte[] GetThreadStableNetworkData()
-        {
-            // SPINEL_PROP_THREAD_STABLE_NETWORK_DATA   /** Format `D` - Read only
-            throw new NotImplementedException();
-        }
-
-        protected byte GetThreadStableNetworkDataVersion()
-        {
-            // SPINEL_PROP_THREAD_STABLE_NETWORK_DATA_VERSION Format `C` - Read only  
-            throw new NotImplementedException();
-        }
-
-        protected OpenThreadBorderRouterConfig[] GetThreadOnMeshNets()
-        {
-            // SPINEL_PROP_THREAD_ON_MESH_NETS Format: `A(t(6CbCbSC))`
-            throw new NotImplementedException();
-        }
-
-        protected OpenThreadExternalRouteConfig[] GetThreadOffMeshRoutes()
-        {
-            // SPINEL_PROP_THREAD_OFF_MESH_ROUTES Format: `A(t(6CbCbSC))`
-            throw new NotImplementedException();
-        }
-
-        protected ushort[] GetThreadAssistingPorts()
-        {
-            //  //SPINEL_PROP_THREAD_ASSISTING_PORTS Format `A(S)`
-            throw new NotImplementedException();
-        }
-
-        protected bool SetThreadAssistingPorts(ushort[] AssistingPort)
-        {
-            //  //SPINEL_PROP_THREAD_ASSISTING_PORTS Format `A(S)`
-            throw new NotImplementedException();
-        }
-
-        protected bool GetThreadAllowLocalNetDataChange()
-        {
-            //SPINEL_PROP_THREAD_ALLOW_LOCAL_NET_DATA_CHANGE Format `b` - Read-write
-            throw new NotImplementedException();
-        }
-
-        protected bool SetThreadAllowLocalNetDataChange(bool AllowLocalNetworkDataChange)
-        {
-            //SPINEL_PROP_THREAD_ALLOW_LOCAL_NET_DATA_CHANGE Format `b` - Read-write
-            throw new NotImplementedException();
-        }
-
->>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
         protected byte GetThreadThreadMode()
         {
             //SPINEL_PROP_THREAD_MODE  Format `b` - Read-write

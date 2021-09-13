@@ -1,8 +1,4 @@
 ﻿using System;
-<<<<<<< HEAD
-using System.Collections.Generic;
-=======
->>>>>>> 25bb757da59cad4c05fadf777d6614cd2c088eed
 using System.Text;
 
 #if (NANOFRAMEWORK_1_0)
@@ -33,7 +29,7 @@ namespace dotNETCore.OpenThread.Core
         public byte[] m8 = new byte[8];
     }
 
-    
+
     public class OpenThreadRouterInfo
     {
         public OpenThreadExtAddress OpenThreadExtAddress; ///< IEEE 802.15.4 Extended Address
@@ -49,7 +45,7 @@ namespace dotNETCore.OpenThread.Core
     }
 
     public class OpenThreadNetifAddress
-    {    
+    {
         OpenThreadIp6Address Address;                ///< The IPv6 unicast address.
         byte PrefixLength;           ///< The Prefix length (in bits).
         byte AddressOrigin;          ///< The IPv6 address origin.
@@ -115,7 +111,7 @@ namespace dotNETCore.OpenThread.Core
     {
         byte[] m8 = new byte[8]; ///< The Network Prefix.
     }
-    
+
     public class OpenThreadIp6AddressComponents
     {
         OpenThreadIp6NetworkPrefix NetworkPrefix; ///< The Network Prefix (most significant 64 bits of the address)
@@ -145,7 +141,7 @@ namespace dotNETCore.OpenThread.Core
         short Preference = 2;   ///< A 2-bit signed int preference (`OT_ROUTE_PREFERENCE_*` values).       
         bool mNat64 = true;               ///< Whether this is a NAT64 prefix.
         bool mStable = true;              ///< Whether this configuration is considered Stable Network Data.
-        bool mNextHopIsThisDevice =true; ///< Whether the next hop is this device (value ignored on config add).
+        bool mNextHopIsThisDevice = true; ///< Whether the next hop is this device (value ignored on config add).
     }
 
     public class OpenThreadNeighborInfo
