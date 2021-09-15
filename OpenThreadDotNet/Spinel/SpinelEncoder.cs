@@ -38,6 +38,11 @@ namespace dotNETCore.OpenThread.Spinel
             return EncodeInt8(PropertyValue);
         }
 
+        public byte[] EncodeValue(sbyte PropertyValue, string PropertyFormat = "c")
+        {
+            return EncodeUInt8(PropertyValue);
+        }
+
         public byte[] EncodeValue(ushort PropertyValue, string PropertyFormat = "S")
         {
             return EncodeInt16(PropertyValue);
@@ -82,6 +87,15 @@ namespace dotNETCore.OpenThread.Spinel
         }
 
         private byte[] EncodeInt8(byte PropertyValue)
+        {
+            byte[] byteArray = new byte[1];
+
+            byteArray[0] = BitConverter.GetBytes(PropertyValue)[0];
+
+            return byteArray;
+        }
+
+        private byte[] EncodeUInt8(sbyte PropertyValue)
         {
             byte[] byteArray = new byte[1];
 

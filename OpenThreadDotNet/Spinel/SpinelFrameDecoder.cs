@@ -17,7 +17,7 @@ namespace dotNETCore.OpenThread.Spinel
     {
         private const byte SpinelHeaderFlag = 0x80;
 
-        public static void DecodeFrame(byte[] frameIn, out FrameData frameData)
+        internal static void DecodeFrame(byte[] frameIn, out FrameData frameData)
         {
 
             SpinelDecoder mDecoder = new SpinelDecoder();
@@ -52,23 +52,23 @@ namespace dotNETCore.OpenThread.Spinel
                 //
                 //********************************************************************************
 
-                case SpinelProperties.PROP_NCP_VERSION:
+                case SpinelProperties.SPINEL_PROP_NCP_VERSION:
                     ncpResponse = mDecoder.ReadUtf8();
                     break;
 
-                case SpinelProperties.PROP_LAST_STATUS:
+                case SpinelProperties.SPINEL_PROP_LAST_STATUS:
                     ncpResponse = mDecoder.ReadUintPacked();
                     break;
 
-                case SpinelProperties.PROP_INTERFACE_TYPE:
+                case SpinelProperties.SPINEL_PROP_INTERFACE_TYPE:
                     ncpResponse = mDecoder.ReadUintPacked();
                     break;
 
-                case SpinelProperties.PROP_VENDOR_ID:
+                case SpinelProperties.SPINEL_PROP_VENDOR_ID:
                     ncpResponse = mDecoder.ReadUintPacked();
                     break;
 
-                case SpinelProperties.PROP_PROTOCOL_VERSION:
+                case SpinelProperties.SPINEL_PROP_PROTOCOL_VERSION:
 
                     tempObj = mDecoder.ReadFields("ii");
 
@@ -80,7 +80,7 @@ namespace dotNETCore.OpenThread.Spinel
 
                     break;
 
-                case SpinelProperties.PROP_CAPS:
+                case SpinelProperties.SPINEL_PROP_CAPS:
 
                     tempObj = mDecoder.ReadFields("A(i)");
 
@@ -190,11 +190,11 @@ namespace dotNETCore.OpenThread.Spinel
 
                     break;
 
-                case SpinelProperties.PROP_PHY_CHAN:
+                case SpinelProperties.SPINEL_PROP_PHY_CHAN:
                     ncpResponse = mDecoder.ReadUint8();
                     break;
 
-                case SpinelProperties.PROP_PHY_CHAN_SUPPORTED:
+                case SpinelProperties.SPINEL_PROP_PHY_CHAN_SUPPORTED:
                     tempObj = mDecoder.ReadFields("A(C)");
 
                     if (tempObj != null)
@@ -262,7 +262,7 @@ namespace dotNETCore.OpenThread.Spinel
                     ncpResponse = eui64;
                     break;
 
-                case SpinelProperties.PROP_HWADDR:
+                case SpinelProperties.SPINEL_PROP_HWADDR:
                     EUI64 hwaddr = mDecoder.ReadEui64();
                     ncpResponse = hwaddr;
                     break;

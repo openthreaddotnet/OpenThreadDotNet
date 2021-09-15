@@ -32,7 +32,8 @@ namespace dotNETCore.OpenThread.NCP
         static object rxLocker = new object();
         static object txLocker = new object();
 
-        public event FrameReceivedEventHandler FrameDataReceived;
+        public event FrameReceivedEventHandler OnFrameDataReceived;        
+        public event SpinelPropertyChangedHandler OnPropertyChanged;
 
         /// <summary>
         ///
@@ -41,30 +42,6 @@ namespace dotNETCore.OpenThread.NCP
         {
         }
 
-        ///// <summary>
-        /////
-        ///// </summary>
-        //public WpanApi(string portName)
-        //{
-        //    this.stream = new SerialStream(portName);
-        //    this.hdlcInterface = new Hdlc(this.stream);
-        //    this.stream.SerialDataReceived += new SerialDataReceivedEventHandler(StreamDataReceived);
-        //}
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="WpanApi"/> class.
-        ///// </summary>
-        ///// <param name="stream"></param>
-        //public WpanApi(IStream stream)
-        //{
-        //    this.stream = stream;
-        //    this.hdlcInterface = new Hdlc(this.stream);
-        //    this.stream.SerialDataReceived += new SerialDataReceivedEventHandler(StreamDataReceived);
-        //}
-
-        /// <summary>
-        ///
-        /// </summary>
         public void Open(string portName)
         {
             this.stream = new SerialStream(portName);
@@ -78,37 +55,53 @@ namespace dotNETCore.OpenThread.NCP
             Transact(SpinelCommands.CMD_RESET);
         }
 
-        public uint DoLastStatus()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_LAST_STATUS);
+        //**********************************************************************
+        //
+        // Spinel NET Core Properties
+        //
+        //**********************************************************************
 
+        /// <summary>
+        /// Last Operation Status
+        /// </summary>
+        /// <returns>uint see `SPINEL_STATUS_*` for list of values</returns>
+        protected internal uint GetPropLastStatus()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_LAST_STATUS);
             try
             {
                 return (uint)frameData.Response;
             }
             catch
             {
-                throw new SpinelProtocolExceptions("Interface type format violation");
+                throw new SpinelProtocolExceptions("Spinel Last Operation Status format violation");
             }
         }
 
-        public uint[] DoProtocolVersion()
+        /// <summary>
+        /// Protocol Version
+        /// </summary>
+        /// <returns></returns>
+        protected internal uint[] GetPropProtocolVersion()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_PROTOCOL_VERSION);
-
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PROTOCOL_VERSION);
             try
             {
                 return (uint[])frameData.Response;
             }
             catch
             {
-                throw new SpinelProtocolExceptions("Protocol version format violation");
+                throw new SpinelProtocolExceptions("Spinel Net format violation");
             }
         }
 
-        public string DoNCPVersion()
+        /// <summary>
+        /// Protocol Version
+        /// </summary>
+        /// <returns></returns>
+        protected internal string GetPropNcpVersion()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_NCP_VERSION);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NCP_VERSION);
 
             try
             {
@@ -120,28 +113,17 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public string DoVendor()
+        /// <summary>
+        ///  NCP Network Protocol Type
+        /// </summary>
+        /// <returns></returns>
+        protected internal SpinelProtocolType GetPropInterfaceType()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_VENDOR_ID);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_INTERFACE_TYPE);
 
             try
             {
-                return frameData.Response.ToString();
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("Vendor id format violation");
-            }
-        }
-
-
-        public uint DoInterfaceType()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_INTERFACE_TYPE);
-
-            try
-            {
-                return (uint)frameData.Response;
+                return (SpinelProtocolType)frameData.Response;
             }
             catch
             {
@@ -149,9 +131,32 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public Capabilities[] DoCaps()
+
+        /// <summary>
+        ///  NCP Vendor ID
+        /// </summary>
+        /// <returns></returns>
+        protected internal uint GetPropVendorId()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_CAPS);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_VENDOR_ID);
+
+            try
+            {
+                return (uint)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Vendor id format violation");
+            }
+        }
+
+        /// <summary>
+        ///  NCP Capability List
+        /// </summary>
+        /// <returns></returns>
+        protected internal Capabilities[] GetPropCaps()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_CAPS);
 
             try
             {
@@ -164,37 +169,13 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public string DoNetworkName()
+        /// <summary>
+        ///  NCP Interface Count
+        /// </summary>
+        /// <returns></returns>
+        protected internal byte GetPropInterfaceCount()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME);
-
-            try
-            {
-                return frameData.Response.ToString();
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("Network name format violation");
-            }
-        }
-
-        public bool DoNetworkName(string networkName)
-        {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME, networkName, "U");
-
-            if (frameData != null && frameData.Response.ToString() == networkName)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public byte DoNetRole()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_ROLE);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_INTERFACE_COUNT);
 
             try
             {
@@ -202,31 +183,77 @@ namespace dotNETCore.OpenThread.NCP
             }
             catch
             {
-                throw new SpinelProtocolExceptions("Role id format violation");
+                throw new SpinelProtocolExceptions("Interface Count format violation");
             }
         }
 
-        public bool DoNetRole(byte role)
+        /// <summary>
+        ///  NCP Power State
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete("Prop Power State - Deprecated")]
+        protected internal byte GetPropPowerState()
         {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_ROLE, role, "C");
+            //     SPINEL_PROP_POWER_STATE  ///< PowerState [C] (deprecated, use `MCU_POWER_STATE` instead).
+            throw new NotImplementedException();
+        }
 
-            if (frameData != null && (byte)(frameData.Response) == role)
+        /// <summary>
+        ///  NCP Hardware Address
+        /// </summary>
+        /// <returns></returns>
+        protected internal EUI64 GetPropHwaddr()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_HWADDR);
+
+            try
             {
-                return true;
+                return (EUI64)frameData.Response;
             }
-            else
+            catch
             {
-                return false;
+                throw new SpinelProtocolExceptions("IP addesss format violation");
             }
         }
 
-        public byte DoPowerState()
+     
+        protected internal byte GetPropLock()
+        {
+            // SPINEL_PROP_LOCK  //////< PropLock [b] (not supported)
+            throw new NotImplementedException();
+        }
+
+        protected internal byte GetPropHboMemMax()
+        {
+            //     SPINEL_PROP_HBO_MEM_MAX   ///< Max offload mem [S] (not supported)
+            throw new NotImplementedException();
+        }
+
+        protected internal byte GetPropHboBlockMax()
+        {
+            //     SPINEL_PROP_HBO_BLOCK_MAX  ///< Max offload block [S] (not supported)
+            throw new NotImplementedException();
+        }
+
+        protected internal byte GetPropHostPowerState()
+        {
+            //     SPINEL_PROP_HOST_POWER_STATE  /** Format: 'C` the valid values (`SPINEL_HOST_POWER_STATE_*`):
+            throw new NotImplementedException();
+        }
+
+        protected internal byte SetPropHostPowerState()
+        {
+            //    SPINEL_PROP_HOST_POWER_STATE
+            throw new NotImplementedException();
+        }
+
+        protected internal SpinelMcuPowerState GetPropMcuPowerState()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MCU_POWER_STATE);
 
             try
             {
-                return (byte)frameData.Response;
+                return (SpinelMcuPowerState)frameData.Response;
             }
             catch
             {
@@ -234,11 +261,216 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public bool DoPowerState(byte powerstate)
+        protected internal bool SetPropMcuPowerState(SpinelMcuPowerState PowerState)
         {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MCU_POWER_STATE, powerstate, "C");
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MCU_POWER_STATE, (byte) PowerState, "C");
 
-            if (frameData != null && (byte)(frameData.Response) == powerstate)
+            if (frameData != null && (byte)(frameData.Response) == (byte)PowerState)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #region "Core Extended Properties Not Ported C Code"
+        //    SPINEL_PROP_BASE_EXT__BEGIN = 0x1000,
+
+        ///// GPIO Configuration
+        ///** Format: `A(CCU)`
+        // *  Type: Read-Only (Optionally Read-write using `CMD_PROP_VALUE_INSERT`)
+        // *
+        // * An array of structures which contain the following fields:
+        // *
+        // * *   `C`: GPIO Number
+        // * *   `C`: GPIO Configuration Flags
+        // * *   `U`: Human-readable GPIO name
+        // *
+        // * GPIOs which do not have a corresponding entry are not supported.
+        // *
+        // * The configuration parameter contains the configuration flags for the
+        // * GPIO:
+        // *
+        // *       0   1   2   3   4   5   6   7
+        // *     +---+---+---+---+---+---+---+---+
+        // *     |DIR|PUP|PDN|TRIGGER|  RESERVED |
+        // *     +---+---+---+---+---+---+---+---+
+        // *             |O/D|
+        // *             +---+
+        // *
+        // * *   `DIR`: Pin direction. Clear (0) for input, set (1) for output.
+        // * *   `PUP`: Pull-up enabled flag.
+        // * *   `PDN`/`O/D`: Flag meaning depends on pin direction:
+        // *     *   Input: Pull-down enabled.
+        // *     *   Output: Output is an open-drain.
+        // * *   `TRIGGER`: Enumeration describing how pin changes generate
+        // *     asynchronous notification commands (TBD) from the NCP to the host.
+        // *     *   0: Feature disabled for this pin
+        // *     *   1: Trigger on falling edge
+        // *     *   2: Trigger on rising edge
+        // *     *   3: Trigger on level change
+        // * *   `RESERVED`: Bits reserved for future use. Always cleared to zero
+        // *     and ignored when read.
+        // *
+        // * As an optional feature, the configuration of individual pins may be
+        // * modified using the `CMD_PROP_VALUE_INSERT` command. Only the GPIO
+        // * number and flags fields MUST be present, the GPIO name (if present)
+        // * would be ignored. This command can only be used to modify the
+        // * configuration of GPIOs which are already exposed---it cannot be used
+        // * by the host to add additional GPIOs.
+        // */
+        //SPINEL_PROP_GPIO_CONFIG = SPINEL_PROP_BASE_EXT__BEGIN + 0,
+
+        ///// GPIO State Bitmask
+        ///** Format: `D`
+        // *  Type: Read-Write
+        // *
+        // * Contains a bit field identifying the state of the GPIOs. The length of
+        // * the data associated with these properties depends on the number of
+        // * GPIOs. If you have 10 GPIOs, you'd have two bytes. GPIOs are numbered
+        // * from most significant bit to least significant bit, so 0x80 is GPIO 0,
+        // * 0x40 is GPIO 1, etc.
+        // *
+        // * For GPIOs configured as inputs:
+        // *
+        // * *   `CMD_PROP_VAUE_GET`: The value of the associated bit describes the
+        // *     logic level read from the pin.
+        // * *   `CMD_PROP_VALUE_SET`: The value of the associated bit is ignored
+        // *     for these pins.
+        // *
+        // * For GPIOs configured as outputs:
+        // *
+        // * *   `CMD_PROP_VAUE_GET`: The value of the associated bit is
+        // *     implementation specific.
+        // * *   `CMD_PROP_VALUE_SET`: The value of the associated bit determines
+        // *     the new logic level of the output. If this pin is configured as an
+        // *     open-drain, setting the associated bit to 1 will cause the pin to
+        // *     enter a Hi-Z state.
+        // *
+        // * For GPIOs which are not specified in `PROP_GPIO_CONFIG`:
+        // *
+        // * *   `CMD_PROP_VAUE_GET`: The value of the associated bit is
+        // *     implementation specific.
+        // * *   `CMD_PROP_VALUE_SET`: The value of the associated bit MUST be
+        // *     ignored by the NCP.
+        // *
+        // * When writing, unspecified bits are assumed to be zero.
+        // */
+        //SPINEL_PROP_GPIO_STATE = SPINEL_PROP_BASE_EXT__BEGIN + 2,
+
+        ///// GPIO State Set-Only Bitmask
+        ///** Format: `D`
+        // *  Type: Write-Only
+        // *
+        // * Allows for the state of various output GPIOs to be set without affecting
+        // * other GPIO states. Contains a bit field identifying the output GPIOs that
+        // * should have their state set to 1.
+        // *
+        // * When writing, unspecified bits are assumed to be zero. The value of
+        // * any bits for GPIOs which are not specified in `PROP_GPIO_CONFIG` MUST
+        // * be ignored.
+        // */
+        //SPINEL_PROP_GPIO_STATE_SET = SPINEL_PROP_BASE_EXT__BEGIN + 3,
+
+        ///// GPIO State Clear-Only Bitmask
+        ///** Format: `D`
+        // *  Type: Write-Only
+        // *
+        // * Allows for the state of various output GPIOs to be cleared without affecting
+        // * other GPIO states. Contains a bit field identifying the output GPIOs that
+        // * should have their state cleared to 0.
+        // *
+        // * When writing, unspecified bits are assumed to be zero. The value of
+        // * any bits for GPIOs which are not specified in `PROP_GPIO_CONFIG` MUST
+        // * be ignored.
+        // */
+        //SPINEL_PROP_GPIO_STATE_CLEAR = SPINEL_PROP_BASE_EXT__BEGIN + 4,
+
+        ///// 32-bit random number from TRNG, ready-to-use.
+        //SPINEL_PROP_TRNG_32 = SPINEL_PROP_BASE_EXT__BEGIN + 5,
+
+        ///// 16 random bytes from TRNG, ready-to-use.
+        //SPINEL_PROP_TRNG_128 = SPINEL_PROP_BASE_EXT__BEGIN + 6,
+
+        ///// Raw samples from TRNG entropy source representing 32 bits of entropy.
+        //SPINEL_PROP_TRNG_RAW_32 = SPINEL_PROP_BASE_EXT__BEGIN + 7,
+
+        ///// NCP Unsolicited update filter
+        ///** Format: `A(I)`
+        // *  Type: Read-Write (optional Insert-Remove)
+        // *  Required capability: `CAP_UNSOL_UPDATE_FILTER`
+        // *
+        // * Contains a list of properties which are excluded from generating
+        // * unsolicited value updates. This property is empty after reset.
+        // * In other words, the host may opt-out of unsolicited property updates
+        // * for a specific property by adding that property id to this list.
+        // * Hosts SHOULD NOT add properties to this list which are not
+        // * present in `PROP_UNSOL_UPDATE_LIST`. If such properties are added,
+        // * the NCP ignores the unsupported properties.
+        // *
+        // */
+        //SPINEL_PROP_UNSOL_UPDATE_FILTER = SPINEL_PROP_BASE_EXT__BEGIN + 8,
+
+        ///// List of properties capable of generating unsolicited value update.
+        ///** Format: `A(I)`
+        // *  Type: Read-Only
+        // *  Required capability: `CAP_UNSOL_UPDATE_FILTER`
+        // *
+        // * Contains a list of properties which are capable of generating
+        // * unsolicited value updates. This list can be used when populating
+        // * `PROP_UNSOL_UPDATE_FILTER` to disable all unsolicited property
+        // * updates.
+        // *
+        // * This property is intended to effectively behave as a constant
+        // * for a given NCP firmware.
+        // */
+        //SPINEL_PROP_UNSOL_UPDATE_LIST = SPINEL_PROP_BASE_EXT__BEGIN + 9,
+
+        //SPINEL_PROP_BASE_EXT__END = 0x1100,
+        #endregion
+
+        //**********************************************************************
+        //
+        // Spinel PHY Properties
+        //
+        //**********************************************************************
+
+        /// <summary>
+        /// Get if the PHY is enabled
+        /// </summary>
+        /// <returns>.</returns>
+        protected internal bool GetPhyEnabled()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_ENABLED);
+            try
+            {
+                return (bool)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Spinel Net format violation");
+            }
+        }
+
+        /// <summary>
+        /// Set to True if the PHY is enabled, set to False otherwise.
+        /// </summary>
+        /// <returns>.</returns>
+        protected internal bool SetPhyEnabled(bool PhyEnabled)
+        {
+            FrameData frameData;
+
+            if (PhyEnabled)
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_ENABLED, 1, "b");
+            }
+            else
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_ENABLED, 0, "b");
+            }
+
+            if (frameData != null && (bool)(frameData.Response) == PhyEnabled)
             {
                 return true;
             }
@@ -248,9 +480,9 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public byte DoChannel()
+        protected internal byte GetPhyChan()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_PHY_CHAN);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_CHAN);
 
             try
             {
@@ -262,9 +494,9 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public bool DoChannel(byte channel)
+        protected internal bool SetPhyChan(byte channel)
         {
-            FrameData frameData = PropertySetValue(SpinelProperties.PROP_PHY_CHAN, channel, "C");
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_CHAN, channel, "C");
 
             if (frameData != null && ((byte)frameData.Response == channel))
             {
@@ -276,9 +508,9 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public byte[] DoChannels()
+        protected internal byte[] GetPhyChanSupported()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_PHY_CHAN_SUPPORTED);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_CHAN_SUPPORTED);
 
             try
             {
@@ -286,11 +518,450 @@ namespace dotNETCore.OpenThread.NCP
             }
             catch
             {
-                throw new SpinelProtocolExceptions("Supported channels format violation");
+                throw new SpinelProtocolExceptions("Phy Chan format violation");
             }
         }
 
-        public byte[] DoChannelsMask()
+        protected internal uint GetPhyFreq()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_FREQ);
+
+            try
+            {
+                return (uint)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Phy Freq format violation");
+            }
+        }
+
+        protected internal sbyte GetPhyCcaThreshold()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_CCA_THRESHOLD);
+
+            try
+            {
+                return (sbyte)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Phy Cca Threshold format violation");
+            }
+        }
+
+        protected internal bool SetPhyCcaThreshold(sbyte CcaThreshold)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_CCA_THRESHOLD, CcaThreshold, "c");
+
+            if (frameData != null && ((sbyte)frameData.Response == CcaThreshold))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal sbyte GetPhyTxPower()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_CHAN);
+
+            try
+            {
+                return (sbyte)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Phy Cca Threshold format violation");
+            }
+        }
+
+        protected internal bool SetPhyTxPower(sbyte TxPower)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_TX_POWER, TxPower, "c");
+
+            if (frameData != null && ((sbyte)frameData.Response == TxPower))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal sbyte GetPhyRssi()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_RSSI);
+
+            try
+            {
+                return (sbyte)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Phy format violation");
+            }
+        }
+
+        protected internal sbyte GetPhyRxSensitivity()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_RX_SENSITIVITY);
+
+            try
+            {
+                return (sbyte)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Phy format violation");
+            }
+        }
+
+      
+        protected internal bool GetPcapEnabled()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_PCAP_ENABLED);
+            try
+            {
+                return (bool)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Phy format violation");
+            }
+        }
+
+        protected internal bool SetPcapEnabled(bool PcapEnabled)
+        {
+            FrameData frameData;
+
+            if (PcapEnabled)
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_PCAP_ENABLED, 1, "b");
+            }
+            else
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_PCAP_ENABLED, 0, "b");
+            }
+
+            if (frameData != null && (bool)(frameData.Response) == PcapEnabled)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal bool SetChanPreferred(byte[] ChanPreferred)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_CHAN_PREFERRED, ChanPreferred, "C");
+
+            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, ChanPreferred))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal sbyte GetPhyFemLnaGain()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_FEM_LNA_GAIN);
+
+            try
+            {
+                return (sbyte)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Phy format violation");
+            }
+        }
+
+        protected internal bool SetPhyFemLnaGain(sbyte LnaGain)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_FEM_LNA_GAIN, LnaGain, "c");
+
+            if (frameData != null && ((sbyte)frameData.Response == LnaGain))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal bool SetPhyChanMaxPower(byte Channel, sbyte MaxPower)
+        {
+            byte[] ChanMaxPower = new byte[2];
+
+            ChanMaxPower[0] = Channel;
+            ChanMaxPower[1] = (byte) MaxPower;
+
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_CHAN_MAX_POWER, ChanMaxPower, "Cc");
+
+            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, ChanMaxPower))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal ushort GetPhyRegionCode()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_REGION_CODE);
+
+            try
+            {
+                return (ushort)(frameData.Response);
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Pan id format violation");
+            }
+        }
+
+        protected internal bool SetPhyRegionCode(ushort RegionCode)
+        {           
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_PHY_REGION_CODE, RegionCode, "S");
+
+            if (frameData != null && (ushort)(frameData.Response) == RegionCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        #region "Phy Extended Properties Not Ported C Code"
+        //    SPINEL_PROP_PHY_EXT__BEGIN = 0x1200,
+
+        ///// Signal Jamming Detection Enable
+        ///** Format: `b`
+        // *
+        // * Indicates if jamming detection is enabled or disabled. Set to true
+        // * to enable jamming detection.
+        // */
+        //SPINEL_PROP_JAM_DETECT_ENABLE = SPINEL_PROP_PHY_EXT__BEGIN + 0,
+
+        ///// Signal Jamming Detected Indicator
+        ///** Format: `b` (Read-Only)
+        // *
+        // * Set to true if radio jamming is detected. Set to false otherwise.
+        // *
+        // * When jamming detection is enabled, changes to the value of this
+        // * property are emitted asynchronously via `CMD_PROP_VALUE_IS`.
+        // */
+        //SPINEL_PROP_JAM_DETECTED = SPINEL_PROP_PHY_EXT__BEGIN + 1,
+
+        ///// Jamming detection RSSI threshold
+        ///** Format: `c`
+        // *  Units: dBm
+        // *
+        // * This parameter describes the threshold RSSI level (measured in
+        // * dBm) above which the jamming detection will consider the
+        // * channel blocked.
+        // */
+        //SPINEL_PROP_JAM_DETECT_RSSI_THRESHOLD = SPINEL_PROP_PHY_EXT__BEGIN + 2,
+
+        ///// Jamming detection window size
+        ///** Format: `C`
+        // *  Units: Seconds (1-63)
+        // *
+        // * This parameter describes the window period for signal jamming
+        // * detection.
+        // */
+        //SPINEL_PROP_JAM_DETECT_WINDOW = SPINEL_PROP_PHY_EXT__BEGIN + 3,
+
+        ///// Jamming detection busy period
+        ///** Format: `C`
+        // *  Units: Seconds (1-63)
+        // *
+        // * This parameter describes the number of aggregate seconds within
+        // * the detection window where the RSSI must be above
+        // * `PROP_JAM_DETECT_RSSI_THRESHOLD` to trigger detection.
+        // *
+        // * The behavior of the jamming detection feature when `PROP_JAM_DETECT_BUSY`
+        // * is larger than `PROP_JAM_DETECT_WINDOW` is undefined.
+        // */
+        //SPINEL_PROP_JAM_DETECT_BUSY = SPINEL_PROP_PHY_EXT__BEGIN + 4,
+
+        ///// Jamming detection history bitmap (for debugging)
+        ///** Format: `X` (read-only)
+        // *
+        // * This value provides information about current state of jamming detection
+        // * module for monitoring/debugging purpose. It returns a 64-bit value where
+        // * each bit corresponds to one second interval starting with bit 0 for the
+        // * most recent interval and bit 63 for the oldest intervals (63 sec earlier).
+        // * The bit is set to 1 if the jamming detection module observed/detected
+        // * high signal level during the corresponding one second interval.
+        // *
+        // */
+        //SPINEL_PROP_JAM_DETECT_HISTORY_BITMAP = SPINEL_PROP_PHY_EXT__BEGIN + 5,
+
+        ///// Channel monitoring sample interval
+        ///** Format: `L` (read-only)
+        // *  Units: Milliseconds
+        // *
+        // * Required capability: SPINEL_CAP_CHANNEL_MONITOR
+        // *
+        // * If channel monitoring is enabled and active, every sample interval, a
+        // * zero-duration Energy Scan is performed, collecting a single RSSI sample
+        // * per channel. The RSSI samples are compared with a pre-specified RSSI
+        // * threshold.
+        // *
+        // */
+        //SPINEL_PROP_CHANNEL_MONITOR_SAMPLE_INTERVAL = SPINEL_PROP_PHY_EXT__BEGIN + 6,
+
+        ///// Channel monitoring RSSI threshold
+        ///** Format: `c` (read-only)
+        // *  Units: dBm
+        // *
+        // * Required capability: SPINEL_CAP_CHANNEL_MONITOR
+        // *
+        // * This value specifies the threshold used by channel monitoring module.
+        // * Channel monitoring maintains the average rate of RSSI samples that
+        // * are above the threshold within (approximately) a pre-specified number
+        // * of samples (sample window).
+        // *
+        // */
+        //SPINEL_PROP_CHANNEL_MONITOR_RSSI_THRESHOLD = SPINEL_PROP_PHY_EXT__BEGIN + 7,
+
+        ///// Channel monitoring sample window
+        ///** Format: `L` (read-only)
+        // *  Units: Number of samples
+        // *
+        // * Required capability: SPINEL_CAP_CHANNEL_MONITOR
+        // *
+        // * The averaging sample window length (in units of number of channel
+        // * samples) used by channel monitoring module. Channel monitoring will
+        // * sample all channels every sample interval. It maintains the average rate
+        // * of RSSI samples that are above the RSSI threshold within (approximately)
+        // * the sample window.
+        // *
+        // */
+        //SPINEL_PROP_CHANNEL_MONITOR_SAMPLE_WINDOW = SPINEL_PROP_PHY_EXT__BEGIN + 8,
+
+        ///// Channel monitoring sample count
+        ///** Format: `L` (read-only)
+        // *  Units: Number of samples
+        // *
+        // * Required capability: SPINEL_CAP_CHANNEL_MONITOR
+        // *
+        // * Total number of RSSI samples (per channel) taken by the channel
+        // * monitoring module since its start (since Thread network interface
+        // * was enabled).
+        // *
+        // */
+        //SPINEL_PROP_CHANNEL_MONITOR_SAMPLE_COUNT = SPINEL_PROP_PHY_EXT__BEGIN + 9,
+
+        ///// Channel monitoring channel occupancy
+        ///** Format: `A(t(CU))` (read-only)
+        // *
+        // * Required capability: SPINEL_CAP_CHANNEL_MONITOR
+        // *
+        // * Data per item is:
+        // *
+        // *  `C`: Channel
+        // *  `U`: Channel occupancy indicator
+        // *
+        // * The channel occupancy value represents the average rate/percentage of
+        // * RSSI samples that were above RSSI threshold ("bad" RSSI samples) within
+        // * (approximately) sample window latest RSSI samples.
+        // *
+        // * Max value of `0xffff` indicates all RSSI samples were above RSSI
+        // * threshold (i.e. 100% of samples were "bad").
+        // *
+        // */
+        //SPINEL_PROP_CHANNEL_MONITOR_CHANNEL_OCCUPANCY = SPINEL_PROP_PHY_EXT__BEGIN + 10,
+
+        ///// Radio caps
+        ///** Format: `i` (read-only)
+        // *
+        // * Data per item is:
+        // *
+        // *  `i`: Radio Capabilities.
+        // *
+        // */
+        //SPINEL_PROP_RADIO_CAPS = SPINEL_PROP_PHY_EXT__BEGIN + 11,
+
+        ///// All coex metrics related counters.
+        ///** Format: t(LLLLLLLL)t(LLLLLLLLL)bL  (Read-only)
+        // *
+        // * Required capability: SPINEL_CAP_RADIO_COEX
+        // *
+        // * The contents include two structures and two common variables, first structure corresponds to
+        // * all transmit related coex counters, second structure provides the receive related counters.
+        // *
+        // * The transmit structure includes:
+        // *   'L': NumTxRequest                       (The number of tx requests).
+        // *   'L': NumTxGrantImmediate                (The number of tx requests while grant was active).
+        // *   'L': NumTxGrantWait                     (The number of tx requests while grant was inactive).
+        // *   'L': NumTxGrantWaitActivated            (The number of tx requests while grant was inactive that were
+        // *                                            ultimately granted).
+        // *   'L': NumTxGrantWaitTimeout              (The number of tx requests while grant was inactive that timed out).
+        // *   'L': NumTxGrantDeactivatedDuringRequest (The number of tx requests that were in progress when grant was
+        // *                                            deactivated).
+        // *   'L': NumTxDelayedGrant                  (The number of tx requests that were not granted within 50us).
+        // *   'L': AvgTxRequestToGrantTime            (The average time in usec from tx request to grant).
+        // *
+        // * The receive structure includes:
+        // *   'L': NumRxRequest                       (The number of rx requests).
+        // *   'L': NumRxGrantImmediate                (The number of rx requests while grant was active).
+        // *   'L': NumRxGrantWait                     (The number of rx requests while grant was inactive).
+        // *   'L': NumRxGrantWaitActivated            (The number of rx requests while grant was inactive that were
+        // *                                            ultimately granted).
+        // *   'L': NumRxGrantWaitTimeout              (The number of rx requests while grant was inactive that timed out).
+        // *   'L': NumRxGrantDeactivatedDuringRequest (The number of rx requests that were in progress when grant was
+        // *                                            deactivated).
+        // *   'L': NumRxDelayedGrant                  (The number of rx requests that were not granted within 50us).
+        // *   'L': AvgRxRequestToGrantTime            (The average time in usec from rx request to grant).
+        // *   'L': NumRxGrantNone                     (The number of rx requests that completed without receiving grant).
+        // *
+        // * Two common variables:
+        // *   'b': Stopped        (Stats collection stopped due to saturation).
+        // *   'L': NumGrantGlitch (The number of of grant glitches).
+        // */
+        //SPINEL_PROP_RADIO_COEX_METRICS = SPINEL_PROP_PHY_EXT__BEGIN + 12,
+
+        ///// Radio Coex Enable
+        ///** Format: `b`
+        // *
+        // * Required capability: SPINEL_CAP_RADIO_COEX
+        // *
+        // * Indicates if radio coex is enabled or disabled. Set to true to enable radio coex.
+        // */
+        //SPINEL_PROP_RADIO_COEX_ENABLE = SPINEL_PROP_PHY_EXT__BEGIN + 13,
+
+        //SPINEL_PROP_PHY_EXT__END = 0x1300,
+
+        #endregion
+
+        //**********************************************************************
+        //
+        // Spinel MAC Properties
+        //
+        //**********************************************************************
+
+        protected internal void SetMacScanState(SpinelScanState ScanState)
+        {
+            PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_STATE, (byte)ScanState, "C");
+        }
+
+        protected internal byte[] GetMacScanMask()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_MASK);
 
@@ -304,7 +975,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public bool DoChannelsMask(byte[] channels)
+        protected internal bool SetMacScanMask(byte[] channels)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_MASK, channels, "D");
 
@@ -318,7 +989,94 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public ushort DoPanId()
+        protected internal ushort GetMacScanPeriod()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_PERIOD);
+
+            try
+            {
+                return (ushort)(frameData.Response);
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Pan id format violation");
+            }
+        }
+
+        protected internal bool SetMacScanPeriod(ushort ScanPeriod)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_PERIOD, ScanPeriod, "S");
+
+            if (frameData != null && (ushort)(frameData.Response) == ScanPeriod)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //SPINEL_PROP_MAC_SCAN_BEACON = SPINEL_PROP_MAC__BEGIN + 3, In async packet handler
+
+        protected internal EUI64 GetMac_15_4_Laddr()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_LADDR);
+
+            try
+            {
+                return (EUI64)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Addesss format violation");
+            }
+        }
+
+        protected internal bool SetMac_15_4_Laddr(EUI64 LongAddr)
+        {
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_LADDR, LongAddr.bytes, "D");
+
+            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, LongAddr.bytes))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal EUI64 GetMac_15_4_Saddr()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_SADDR);
+
+            try
+            {
+                return (EUI64)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Addesss format violation");
+            }
+        }
+
+        protected internal bool SetMac_15_4_Saddr(ushort ShortAddr)
+        {
+           
+            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_SADDR, ShortAddr, "S");
+
+            if (frameData != null && (ushort)(frameData.Response) == ShortAddr)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected internal ushort GetMac_15_4_PanId()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_PANID);
 
@@ -332,7 +1090,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public bool DoPanId(ushort panId)
+        protected internal bool SetMac_15_4_PanId(ushort panId)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_PANID, panId, "S");
 
@@ -346,133 +1104,35 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public byte[] DoXpanId()
+     
+        protected internal bool GetMacRawStreamEnabled()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_XPANID);
-
-            try
-            {
-                return (byte[])frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("XPan id format violation");
-            }
-        }
-
-        public bool DoXpanId(byte[] xpanId)
-        {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_XPANID, xpanId, "D");
-
-            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, xpanId))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public IPv6Address[] DoIPAddresses()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ADDRESS_TABLE);
-
-            try
-            {
-                return (IPv6Address[])frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("IP addesss format violation");
-            }
-        }
-
-        public IPv6Address DoIPLinkLocal64()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_LL_ADDR);
-
-            try
-            {
-                return (IPv6Address)frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("IP addesss format violation");
-            }
-        }
-
-        public EUI64 DoExtendedAddress()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_15_4_LADDR);
-
-            try
-            {
-                return (EUI64)frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("IP addesss format violation");
-            }
-        }
-
-        public EUI64 DoPhysicalAddress()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.PROP_HWADDR);
-
-            try
-            {
-                return (EUI64)frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("IP addesss format violation");
-            }
-        }
-
-
-
-        public IPv6Address DoIPMeshLocal64()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ML_ADDR);
-
-            try
-            {
-                return (IPv6Address)frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("IP addesss format violation");
-            }
-        }
-
-        public bool DoInterfaceConfig()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MAC_RAW_STREAM_ENABLED);
             try
             {
                 return (bool)frameData.Response;
             }
             catch
             {
-                throw new SpinelProtocolExceptions("XPan id format violation");
+                throw new SpinelProtocolExceptions("Mac format violation");
             }
         }
 
-        public bool DoInterfaceConfig(bool interfaceState)
+     
+        protected internal bool SetMacRawStreamEnabled(bool StreamEnabled)
         {
             FrameData frameData;
 
-            if (interfaceState)
+            if (StreamEnabled)
             {
-                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP, 1, "b");
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_RAW_STREAM_ENABLED, 1, "b");
             }
             else
             {
-                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP, 0, "b");
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_RAW_STREAM_ENABLED, 0, "b");
             }
 
-            if (frameData != null && (bool)(frameData.Response) == interfaceState)
+            if (frameData != null && (bool)(frameData.Response) == StreamEnabled)
             {
                 return true;
             }
@@ -482,136 +1142,149 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public bool DoThread()
+        protected internal byte GetMacPromiscuousMode()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP);
-            try
-            {
-                return (bool)frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("Stack up format violation");
-            }
+            //SPINEL_PROP_THREAD_MODE  Format `b` - Read-write
+            throw new NotImplementedException();
         }
 
-        public bool DoThread(bool threadState)
+        protected internal bool SetMacPromiscuousMode(byte PromiscuousMode)
         {
-            FrameData frameData;
-
-            if (threadState)
-            {
-                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP, 1, "b");
-            }
-            else
-            {
-                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP, 0, "b");
-            }
-
-            if (frameData != null && (bool)(frameData.Response) == threadState)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            //SPINEL_PROP_THREAD_MODE  Format `b` - Read-write
+            throw new NotImplementedException();
         }
 
-        public byte[] DoMasterkey()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY);
+        //  SPINEL_PROP_MAC_ENERGY_SCAN_RESULT = SPINEL_PROP_MAC__BEGIN + 9,  /** Format: `Cc` - Asynchronous event only In async packet handler
 
-            try
-            {
-                return (byte[])frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("XPan id format violation");
-            }
+        protected internal byte GetMacDataPollPeriod()
+        {
+            //SPINEL_PROP_THREAD_MODE  Format `b` - Read-write
+            throw new NotImplementedException();
         }
 
-        public bool DoMasterkey(byte[] masterKey)
+        protected internal bool SetMacDataPollPeriod(uint PollPeriod)
         {
-            FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY, masterKey, "D");
-
-            if (frameData != null && Utilities.ByteArrayCompare((byte[])frameData.Response, masterKey))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            
+            //SPINEL_PROP_THREAD_MODE  Format `b` - Read-write
+            throw new NotImplementedException();
         }
 
-        public uint DoPartitionId()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_PARTITION_ID);
-            try
-            {
-                return (uint)frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("Partition id format violation");
-            }
-        }
+        #region "Mac Extended Properties Not Ported C Code"
+    //    SPINEL_PROP_MAC_EXT__BEGIN = 0x1300,
 
-        public void DoScan(byte ScanState)
-        {
-            PropertySetValue(SpinelProperties.SPINEL_PROP_MAC_SCAN_STATE, ScanState, "C");
-        }
+    ///// MAC Allowlist
+    ///** Format: `A(t(Ec))`
+    // * Required capability: `CAP_MAC_ALLOWLIST`
+    // *
+    // * Structure Parameters:
+    // *
+    // *  `E`: EUI64 address of node
+    // *  `c`: Optional RSSI-override value. The value 127 indicates
+    // *       that the RSSI-override feature is not enabled for this
+    // *       address. If this value is omitted when setting or
+    // *       inserting, it is assumed to be 127. This parameter is
+    // *       ignored when removing.
+    // */
+    //SPINEL_PROP_MAC_ALLOWLIST = SPINEL_PROP_MAC_EXT__BEGIN + 0,
 
-        public bool DoProperty_NET_REQUIRE_JOIN_EXISTING(bool State)
-        {
-            FrameData frameData;
+    ///// MAC Allowlist Enabled Flag
+    ///** Format: `b`
+    // * Required capability: `CAP_MAC_ALLOWLIST`
+    // *
+    // */
+    //SPINEL_PROP_MAC_ALLOWLIST_ENABLED = SPINEL_PROP_MAC_EXT__BEGIN + 1,
 
-            if (State)
-            {
-                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING, 1, "b");
-            }
-            else
-            {
-                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING, 0, "b");
-            }
+    ///// MAC Extended Address
+    ///** Format: `E`
+    // *
+    // *  Specified by Thread. Randomly-chosen, but non-volatile EUI-64.
+    // */
+    //SPINEL_PROP_MAC_EXTENDED_ADDR = SPINEL_PROP_MAC_EXT__BEGIN + 2,
 
-            if (frameData != null && (bool)(frameData.Response) == State)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+    ///// MAC Source Match Enabled Flag
+    ///** Format: `b`
+    // * Required Capability: SPINEL_CAP_MAC_RAW or SPINEL_CAP_CONFIG_RADIO
+    // *
+    // * Set to true to enable radio source matching or false to disable it.
+    // * The source match functionality is used by radios when generating
+    // * ACKs. The short and extended address lists are used for setting
+    // * the Frame Pending bit in the ACKs.
+    // *
+    // */
+    //SPINEL_PROP_MAC_SRC_MATCH_ENABLED = SPINEL_PROP_MAC_EXT__BEGIN + 3,
 
-        public void DoSendData(byte[] frame, bool waitResponse = true)
-        {
-            byte[] dataCombined = mEncoder.EncodeDataWithLength(frame);
+    ///// MAC Source Match Short Address List
+    ///** Format: `A(S)`
+    // * Required Capability: SPINEL_CAP_MAC_RAW or SPINEL_CAP_CONFIG_RADIO
+    // *
+    // */
+    //SPINEL_PROP_MAC_SRC_MATCH_SHORT_ADDRESSES = SPINEL_PROP_MAC_EXT__BEGIN + 4,
 
-            PropertySetValue(SpinelProperties.SPINEL_PROP_STREAM_NET, dataCombined, "dD", 129, waitResponse);
-        }
+    ///// MAC Source Match Extended Address List
+    ///** Format: `A(E)`
+    // *  Required Capability: SPINEL_CAP_MAC_RAW or SPINEL_CAP_CONFIG_RADIO
+    // *
+    // */
+    //SPINEL_PROP_MAC_SRC_MATCH_EXTENDED_ADDRESSES = SPINEL_PROP_MAC_EXT__BEGIN + 5,
 
-        public void DoCountersReset()
-        {
-            PropertySetValue(SpinelProperties.SPINEL_PROP_CNTR_RESET, 1, "C");
-        }
+    ///// MAC Denylist
+    ///** Format: `A(t(E))`
+    // * Required capability: `CAP_MAC_ALLOWLIST`
+    // *
+    // * Structure Parameters:
+    // *
+    // *  `E`: EUI64 address of node
+    // *
+    // */
+    //SPINEL_PROP_MAC_DENYLIST = SPINEL_PROP_MAC_EXT__BEGIN + 6,
 
-        public ushort[] DoCountersMessageBuffer()
-        {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MSG_BUFFER_COUNTERS);
+    ///// MAC Denylist Enabled Flag
+    ///** Format: `b`
+    // *  Required capability: `CAP_MAC_ALLOWLIST`
+    // */
+    //SPINEL_PROP_MAC_DENYLIST_ENABLED = SPINEL_PROP_MAC_EXT__BEGIN + 7,
 
-            try
-            {
-                return (ushort[])frameData.Response;
-            }
-            catch
-            {
-                throw new SpinelProtocolExceptions("Buffer counters format violation");
-            }
-        }
+    ///// MAC Received Signal Strength Filter
+    ///** Format: `A(t(Ec))`
+    // * Required capability: `CAP_MAC_ALLOWLIST`
+    // *
+    // * Structure Parameters:
+    // *
+    // * * `E`: Optional EUI64 address of node. Set default RSS if not included.
+    // * * `c`: Fixed RSS. 127 means not set.
+    // */
+    //SPINEL_PROP_MAC_FIXED_RSS = SPINEL_PROP_MAC_EXT__BEGIN + 8,
+
+    ///// The CCA failure rate
+    ///** Format: `S`
+    // *
+    // * This property provides the current CCA (Clear Channel Assessment) failure rate.
+    // *
+    // * Maximum value `0xffff` corresponding to 100% failure rate.
+    // *
+    // */
+    //SPINEL_PROP_MAC_CCA_FAILURE_RATE = SPINEL_PROP_MAC_EXT__BEGIN + 9,
+
+    ///// MAC Max direct retry number
+    ///** Format: `C`
+    // *
+    // * The maximum (user-specified) number of direct frame transmission retries.
+    // *
+    // */
+    //SPINEL_PROP_MAC_MAX_RETRY_NUMBER_DIRECT = SPINEL_PROP_MAC_EXT__BEGIN + 10,
+
+    ///// MAC Max indirect retry number
+    ///** Format: `C`
+    // * Required capability: `SPINEL_CAP_CONFIG_FTD`
+    // *
+    // * The maximum (user-specified) number of indirect frame transmission retries.
+    // *
+    // */
+    //SPINEL_PROP_MAC_MAX_RETRY_NUMBER_INDIRECT = SPINEL_PROP_MAC_EXT__BEGIN + 11,
+
+    //SPINEL_PROP_MAC_EXT__END = 0x1400,
+        #endregion
+
 
         //**********************************************************************
         //
@@ -623,7 +1296,7 @@ namespace dotNETCore.OpenThread.NCP
         /// Network Is Saved (Is Commissioned)
         /// </summary>
         /// <returns>true if there is a network state stored/saved.</returns>
-        protected bool GetNetSaved()
+        protected internal bool GetNetSaved()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_SAVED);
             try
@@ -640,7 +1313,7 @@ namespace dotNETCore.OpenThread.NCP
         /// Network Interface Status
         /// </summary>
         /// <returns>Returns true if interface up and false if interface down</returns>
-        protected bool GetNetIfUp()
+        protected internal bool GetNetIfUp()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_IF_UP);
             try
@@ -658,7 +1331,7 @@ namespace dotNETCore.OpenThread.NCP
         /// </summary>
         /// <param name="NetworkInterfaceStatus"></param>
         /// <returns></returns>
-        protected bool SetNetIfUp(bool NetworkInterfaceStatus)
+        protected internal bool SetNetIfUp(bool NetworkInterfaceStatus)
         {
             FrameData frameData;
 
@@ -681,7 +1354,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool GetNetStackUp()
+        protected internal bool GetNetStackUp()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_STACK_UP);
             try
@@ -694,7 +1367,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetStackUp(bool ThreadStackStatus)
+        protected internal bool SetNetStackUp(bool ThreadStackStatus)
         {
             FrameData frameData;
 
@@ -717,7 +1390,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected SpinelNetRole GetNetRole()
+        protected internal SpinelNetRole GetNetRole()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_ROLE);
 
@@ -731,7 +1404,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetRole(SpinelNetRole ThreadDeviceRole)
+        protected internal bool SetNetRole(SpinelNetRole ThreadDeviceRole)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_ROLE, ((byte)ThreadDeviceRole), "C");
 
@@ -745,7 +1418,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected string GetNetNetworkName()
+        protected internal string GetNetNetworkName()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME);
 
@@ -759,7 +1432,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetNetworkName(string ThreadNetworkName)
+        protected internal bool SetNetNetworkName(string ThreadNetworkName)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME, ThreadNetworkName, "U");
 
@@ -773,7 +1446,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected byte[] GetNetXpanId()
+        protected internal byte[] GetNetXpanId()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_XPANID);
 
@@ -787,7 +1460,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetXpanId(byte[] ThreadNetworkExtendedPANId)
+        protected internal bool SetNetXpanId(byte[] ThreadNetworkExtendedPANId)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_XPANID, ThreadNetworkExtendedPANId, "D");
 
@@ -801,7 +1474,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected byte[] GetNetNetworkKey()
+        protected internal byte[] GetNetNetworkKey()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY);
 
@@ -815,7 +1488,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetNetworkKey(byte[] ThreadNetworkKey)
+        protected internal bool SetNetNetworkKey(byte[] ThreadNetworkKey)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY, ThreadNetworkKey, "D");
 
@@ -829,7 +1502,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected uint GetNetKeySequenceCounter()
+        protected internal uint GetNetKeySequenceCounter()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER);
 
@@ -843,7 +1516,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetKeySequenceCounter(uint ThreadNetworkKeySequenceCounter)
+        protected internal bool SetNetKeySequenceCounter(uint ThreadNetworkKeySequenceCounter)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER, ThreadNetworkKeySequenceCounter, "L");
 
@@ -857,7 +1530,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected uint GetNetPartitionId()
+        protected internal uint GetNetPartitionId()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_PARTITION_ID);
 
@@ -871,7 +1544,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetPartitionId(uint ThreadNetworkPartitionId)
+        protected internal bool SetNetPartitionId(uint ThreadNetworkPartitionId)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_PARTITION_ID, ThreadNetworkPartitionId, "L");
 
@@ -885,31 +1558,55 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool GetNetRequireJoinExisting()
+        protected internal bool GetNetRequireJoinExisting()
         {
-            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
-            throw new NotImplementedException();
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING);
+            try
+            {
+                return (bool)frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Net format violation");
+            }
         }
 
-        protected bool SetNetRequireJoinExisting(bool RequireJoinExisting)
+        protected internal bool SetNetRequireJoinExisting(bool RequireJoinExisting)
         {
-            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
-            throw new NotImplementedException();
+            FrameData frameData;
+
+            if (RequireJoinExisting)
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING, 1, "b");
+            }
+            else
+            {
+                frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING, 0, "b");
+            }
+
+            if (frameData != null && (bool)(frameData.Response) == RequireJoinExisting)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        protected uint GetNetKeySwitchGuardtime()
+        protected internal uint GetNetKeySwitchGuardtime()
         {
             //     SPINEL_PROP_NET_KEY_SWITCH_GUARDTIME
             throw new NotImplementedException();
         }
 
-        protected bool SetNetKeySwitchGuardtime(uint ThreadNetworkKeySwitchGuardTime)
+        protected internal bool SetNetKeySwitchGuardtime(uint ThreadNetworkKeySwitchGuardTime)
         {
-            //    SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING
+            //    SPINEL_PROP_NET_KEY_SWITCH_GUARDTIME
             throw new NotImplementedException();
         }
 
-        protected byte[] GetNetNetworkPSKC()
+        protected internal byte[] GetNetNetworkPSKC()
         {
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_NET_PSKC);
 
@@ -923,7 +1620,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected bool SetNetNetworkPSKC(byte[] ThreadNetworkPSKc)
+        protected internal bool SetNetNetworkPSKC(byte[] ThreadNetworkPSKc)
         {
             FrameData frameData = PropertySetValue(SpinelProperties.SPINEL_PROP_NET_PSKC, ThreadNetworkPSKc, "D");
 
@@ -943,109 +1640,109 @@ namespace dotNETCore.OpenThread.NCP
         //
         //**********************************************************************
 
-        protected IPv6Address[] GetThreadLeaderAddr()
+        protected internal IPv6Address[] GetThreadLeaderAddr()
         {
             //   SPINEL_PROP_THREAD_LEADER_ADDR
             throw new NotImplementedException();
         }
 
-        protected OpenThreadRouterInfo GetThreadLeaderParent()
+        protected internal OpenThreadRouterInfo GetThreadLeaderParent()
         {
             //   SPINEL_PROP_THREAD_PARENT  /** Format: `ESLccCC` - Read only
             throw new NotImplementedException();
         }
 
-        protected OpenThreadChildInfo[] GetThreadChildTable()
+        protected internal OpenThreadChildInfo[] GetThreadChildTable()
         {
             //SPINEL_PROP_THREAD_CHILD_TABLE Format: [A(t(ESLLCCcCc)] - Read only         
             throw new NotImplementedException();
         }
 
-        protected byte GetThreadLeaderRid()
+        protected internal byte GetThreadLeaderRid()
         {
             //SPINEL_PROP_THREAD_LEADER_RID Format `C` - Read only  
             throw new NotImplementedException();
         }
 
-        protected byte GetThreadLeaderWeight()
+        protected internal byte GetThreadLeaderWeight()
         {
             // SPINEL_PROP_THREAD_LEADER_WEIGHT Format `C` - Read only  
             throw new NotImplementedException();
         }
 
-        protected byte GetThreadLocalLeaderWeight()
+        protected internal byte GetThreadLocalLeaderWeight()
         {
             // SPINEL_PROP_THREAD_LOCAL_LEADER_WEIGHT Format `C` - Read only  
             throw new NotImplementedException();
         }
 
-        protected byte[] GetThreadNetworkData()
+        protected internal byte[] GetThreadNetworkData()
         {
             // SPINEL_PROP_THREAD_NETWORK_DATA   /** Format `D` - Read only
             throw new NotImplementedException();
         }
 
-        protected byte GetThreadNetworkDataVersion()
+        protected internal byte GetThreadNetworkDataVersion()
         {
             // SPINEL_PROP_THREAD_NETWORK_DATA_VERSION Format `C` - Read only  
             throw new NotImplementedException();
         }
 
-        protected byte[] GetThreadStableNetworkData()
+        protected internal byte[] GetThreadStableNetworkData()
         {
             // SPINEL_PROP_THREAD_STABLE_NETWORK_DATA   /** Format `D` - Read only
             throw new NotImplementedException();
         }
 
-        protected byte GetThreadStableNetworkDataVersion()
+        protected internal byte GetThreadStableNetworkDataVersion()
         {
             // SPINEL_PROP_THREAD_STABLE_NETWORK_DATA_VERSION Format `C` - Read only  
             throw new NotImplementedException();
         }
 
-        protected OpenThreadBorderRouterConfig[] GetThreadOnMeshNets()
+        protected internal OpenThreadBorderRouterConfig[] GetThreadOnMeshNets()
         {
             // SPINEL_PROP_THREAD_ON_MESH_NETS Format: `A(t(6CbCbSC))`
             throw new NotImplementedException();
         }
 
-        protected OpenThreadExternalRouteConfig[] GetThreadOffMeshRoutes()
+        protected internal OpenThreadExternalRouteConfig[] GetThreadOffMeshRoutes()
         {
             // SPINEL_PROP_THREAD_OFF_MESH_ROUTES Format: `A(t(6CbCbSC))`
             throw new NotImplementedException();
         }
 
-        protected ushort[] GetThreadAssistingPorts()
+        protected internal ushort[] GetThreadAssistingPorts()
         {
             //  //SPINEL_PROP_THREAD_ASSISTING_PORTS Format `A(S)`
             throw new NotImplementedException();
         }
 
-        protected bool SetThreadAssistingPorts(ushort[] AssistingPort)
+        protected internal bool SetThreadAssistingPorts(ushort[] AssistingPort)
         {
             //  //SPINEL_PROP_THREAD_ASSISTING_PORTS Format `A(S)`
             throw new NotImplementedException();
         }
 
-        protected bool GetThreadAllowLocalNetDataChange()
+        protected internal bool GetThreadAllowLocalNetDataChange()
         {
             //SPINEL_PROP_THREAD_ALLOW_LOCAL_NET_DATA_CHANGE Format `b` - Read-write
             throw new NotImplementedException();
         }
 
-        protected bool SetThreadAllowLocalNetDataChange(bool AllowLocalNetworkDataChange)
+        protected internal bool SetThreadAllowLocalNetDataChange(bool AllowLocalNetworkDataChange)
         {
             //SPINEL_PROP_THREAD_ALLOW_LOCAL_NET_DATA_CHANGE Format `b` - Read-write
             throw new NotImplementedException();
         }
 
-        protected byte GetThreadThreadMode()
+        protected internal byte GetThreadThreadMode()
         {
             //SPINEL_PROP_THREAD_MODE  Format `b` - Read-write
             throw new NotImplementedException();
         }
 
-        protected bool SetThreadThreadMode(byte ThreadMode)
+        protected internal bool SetThreadThreadMode(byte ThreadMode)
         {
             //SPINEL_PROP_THREAD_MODE  Format `b` - Read-write
             throw new NotImplementedException();
@@ -1060,19 +1757,19 @@ namespace dotNETCore.OpenThread.NCP
 
 
 
-        protected OpenThreadNeighborInfo[] GetThreadNeighborTable()
+        protected internal OpenThreadNeighborInfo[] GetThreadNeighborTable()
         {
             //SPINEL_PROP_THREAD_NEIGHBOR_TABLE  Format: `A(t(ESLCcCbLLc))` - Read only
             throw new NotImplementedException();
         }
 
-        protected OpenThreadRouterInfo[] GetThreadRouterTable()
+        protected internal OpenThreadRouterInfo[] GetThreadRouterTable()
         {
             //SPINEL_PROP_THREAD_ROUTER_TABLE   Format: `A(t(ESCCCCCCb)` - Read only
             throw new NotImplementedException();
         }
 
-        protected OpenThreadChildInfo[] GetThreadChildTableAddresses()
+        protected internal OpenThreadChildInfo[] GetThreadChildTableAddresses()
         {
             //SPINEL_PROP_THREAD_CHILD_TABLE_ADDRESSES   Format: `A(t(ESA(6)))` - Read only
             throw new NotImplementedException();
@@ -1882,7 +2579,7 @@ namespace dotNETCore.OpenThread.NCP
         //
         //**********************************************************************
 
-        protected IPv6Address GetIPv6LLAddr()
+        protected internal IPv6Address GetIPv6LLAddr()
         {
             // SPINEL_PROP_IPV6_LL_ADDR Format: `6` - Read only
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_LL_ADDR);
@@ -1897,7 +2594,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected IPv6Address GetIPv6MLAddr()
+        protected internal IPv6Address GetIPv6MLAddr()
         {
             //SPINEL_PROP_IPV6_ML_ADDR Format: `6` - Read only
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ML_ADDR);
@@ -1912,7 +2609,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected OpenThreadIp6Prefix GetIPv6MLPrefix()
+        protected internal OpenThreadIp6Prefix GetIPv6MLPrefix()
         {
             //SPINEL_PROP_IPV6_ML_PREFIX /** Format: `6C` - Read-write
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ML_PREFIX);
@@ -1927,14 +2624,14 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected OpenThreadNetifAddress[] GetIPv6AddressTable()
+        protected internal IPv6Address[] GetIPv6AddressTable()
         {
             //SPINEL_PROP_IPV6_ADDRESS_TABLE
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ADDRESS_TABLE);
 
             try
             {
-                return (OpenThreadNetifAddress[])frameData.Response;
+                return (IPv6Address[])frameData.Response;
             }
             catch
             {
@@ -1943,25 +2640,25 @@ namespace dotNETCore.OpenThread.NCP
         }
 
         [Obsolete("IPv6 Route Table - Deprecated")]
-        protected void GetIPv6RouteTable()
+        protected internal void GetIPv6RouteTable()
         {
             //SPINEL_PROP_IPV6_ROUTE_TABLE          
             throw new NotImplementedException();
         }
 
-        protected bool GetIPv6ICMPPingOffload()
+        protected internal bool GetIPv6ICMPPingOffload()
         {
             //SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD Format `b` - Read-write
             throw new NotImplementedException();
         }
 
-        protected bool SetIPv6ICMPPingOffload(bool AllowRespondICMPPingRequests)
+        protected internal bool SetIPv6ICMPPingOffload(bool AllowRespondICMPPingRequests)
         {
             //SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD Format `b` - Read-write
             throw new NotImplementedException();
         }
 
-        protected IPv6Address[] GetIPv6MulticastAddressTable()
+        protected internal IPv6Address[] GetIPv6MulticastAddressTable()
         {
             //SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE);
@@ -1976,7 +2673,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        protected SpinelIPv6ICMPPingOffloadMode GetIPv6IcmpPingOffloadMode()
+        protected internal SpinelIPv6ICMPPingOffloadMode GetIPv6IcmpPingOffloadMode()
         {
             //SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE
             FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD_MODE);
@@ -1998,19 +2695,19 @@ namespace dotNETCore.OpenThread.NCP
         //
         //**********************************************************************
 
-        protected byte[] GetStreamDebug()
+        protected internal byte[] GetStreamDebug()
         {
             ///SPINEL_PROP_STREAM_DEBUG ** Format: `dD` (stream, read only)
             throw new NotImplementedException();
         }
 
 
-        //protected void DoSendData(byte[] frame, bool waitResponse = true)
-        //{
-        //    byte[] dataCombined = mEncoder.EncodeDataWithLength(frame);
+        protected internal void SetPropStreamNet(byte[] frame, bool waitResponse = true)
+        {
+            byte[] dataCombined = mEncoder.EncodeDataWithLength(frame);
 
-        //    PropertySetValue(SpinelProperties.SPINEL_PROP_STREAM_NET, dataCombined, "dD", 129, waitResponse);
-        //}
+            PropertySetValue(SpinelProperties.SPINEL_PROP_STREAM_NET, dataCombined, "dD", 129, waitResponse);
+        }
 
         //    SPINEL_PROP_STREAM__BEGIN = 0x70,
 
@@ -2179,26 +2876,45 @@ namespace dotNETCore.OpenThread.NCP
         //SPINEL_PROP_STREAM__END = 0x80,
 
 
+        //**********************************************************************
+        //
+        //      Counter Properties
+        //
+        //**********************************************************************
+
+        protected internal void SetCntrReset()
+        {
+            PropertySetValue(SpinelProperties.SPINEL_PROP_CNTR_RESET, 1, "C");
+        }
 
 
+        protected internal ushort[] GetMsgBufferCounters()
+        {
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_MSG_BUFFER_COUNTERS);
+
+            try
+            {
+                return (ushort[])frameData.Response;
+            }
+            catch
+            {
+                throw new SpinelProtocolExceptions("Buffer counters format violation");
+            }
+        }
 
 
-
-
-
-
-        protected void Transact(int commandId, byte[] payload, byte tID = SpinelCommands.HEADER_DEFAULT)
+        protected internal void Transact(int commandId, byte[] payload, byte tID = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] packet = EncodePacket(commandId, tID, payload);
             StreamTx(packet);
         }
 
-        protected void Transact(int commandId, byte tID = SpinelCommands.HEADER_DEFAULT)
+        protected internal void Transact(int commandId, byte tID = SpinelCommands.HEADER_DEFAULT)
         {
             Transact(commandId, null, tID);
         }
 
-        protected byte[] EncodePacket(int commandId, byte tid = SpinelCommands.HEADER_DEFAULT, params byte[] payload)
+        protected internal byte[] EncodePacket(int commandId, byte tid = SpinelCommands.HEADER_DEFAULT, params byte[] payload)
         {
             byte[] tidBytes = new byte[1] { tid };
             byte[] commandBytes = mEncoder.EncodeValue(commandId);
@@ -2214,6 +2930,70 @@ namespace dotNETCore.OpenThread.NCP
             }
 
             return packet;
+        }
+
+        private void PacketHandler(FrameData frameData)
+        {
+            uint propertyId = frameData.PropertyId;
+
+            switch (propertyId)
+            {
+                case SpinelProperties.SPINEL_PROP_LAST_STATUS:              
+                case SpinelProperties.SPINEL_PROP_STREAM_NET:
+                case SpinelProperties.SPINEL_PROP_STREAM_NET_INSECURE:
+                case SpinelProperties.SPINEL_PROP_THREAD_UDP_FORWARD_STREAM:                      
+                case SpinelProperties.SPINEL_PROP_STREAM_RAW:                                        
+                case SpinelProperties.SPINEL_PROP_MAC_SCAN_STATE:    
+                case SpinelProperties.SPINEL_PROP_MAC_SCAN_BEACON:                    
+                case SpinelProperties.SPINEL_PROP_MAC_ENERGY_SCAN_RESULT:
+                //case SpinelProperties.SPINEL_PROP_THREAD_MLR_RESPONSE:                  
+                //case SpinelProperties.SPINEL_PROP_SRP_CLIENT_EVENT:                    
+                //case SpinelProperties.SPINEL_PROP_THREAD_LINK_METRICS_QUERY_RESULT:                    
+                //case SpinelProperties.SPINEL_PROP_THREAD_LINK_METRICS_MGMT_RESPONSE:                    
+                //case SpinelProperties.SPINEL_PROP_THREAD_LINK_METRICS_MGMT_ENH_ACK_IE:
+                    
+                    if (OnPropertyChanged != null)
+                    {                     
+                        OnPropertyChanged(propertyId, frameData.Response);
+                    }
+                    return;                
+            }
+
+            if(frameData.TID == 0x80)
+            {
+                switch (frameData.PropertyId)
+                {
+                    case SpinelProperties.SPINEL_PROP_IPV6_ADDRESS_TABLE:                       
+                    case SpinelProperties.SPINEL_PROP_NET_ROLE:                        
+                    case SpinelProperties.SPINEL_PROP_IPV6_LL_ADDR:                                          
+                    case SpinelProperties.SPINEL_PROP_IPV6_ML_ADDR:                        
+                    case SpinelProperties.SPINEL_PROP_NET_PARTITION_ID:                        
+                    case SpinelProperties.SPINEL_PROP_THREAD_CHILD_TABLE:                       
+                    case SpinelProperties.SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER:                        
+                    case SpinelProperties.SPINEL_PROP_THREAD_LEADER_NETWORK_DATA:                        
+                    case SpinelProperties.SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE:                        
+                    case SpinelProperties.SPINEL_PROP_PHY_CHAN:                       
+                    case SpinelProperties.SPINEL_PROP_MAC_15_4_PANID:
+                    case SpinelProperties.SPINEL_PROP_NET_NETWORK_NAME:                       
+                    case SpinelProperties.SPINEL_PROP_NET_XPANID:                        
+                    case SpinelProperties.SPINEL_PROP_NET_NETWORK_KEY:                      
+                    case SpinelProperties.SPINEL_PROP_NET_PSKC:                       
+                    case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_NEW_CHANNEL:                       
+                    case SpinelProperties.SPINEL_PROP_PHY_CHAN_SUPPORTED:
+
+                        if (OnPropertyChanged != null)
+                        {
+                            OnPropertyChanged(propertyId, frameData.Response);
+                        }
+
+                        return;
+                }
+            }
+            
+            if (OnFrameDataReceived != null)
+            {
+                OnFrameDataReceived(frameData);
+            }           
         }
 
 
@@ -2236,7 +3016,7 @@ namespace dotNETCore.OpenThread.NCP
 
                 FrameData frameData = waitingQueue.Dequeue() as FrameData;
 
-                FrameDataReceived(frameData);
+                PacketHandler(frameData);                
             }
 
             //  receivedPacketWaitHandle.Reset();
@@ -2267,8 +3047,11 @@ namespace dotNETCore.OpenThread.NCP
             }
 
             receivedPacketWaitHandle.Reset();
-
-            if (!receivedPacketWaitHandle.WaitOne(155000, false))
+#if DEBUG
+            if (!receivedPacketWaitHandle.WaitOne(150000, false))
+#else
+            if (!receivedPacketWaitHandle.WaitOne(5000, false))
+#endif
             {
                 throw new SpinelProtocolExceptions("Timeout for sync packet " + commandId);
             }
@@ -2286,7 +3069,7 @@ namespace dotNETCore.OpenThread.NCP
                     }
                     else
                     {
-                        FrameDataReceived(frameData);
+                        PacketHandler(frameData);                        
                     }
                 }
             }
@@ -2358,6 +3141,13 @@ namespace dotNETCore.OpenThread.NCP
         }
 
         private FrameData PropertySetValue(int propertyId, byte propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
+        {
+            byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
+
+            return PropertySetValue(propertyId, propertyValueArray, propertyFormat, tid);
+        }
+
+        private FrameData PropertySetValue(int propertyId, sbyte propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
 
