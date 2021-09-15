@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\Hdlc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelDeclarations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelDecoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelDelegates.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelEncoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelFrameDecoder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Spinel\SpinelProtocolExceptions.cs" />
@@ -46,7 +47,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanChannelInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanCounters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanCredential.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanDeclarations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanDelegates.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanIdentity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Sockets\Socket.cs" />

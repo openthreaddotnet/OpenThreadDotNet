@@ -4,6 +4,7 @@ using System.Threading;
 using dotNETCore.OpenThread.Core;
 
 
+
 #if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.Net;
 using nanoFramework.OpenThread.Net.Lowpan;
@@ -29,15 +30,15 @@ namespace dotNETCore.OpenThread.NCP
         private string name;
         private string ncpVersion;
         private uint[] protocolVersion;
-        private InterfaceType interfaceType;
+        private SpinelProtocolType interfaceType;
         private string vendor;
         private Capabilities[] capabilities;
         private byte[] supportedChannels;
         private byte[] scanMask;
         private bool threadStackState;
         private bool networkInterfaceState;
-        private NetworkRole netRole = NetworkRole.Detached;
-        private PowerState powerstate = PowerState.Offline;
+        private SpinelNetRole netRole = SpinelNetRole.SPINEL_NET_ROLE_DETACHED;
+        private SpinelMcuPowerState powerstate = SpinelMcuPowerState.SPINEL_MCU_POWER_STATE_OFF;
 
         private HardwareAddress extendedAddress;
         private HardwareAddress hardwareAddress;
@@ -46,6 +47,7 @@ namespace dotNETCore.OpenThread.NCP
         private IPAddress[] ipMulticastAddresses;
         private IPAddress ipLinkLocal;
         private IPAddress ipMeshLocal;
+        private SpinelStatus lastStatus;
 
         private uint partitionId = 0;
 
@@ -58,6 +60,9 @@ namespace dotNETCore.OpenThread.NCP
         public event LowpanRoleChanged OnLowpanNetRoleChanged;           
         public event PacketReceivedEventHandler OnPacketReceived;
         public event LowpanIpChanged OnIpChanged;
+
+
+        public event LowpanPropertyChangedHandler OnLowpanPropertyChanged;
 
         private IStream stream;
 
@@ -92,7 +97,7 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        public InterfaceType InterfaceType
+        public SpinelProtocolType InterfaceType
         {
             get { return interfaceType; }
         }
@@ -116,8 +121,8 @@ namespace dotNETCore.OpenThread.NCP
         {
             get { return supportedChannels; }
             set
-            {
-                if (wpanApi.DoChannelsMask((byte[])value))
+            {              
+                if (wpanApi.SetMacScanMask((byte[])value))
                 {
                     scanMask = value;
                 }
@@ -144,29 +149,29 @@ namespace dotNETCore.OpenThread.NCP
             get { return networkInterfaceState; }
         }
        
-        public PowerState PowerState
+        public SpinelMcuPowerState PowerState
         {
             get { return powerstate; }
             set
             {
                 if (value != powerstate)
                 {
-                    if (wpanApi.DoPowerState((byte)value))
-                    {
+                    if (wpanApi.SetPropMcuPowerState((SpinelMcuPowerState)value))
+                    {                        
                         powerstate = value;
                     }
                 }
             }
         }
 
-        public NetworkRole NetRole
+        public SpinelNetRole NetRole
         {
             get { return netRole; }
             set
             {
                 if (value != NetRole)
                 {
-                    if (wpanApi.DoNetRole((byte)value))
+                    if (wpanApi.SetNetRole((SpinelNetRole)value))
                     {
                         netRole = value;
                     }
@@ -198,7 +203,12 @@ namespace dotNETCore.OpenThread.NCP
             get { return ipMeshLocal; }
         }
 
-        public LastStatus LastStatus => (LastStatus)wpanApi.DoLastStatus();
+        public SpinelStatus LastStatus
+        {
+            get { return lastStatus; }
+        }
+
+      //  public SpinelStatus LastStatus => (SpinelStatus)wpanApi.GetPropLastStatus();
 
         public uint PartitionId
         {
@@ -207,63 +217,62 @@ namespace dotNETCore.OpenThread.NCP
 
         public bool Connected 
         {
-            get { return netRole == NetworkRole.Detached ? false : true ; }
+            get { return netRole == SpinelNetRole.SPINEL_NET_ROLE_DETACHED ? false : true ; }
         }
     
         public bool Commissioned => throw new NotImplementedException();
 
-        //public LoWPAN(string portName)
-        //{
-        //    stream = new SerialStream(portName);
-        //}
+        public LoWPAN()
+        {          
+        }
 
-        //public LoWPAN(IStream stream)
-        //{
-        //    this.stream = stream;
-        //}
-     
         public void Open(string portName)
         {
             wpanApi = new WpanApi();
-            wpanApi.FrameDataReceived += new FrameReceivedEventHandler(FrameDataReceived);
+            wpanApi.OnFrameDataReceived += new FrameReceivedEventHandler(FrameDataReceived);           
+            wpanApi.OnPropertyChanged += new SpinelPropertyChangedHandler(PropertyChanged);
             wpanApi.Open(portName);
 
             //     wpanApi.DoReset();
 
             Thread.Sleep(300);
-
             ReadInitialValues();
             NetworkInterface.SetupInterface(this);
         }
 
-        private void ReadInitialValues()
+        private void WpanApi_OnPropertyChanged(uint PropertyId, object PropertyValue)
         {
-           
-            LowpanIdentity = new LowpanIdentity(wpanApi.DoNetworkName(),wpanApi.DoPanId(),wpanApi.DoChannel(),wpanApi.DoXpanId());
-            LowpanCredential = new LowpanCredential(wpanApi.DoMasterkey());
+            throw new NotImplementedException();
+        }
 
-            ncpVersion = wpanApi.DoNCPVersion();
-            protocolVersion = wpanApi.DoProtocolVersion();
-            interfaceType = (InterfaceType)wpanApi.DoInterfaceType();
-            vendor = wpanApi.DoVendor();
-            capabilities = wpanApi.DoCaps();
-            supportedChannels = wpanApi.DoChannels();
-            scanMask = wpanApi.DoChannelsMask();
+        private void ReadInitialValues()
+        {         
+            LowpanIdentity = new LowpanIdentity(wpanApi.GetNetNetworkName(),wpanApi.GetMac_15_4_PanId(),wpanApi.GetPhyChan(),wpanApi.GetNetXpanId());
+            LowpanCredential = new LowpanCredential(wpanApi.GetNetNetworkKey());
 
-            networkInterfaceState = wpanApi.DoInterfaceConfig();
-            threadStackState = wpanApi.DoThread();
-            netRole = (NetworkRole)wpanApi.DoNetRole();
-            extendedAddress = new HardwareAddress(wpanApi.DoExtendedAddress().bytes);
-            hardwareAddress = new HardwareAddress(wpanApi.DoPhysicalAddress().bytes);
-            ipAddresses = NetUtilities.SpinelIPtoSystemIP(wpanApi.DoIPAddresses());
+            ncpVersion = wpanApi.GetPropNcpVersion();
+            protocolVersion = wpanApi.GetPropProtocolVersion();
+            interfaceType = (SpinelProtocolType)wpanApi.GetPropInterfaceType();
+            vendor = wpanApi.GetPropVendorId().ToString();
+            capabilities = wpanApi.GetPropCaps();
+            supportedChannels = wpanApi.GetPhyChanSupported();
+            scanMask = wpanApi.GetMacScanMask();
 
-            ipLinkLocal = new IPAddress(wpanApi.DoIPLinkLocal64().bytes);
-            ipMeshLocal = new IPAddress(wpanApi.DoIPMeshLocal64().bytes);
+            networkInterfaceState = wpanApi.GetNetIfUp();
+            threadStackState = wpanApi.GetNetStackUp();
+            netRole = (SpinelNetRole)wpanApi.GetNetRole();
+            extendedAddress = new HardwareAddress(wpanApi.GetMac_15_4_Laddr().bytes);
+            hardwareAddress = new HardwareAddress(wpanApi.GetPropHwaddr().bytes);
+            ipAddresses = NetUtilities.SpinelIPtoSystemIP(wpanApi.GetIPv6AddressTable());
+
+            ipLinkLocal = new IPAddress(wpanApi.GetIPv6LLAddr().bytes);
+            ipMeshLocal = new IPAddress(wpanApi.GetIPv6MLAddr().bytes);
+            lastStatus = (SpinelStatus)wpanApi.GetPropLastStatus();
         }
 
         public bool NetworkInterfaceUp()
         {
-            if (wpanApi.DoInterfaceConfig(true))
+            if (wpanApi.SetNetIfUp(true))
             {
                 networkInterfaceState = true;
             }
@@ -273,7 +282,7 @@ namespace dotNETCore.OpenThread.NCP
 
         public bool NetworkInterfaceDown()
         {
-            if (wpanApi.DoInterfaceConfig(false))
+            if (wpanApi.SetNetIfUp(false))
             {
                 networkInterfaceState = false;
             }
@@ -281,9 +290,9 @@ namespace dotNETCore.OpenThread.NCP
             return networkInterfaceState;
         }
 
-        public bool ThreadUp()
+        public bool ThreadStackUp()
         {
-            if (wpanApi.DoThread(true))
+            if (wpanApi.SetNetStackUp(true))
             {
                 threadStackState = true;
             }
@@ -291,9 +300,9 @@ namespace dotNETCore.OpenThread.NCP
             return threadStackState;
         }
 
-        public bool ThreadDown()
+        public bool ThreadStackDown()
         {
-            if (wpanApi.DoThread(false))
+            if (wpanApi.SetNetStackUp(false))
             {
                 threadStackState = false;
             }
@@ -303,7 +312,7 @@ namespace dotNETCore.OpenThread.NCP
                               
         public LowpanChannelInfo[] ScanEnergy()
         {
-            wpanApi.DoScan(2);
+            wpanApi.SetMacScanState(SpinelScanState.SPINEL_SCAN_STATE_ENERGY);
             scanThread.WaitOne(10000, false);
 
             if (scanEnergyResult.Count > 0)
@@ -320,9 +329,8 @@ namespace dotNETCore.OpenThread.NCP
         
         public LowpanBeaconInfo[] ScanBeacon()
         {
-            wpanApi.DoScan(1);
+            wpanApi.SetMacScanState(SpinelScanState.SPINEL_SCAN_STATE_BEACON);          
             scanThread.WaitOne(10000, false);
-
 
             if (scanMacResult.Count > 0)        
             {            
@@ -382,9 +390,9 @@ namespace dotNETCore.OpenThread.NCP
                 this.LowpanCredential.MasterKey = Utilities.HexToBytes(masterkey);
             }
 
-            if (!ThreadUp()) throw new InvalidOperationException("Thread start exception");
+            if (!ThreadStackUp()) throw new InvalidOperationException("Thread start exception");
 
-            this.NetRole = (NetworkRole)wpanApi.DoNetRole();
+            this.NetRole = (SpinelNetRole)wpanApi.GetNetRole();
         }
                  
         public void Join(string networkName, byte channel, string masterkey, string xpanid, ushort panid)
@@ -417,14 +425,14 @@ namespace dotNETCore.OpenThread.NCP
 
             if (requireExistingPeers)
             {
-                wpanApi.DoProperty_NET_REQUIRE_JOIN_EXISTING(true);
+                wpanApi.SetNetRequireJoinExisting(true);
             }
             else
             {
-                wpanApi.DoProperty_NET_REQUIRE_JOIN_EXISTING(false);
+                wpanApi.SetNetRequireJoinExisting(false);
             }
 
-            if (!ThreadUp()) throw new InvalidOperationException("Thread stack start exception");
+            if (!ThreadStackUp()) throw new InvalidOperationException("Thread stack start exception");
         }
 
         public bool ShutDownNetwork()
@@ -434,13 +442,15 @@ namespace dotNETCore.OpenThread.NCP
             //    if (!ThreadDown()) return false;
             //}
 
-            bool statete=wpanApi.DoInterfaceConfig();
+            bool statete=wpanApi.GetNetIfUp();
+
+#if DEBUG
 
             if (statete == true)
             {
-               bool opaaa= wpanApi.DoInterfaceConfig(false);
+               bool opaaa= wpanApi.SetNetIfUp(false);
             }
-
+#endif
             //if(networkInterfaceState== true)
             //{
             //    if (!NetworkInterfaceDown()) return false;                
@@ -461,240 +471,179 @@ namespace dotNETCore.OpenThread.NCP
  
         public void SendAndWait(byte[] frame)
         {
-            wpanApi.DoSendData(frame);
+            wpanApi.SetPropStreamNet(frame);
         }
 
         public void Send(byte[] frame)
         {
-            wpanApi.DoSendData(frame, false);
+            wpanApi.SetPropStreamNet(frame, false);
         }      
 
         public LowpanBufferCounters GetBufferCounters()
         {
-            LowpanBufferCounters lowpanCounters = new LowpanBufferCounters(wpanApi.DoCountersMessageBuffer());
+            LowpanBufferCounters lowpanCounters = new LowpanBufferCounters(wpanApi.GetMsgBufferCounters());
             return lowpanCounters;
         }
 
+        private void PropertyChanged(uint PropertyId, object PropertyValue)
+        {
+            switch (PropertyId)
+            {
+                case SpinelProperties.SPINEL_PROP_LAST_STATUS:
+                
+                    lastStatus = (SpinelStatus)PropertyValue;
+
+                    if (OnLowpanPropertyChanged != null)
+                    {
+                        OnLowpanPropertyChanged(PropertyId);
+                    }
+
+                    break;
+
+                case SpinelProperties.SPINEL_PROP_STREAM_NET:
+                case SpinelProperties.SPINEL_PROP_STREAM_NET_INSECURE:
+
+
+                    byte[] ipv6frame = (byte[])PropertyValue;
+
+                    if (OnPacketReceived != null)
+                    {
+                        OnPacketReceived(ipv6frame);
+                    }
+
+                    break;
+
+                case SpinelProperties.SPINEL_PROP_MAC_SCAN_BEACON:
+
+                    ArrayList scanInfo = (ArrayList)PropertyValue;
+                    LowpanBeaconInfo lowpanBeaconInfo = new LowpanBeaconInfo();
+
+                    lowpanBeaconInfo.Channel = (byte)scanInfo[0];
+                    lowpanBeaconInfo.Rssi = (sbyte)scanInfo[1];
+
+                    ArrayList tempObj = scanInfo[2] as ArrayList;
+                    EUI64 mac = (EUI64)tempObj[0];
+
+                    lowpanBeaconInfo.HardwareAddress = new HardwareAddress(mac.bytes);
+                    lowpanBeaconInfo.ShortAddress = (ushort)tempObj[1];
+                    lowpanBeaconInfo.PanId = (ushort)tempObj[2];
+                    lowpanBeaconInfo.LQI = (byte)tempObj[3];
+
+                    tempObj = scanInfo[3] as ArrayList;
+
+                    lowpanBeaconInfo.Protocol = (uint)tempObj[0];
+                    lowpanBeaconInfo.Flags = (byte)tempObj[1];
+                    lowpanBeaconInfo.NetworkName = (string)tempObj[2];
+                    lowpanBeaconInfo.XpanId = (byte[])tempObj[3];
+
+                    scanMacResult.Add(lowpanBeaconInfo);
+                    break;
+              
+                case SpinelProperties.SPINEL_PROP_MAC_ENERGY_SCAN_RESULT:
+
+                    ArrayList energyScan = (ArrayList)PropertyValue;
+
+                    LowpanChannelInfo lowpanChannelInfo = new LowpanChannelInfo();
+
+                    lowpanChannelInfo.Channel = (byte)energyScan[0];
+                    lowpanChannelInfo.Rssi = (sbyte)energyScan[1];
+                    scanEnergyResult.Add(lowpanChannelInfo);
+
+                    break;
+
+                case SpinelProperties.SPINEL_PROP_MAC_SCAN_STATE:
+
+                    SpinelScanState scanState = (SpinelScanState)(PropertyValue);
+
+                    if (scanState == SpinelScanState.SPINEL_SCAN_STATE_IDLE)
+                    {
+                        scanThread.Set();
+                    }
+
+                    break;
+
+                case SpinelProperties.SPINEL_PROP_NET_ROLE:
+                    
+                    SpinelNetRole newRole = (SpinelNetRole)(byte)(PropertyValue);
+
+                    if (netRole != newRole)
+                    {
+                        netRole = newRole;
+
+                        if (OnLowpanPropertyChanged != null)
+                        {
+                            OnLowpanPropertyChanged(PropertyId);
+                        }
+                    }
+
+                    break;
+
+                case SpinelProperties.SPINEL_PROP_IPV6_LL_ADDR:
+
+                    if (PropertyValue == null)
+                    {
+                        ipLinkLocal = null;
+                        return;
+                    }
+
+                    IPv6Address ipaddrLL = (IPv6Address)PropertyValue;
+                    ipLinkLocal = new IPAddress(ipaddrLL.bytes);
+
+                    if (OnLowpanPropertyChanged != null)
+                    {
+                        OnLowpanPropertyChanged(PropertyId);
+                    }
+
+                    break;
+
+                case SpinelProperties.SPINEL_PROP_IPV6_ML_ADDR:
+
+                    if (PropertyValue == null)
+                    {
+                        ipMeshLocal = null;
+                        return;
+                    }
+
+                    IPv6Address ipaddrML = (IPv6Address)PropertyValue;
+                    ipMeshLocal = new IPAddress(ipaddrML.bytes);
+
+
+                    if (OnLowpanPropertyChanged != null)
+                    {
+                        OnLowpanPropertyChanged(PropertyId);
+                    }
+
+                    break;
+
+
+                case SpinelProperties.SPINEL_PROP_IPV6_ADDRESS_TABLE:
+                    
+                    ipAddresses = NetUtilities.SpinelIPtoSystemIP((IPv6Address[])PropertyValue);
+
+                    if (OnLowpanPropertyChanged != null)
+                    {
+                        OnLowpanPropertyChanged(PropertyId);
+                    }
+
+                    break;
+
+                case SpinelProperties.SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE:
+                   
+                    ipMulticastAddresses = NetUtilities.SpinelIPtoSystemIP((IPv6Address[])PropertyValue);
+
+                    if (OnLowpanPropertyChanged != null)
+                    {
+                        OnLowpanPropertyChanged(PropertyId);
+                    }
+
+                    break;
+            }
+        }
+            
         private void FrameDataReceived(FrameData frameData)
         {
-            uint properyId = frameData.PropertyId;
-
-            if (properyId == SpinelProperties.PROP_LAST_STATUS)
-            {
-                if (OnLastStatusHandler != null)
-                {
-                    LastStatus lastStatus = (LastStatus)(uint)frameData.Response;
-                    OnLastStatusHandler(lastStatus);
-                }
-                
-                return;
-            }
-            else if (properyId == SpinelProperties.SPINEL_PROP_STREAM_NET)
-            {
-                byte[] ipv6frame = (byte[])frameData.Response;
-
-                if (OnPacketReceived != null)
-                {
-                    OnPacketReceived(this, ipv6frame);
-                }
-
-                return;
-            }
-            else if (properyId == SpinelProperties.SPINEL_PROP_MAC_SCAN_STATE)
-            {
-                byte scanState = (byte)(frameData.Response);
-
-                if (scanState == 0)
-                {
-                    scanThread.Set();
-                }
-            }
-            else if (properyId == SpinelProperties.SPINEL_PROP_MAC_SCAN_BEACON)
-            {
-                ArrayList scanInfo = (ArrayList)frameData.Response;
-
-                LowpanBeaconInfo lowpanBeaconInfo = new LowpanBeaconInfo();
-
-                lowpanBeaconInfo.Channel = (byte)scanInfo[0];
-                lowpanBeaconInfo.Rssi = (sbyte)scanInfo[1];
-
-                ArrayList tempObj = scanInfo[2] as ArrayList;
-                EUI64 mac = (EUI64)tempObj[0];
-
-                lowpanBeaconInfo.HardwareAddress = new HardwareAddress(mac.bytes);
-                lowpanBeaconInfo.ShortAddress = (ushort)tempObj[1];
-                lowpanBeaconInfo.PanId = (ushort)tempObj[2];
-                lowpanBeaconInfo.LQI = (byte)tempObj[3];
-
-                tempObj = scanInfo[3] as ArrayList;
-
-                lowpanBeaconInfo.Protocol = (uint)tempObj[0];
-                lowpanBeaconInfo.Flags = (byte)tempObj[1];
-                lowpanBeaconInfo.NetworkName = (string)tempObj[2];
-                lowpanBeaconInfo.XpanId = (byte[])tempObj[3];
-
-                scanMacResult.Add(lowpanBeaconInfo);
-
-
-                return;
-            }
-            else if (properyId == SpinelProperties.SPINEL_PROP_MAC_ENERGY_SCAN_RESULT)
-            {
-                ArrayList energyScan = (ArrayList)frameData.Response;
-
-                LowpanChannelInfo lowpanChannelInfo = new LowpanChannelInfo();
-
-                lowpanChannelInfo.Channel = (byte)energyScan[0];
-                lowpanChannelInfo.Rssi = (sbyte)energyScan[1];
-                scanEnergyResult.Add(lowpanChannelInfo);
-
-                return;
-            }
-
-            if (frameData.TID == 0x80)
-            {
-                switch (properyId)
-                {
-                    case SpinelProperties.SPINEL_PROP_NET_ROLE :
-                        NetworkRole newRole = (NetworkRole)(byte)(frameData.Response);
-                        if (netRole != newRole)
-                        {
-                            netRole = newRole;
-                            if (OnLowpanNetRoleChanged != null)
-                            {
-                                OnLowpanNetRoleChanged();
-                            }
-                        }
-                        break;
-
-                    case SpinelProperties.SPINEL_PROP_IPV6_LL_ADDR:
-
-                        if (frameData.Response == null)
-                        {
-                            ipLinkLocal = null;
-                            return;
-                        }
-
-                        IPv6Address ipaddrLL = (IPv6Address)frameData.Response;
-                        ipLinkLocal = new IPAddress(ipaddrLL.bytes);
-
-                        if (OnIpChanged != null)
-                        {
-                            OnIpChanged();
-                        }
-
-                        break;
-
-                    case SpinelProperties.SPINEL_PROP_IPV6_ML_ADDR:
-
-                        if (frameData.Response == null)
-                        {
-                            ipMeshLocal = null;
-                            return;
-                        }
-
-                        IPv6Address ipaddrML = (IPv6Address)frameData.Response;
-                        ipMeshLocal = new IPAddress(ipaddrML.bytes);
-                        break;
-
-                    case SpinelProperties.SPINEL_PROP_IPV6_ADDRESS_TABLE:
-                        ipAddresses = NetUtilities.SpinelIPtoSystemIP((IPv6Address[])frameData.Response);
-                        break;
-
-                    case SpinelProperties.SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE:
-                        ipMulticastAddresses = NetUtilities.SpinelIPtoSystemIP((IPv6Address[])frameData.Response);
-                        break;
-
-                    //case SpinelProperties.PROP_NET_SAVED:
-                    //case SpinelProperties.PROP_NET_IF_UP:
-                    //    break;
-                    //case SpinelProperties.PROP_NET_STACK_UP:
-                    //    break;
-
-                    //case SpinelProperties.PROP_NET_NETWORK_NAME:
-                    //case SpinelProperties.PROP_NET_XPANID:
-                    //case SpinelProperties.PROP_NET_MASTER_KEY:
-                    //case SpinelProperties.PROP_NET_KEY_SEQUENCE_COUNTER:
-                    //case SpinelProperties.PROP_NET_PARTITION_ID:
-                    //case SpinelProperties.PROP_NET_KEY_SWITCH_GUARDTIME:
-                    //    break;
-
-                    //case SpinelProperties.SPINEL_PROP_THREAD_LEADER_ADDR:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_PARENT:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_CHILD_TABLE:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_LEADER_RID:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_LEADER_WEIGHT:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_LOCAL_LEADER_WEIGHT:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_NETWORK_DATA:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_NETWORK_DATA_VERSION:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_STABLE_NETWORK_DATA:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_STABLE_NETWORK_DATA_VERSION:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ASSISTING_PORTS:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ALLOW_LOCAL_NET_DATA_CHANGE:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_MODE:
-                    //    break;
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ON_MESH_NETS:
-                    //    break;
-                    //case SpinelProperties.SPINEL_PROP_THREAD_OFF_MESH_ROUTES:
-                    //    break;
-
-
-
-                    //case SpinelProperties.SPINEL_PROP_IPV6_ML_PREFIX:
-                    //    break;
-
-                    //case SpinelProperties.SPINEL_PROP_IPV6_ROUTE_TABLE:
-                    //case SpinelProperties.SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD:
-                    //case SpinelProperties.SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD_MODE:
-                    //    break;
-
-
-
-                    //case SpinelProperties.SPINEL_PROP_THREAD_CHILD_TIMEOUT:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_RLOC16:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ROUTER_UPGRADE_THRESHOLD:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_CONTEXT_REUSE_DELAY:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_NETWORK_ID_TIMEOUT:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ACTIVE_ROUTER_IDS:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_RLOC16_DEBUG_PASSTHRU:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ROUTER_ROLE_ENABLED:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ROUTER_DOWNGRADE_THRESHOLD:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_ROUTER_SELECTION_JITTER:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_PREFERRED_ROUTER_ID:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_CHILD_COUNT_MAX:
-                    //    break;
-                    //case SpinelProperties.SPINEL_PROP_THREAD_NEIGHBOR_TABLE:
-                    //    break;
-                    //case SpinelProperties.SPINEL_PROP_THREAD_LEADER_NETWORK_DATA:
-                    //    break;
-
-                    //case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_NEW_CHANNEL:
-                    //case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_DELAY:
-                    //case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_SUPPORTED_CHANNELS:
-                    //case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_FAVORED_CHANNELS:
-                    //case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_CHANNEL_SELECT:
-                    //case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_AUTO_SELECT_ENABLED:
-                    //case SpinelProperties.SPINEL_PROP_CHANNEL_MANAGER_AUTO_SELECT_INTERVAL:
-                    //case SpinelProperties.SPINEL_PROP_THREAD_NETWORK_TIME:
-                    //case SpinelProperties.SPINEL_PROP_TIME_SYNC_PERIOD:
-                    //case SpinelProperties.SPINEL_PROP_TIME_SYNC_XTAL_THRESHOLD:
-                    //case SpinelProperties.SPINEL_PROP_CHILD_SUPERVISION_INTERVAL:
-                    //case SpinelProperties.SPINEL_PROP_CHILD_SUPERVISION_CHECK_TIMEOUT:
-                    //case SpinelProperties.SPINEL_PROP_RCP_VERSION:
-                    //case SpinelProperties.SPINEL_PROP_SLAAC_ENABLED:
-                    //    break;
-                    //case SpinelProperties.SPINEL_PROP_PARENT_RESPONSE_INFO:
-                    //    break;
-                    //case SpinelProperties.PROP_LAST_STATUS:
-
-                    //    LastStatus lastStatus = (LastStatus)Convert.ToInt32(frameData.Response);
-                    //    OnLastStatusHandler(lastStatus);
-                    //    break;
-                    default:
-                        break;
-
-                }
-            }
+          
+            
         }
     }
 }

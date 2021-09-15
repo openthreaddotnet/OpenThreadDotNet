@@ -1,7 +1,11 @@
 ﻿#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.Spinel;
+
 namespace nanoFramework.OpenThread.Net.Lowpan
 {
 #else
+using dotNETCore.OpenThread.Spinel;
+
 namespace dotNETCore.OpenThread.Net.Lowpan
 {
 #endif
@@ -13,9 +17,10 @@ namespace dotNETCore.OpenThread.Net.Lowpan
     public delegate void onLowpanStateChanged(string value);
     public delegate void onLowpanIdentityChanged(LowpanIdentity value);
     public delegate void onLowpanReceiveFromCommissioner(out byte[] packet);
-    public delegate void LowpanLastStatusHandler(LastStatus value);
-   
-    public delegate void PacketReceivedEventHandler(object sender, byte[] buffer);
+    public delegate void LowpanLastStatusHandler(SpinelStatus value);
+    public delegate void LowpanPropertyChangedHandler(uint PropertyId);
+
+    public delegate void PacketReceivedEventHandler(byte[] buffer);
 
     //  public delegate void NetStreamDataHandler(byte[] packet);
 
