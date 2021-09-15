@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Threading;
 
-
-
 #if (NANOFRAMEWORK_1_0)
 using nanoFramework.OpenThread.Net;
 using nanoFramework.OpenThread.Net.Lowpan;
@@ -54,8 +52,7 @@ namespace dotNETCore.OpenThread.NCP
         private ArrayList scanEnergyResult = new ArrayList();
 
         private AutoResetEvent scanThread = new AutoResetEvent(false);
-
-        public event LowpanLastStatusHandler OnLastStatusHandler;
+       
         public event LowpanRoleChanged OnLowpanNetRoleChanged;           
         public event PacketReceivedEventHandler OnPacketReceived;
         public event LowpanIpChanged OnIpChanged;

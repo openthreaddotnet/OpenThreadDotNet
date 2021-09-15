@@ -33,8 +33,7 @@ namespace dotNETCore.OpenThread.Net.Lowpan
         string Vendor { get; }
         bool Connected { get; }
         bool Commissioned { get; }
-
-        event LowpanLastStatusHandler OnLastStatusHandler;       
+        
         event LowpanRoleChanged OnLowpanNetRoleChanged;
         event PacketReceivedEventHandler OnPacketReceived;
         event LowpanIpChanged OnIpChanged;
