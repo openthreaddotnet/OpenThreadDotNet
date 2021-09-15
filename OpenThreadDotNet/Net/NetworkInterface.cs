@@ -47,7 +47,8 @@ namespace dotNETCore.OpenThread.Net
             IPAddress = lowpanInterface.IPLinkLocal;
         }
 
-        internal static void IPv6PacketHandler(object sender, byte[] frame)
+        //internal static void IPv6PacketHandler(object sender, byte[] frame)
+        internal static void IPv6PacketHandler(byte[] frame)
         {
             IPv6Packet ipv6Packet = new IPv6Packet();
             ipv6Packet.FromBytes(frame);
