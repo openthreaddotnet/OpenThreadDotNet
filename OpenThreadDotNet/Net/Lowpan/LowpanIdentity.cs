@@ -1,14 +1,17 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 #if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.NCP;
 namespace nanoFramework.OpenThread.Net.Lowpan
 { 
 #else
+using dotNETCore.OpenThread.NCP;
 namespace dotNETCore.OpenThread.Net.Lowpan
 {
 #endif
     public class LowpanIdentity
     {                      
-      //  private WpanApi wpanApi;
+        private WpanApi wpanApi;
         private string networkName;
         private ushort panid;
         private byte channel;
@@ -21,19 +24,18 @@ namespace dotNETCore.OpenThread.Net.Lowpan
                 return networkName;              
             }
             set
-            {
-                networkName = value;
-                //if (value != networkName)
-                //{
-                //    if(wpanApi.DoNetworkName(value))
-                //    {
-                //        networkName = value;
-                //    }
-                //    else
-                //    {
-                //        throw new Exception("Exception setting property value.");
-                //    }
-                //}                          
+            {                
+                if (value != networkName)
+                {
+                    if (wpanApi.SetNetNetworkName(value))
+                    {
+                        networkName = value;
+                    }
+                    else
+                    {
+                        throw new Exception("Exception setting property value.");
+                    }
+                }
             }
         }
 
@@ -44,15 +46,14 @@ namespace dotNETCore.OpenThread.Net.Lowpan
                 return panid;
             }
             set
-            {
-                panid = value;
-                //if (value != panid)
-                //{
-                //    if (wpanApi.DoPanId(value))
-                //    {
-                //        panid = value;
-                //    }
-                //}              
+            {                
+                if (value != panid)
+                {
+                    if (wpanApi.SetMac_15_4_PanId(value))
+                    {
+                        panid = value;
+                    }
+                }
             }
         }
 
@@ -63,15 +64,14 @@ namespace dotNETCore.OpenThread.Net.Lowpan
                 return channel;
             }
             set
-            {
-                channel = value;
-                //if (value != channel)
-                //{
-                //    if (wpanApi.DoChannel(value))
-                //    {
-                //        channel = value;
-                //    }
-                //}
+            {                
+                if (value != channel)
+                {
+                    if (wpanApi.SetPhyChan(value))
+                    {
+                        channel = value;
+                    }
+                }
             }
         }
 
@@ -82,35 +82,25 @@ namespace dotNETCore.OpenThread.Net.Lowpan
                 return xpanid;
             }
             set
-            {
-                xpanid = value;
-                //if (value != xpanid)
-                //{
-                //    if (wpanApi.DoXpanId(value))
-                //    {
-                //        xpanid = value;
-                //    }
-                //}              
+            {                
+                if (value != xpanid)
+                {
+                    if (wpanApi.SetNetXpanId(value))
+                    {
+                        xpanid = value;
+                    }
+                }
             }
         }
 
-        public LowpanIdentity(string networkName, ushort panid, byte channel,byte[] xpanid)
+        internal LowpanIdentity(WpanApi wpanApi)
         {
-          //  this.wpanApi = wpanApi;
-            this.networkName = networkName;
-            this.panid = panid;
-            this.channel = channel;
-            this.xpanid = xpanid;
+            this.wpanApi = wpanApi;
+            this.networkName = wpanApi.GetNetNetworkName();
+            this.panid = wpanApi.GetMac_15_4_PanId();
+            this.channel = wpanApi.GetPhyChan();
+            this.xpanid = wpanApi.GetNetXpanId();
         }
-
-        //public LowpanIdentity(WpanApi wpanApi)
-        //{
-        //    this.wpanApi = wpanApi;
-        //    this.networkName=wpanApi.DoNetworkName();
-        //    this.panid= wpanApi.DoPanId();
-        //    this.channel= wpanApi.DoChannel();
-        //    this.xpanid= wpanApi.DoXpanId();
-        //}
 
         public override string ToString()
         {

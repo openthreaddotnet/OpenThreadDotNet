@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Net\DNS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\IPHostEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanBufferCounters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Net\Lowpan\LowpanScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Sockets\ProtocolType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Sockets\SocketErrors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net\Sockets\SocketType.cs" />
