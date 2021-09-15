@@ -28,8 +28,7 @@ namespace dotNETCore.OpenThread.Net
         {
             lowpanInterface = Interface;
             IPAddress = lowpanInterface.IPLinkLocal;
-            lowpanInterface.OnPacketReceived += IPv6PacketHandler;
-            lowpanInterface.OnIpChanged += OnIpChanged;
+            lowpanInterface.OnPacketReceived += IPv6PacketHandler;            
         }
 
         internal static void Send(byte[] data)

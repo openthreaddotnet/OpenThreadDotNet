@@ -30,8 +30,7 @@ namespace dotNETCore.OpenThread.NCP
         private SpinelProtocolType interfaceType;
         private string vendor;
         private Capabilities[] capabilities;
-        private byte[] supportedChannels;
-        private byte[] scanMask;
+        private byte[] supportedChannels;        
         private bool threadStackState;
         private bool networkInterfaceState;
         private SpinelNetRole netRole = SpinelNetRole.SPINEL_NET_ROLE_DETACHED;
@@ -46,21 +45,11 @@ namespace dotNETCore.OpenThread.NCP
         private IPAddress ipMeshLocal;
         private SpinelStatus lastStatus;
 
-        private uint partitionId = 0;
-
-        private ArrayList scanMacResult = new ArrayList();
-        private ArrayList scanEnergyResult = new ArrayList();
-
+        private uint partitionId = 0;    
         private AutoResetEvent scanThread = new AutoResetEvent(false);
-       
-        public event LowpanRoleChanged OnLowpanNetRoleChanged;           
+                     
         public event PacketReceivedEventHandler OnPacketReceived;
-        public event LowpanIpChanged OnIpChanged;
-
-
         public event LowpanPropertyChangedHandler OnLowpanPropertyChanged;
-
-        private IStream stream;
 
         public string Name
         {
@@ -113,18 +102,7 @@ namespace dotNETCore.OpenThread.NCP
             get { return supportedChannels; }
         }
 
-        public byte[] ScanMask
-        {
-            get { return supportedChannels; }
-            set
-            {              
-                if (wpanApi.SetMacScanMask((byte[])value))
-                {
-                    scanMask = value;
-                }
-            }
-        }
-
+ 
         public HardwareAddress HardwareAddress
         {
             get { return hardwareAddress; }
@@ -179,6 +157,8 @@ namespace dotNETCore.OpenThread.NCP
 
         public LowpanCredential LowpanCredential { get; set; }
 
+        public LowpanScanner LowpanScanner { get; set; }
+
         public IPAddress[] IPAddresses
         {
             get { return ipAddresses; }
@@ -204,8 +184,6 @@ namespace dotNETCore.OpenThread.NCP
             get { return lastStatus; }
         }
 
-      //  public SpinelStatus LastStatus => (SpinelStatus)wpanApi.GetPropLastStatus();
-
         public uint PartitionId
         {
             get { return partitionId; }
@@ -228,11 +206,15 @@ namespace dotNETCore.OpenThread.NCP
             wpanApi.OnFrameDataReceived += new FrameReceivedEventHandler(FrameDataReceived);           
             wpanApi.OnPropertyChanged += new SpinelPropertyChangedHandler(PropertyChanged);
             wpanApi.Open(portName);
-
-            //     wpanApi.DoReset();
+            
+           // wpanApi.DoReset();
 
             Thread.Sleep(300);
             ReadInitialValues();
+
+            ShutDownNetwork();
+            NetworkInterfaceDown();
+
             NetworkInterface.SetupInterface(this);
         }
 
@@ -243,17 +225,16 @@ namespace dotNETCore.OpenThread.NCP
 
         private void ReadInitialValues()
         {         
-            LowpanIdentity = new LowpanIdentity(wpanApi.GetNetNetworkName(),wpanApi.GetMac_15_4_PanId(),wpanApi.GetPhyChan(),wpanApi.GetNetXpanId());
-            LowpanCredential = new LowpanCredential(wpanApi.GetNetNetworkKey());
+            LowpanIdentity = new LowpanIdentity(wpanApi);
+            LowpanCredential = new LowpanCredential(wpanApi);
+            LowpanScanner = new LowpanScanner(wpanApi);
 
             ncpVersion = wpanApi.GetPropNcpVersion();
             protocolVersion = wpanApi.GetPropProtocolVersion();
             interfaceType = (SpinelProtocolType)wpanApi.GetPropInterfaceType();
             vendor = wpanApi.GetPropVendorId().ToString();
             capabilities = wpanApi.GetPropCaps();
-            supportedChannels = wpanApi.GetPhyChanSupported();
-            scanMask = wpanApi.GetMacScanMask();
-
+            supportedChannels = wpanApi.GetPhyChanSupported();            
             networkInterfaceState = wpanApi.GetNetIfUp();
             threadStackState = wpanApi.GetNetStackUp();
             netRole = (SpinelNetRole)wpanApi.GetNetRole();
@@ -305,41 +286,7 @@ namespace dotNETCore.OpenThread.NCP
 
             return threadStackState;
         }
-                              
-        public LowpanChannelInfo[] ScanEnergy()
-        {
-            wpanApi.SetMacScanState(SpinelScanState.SPINEL_SCAN_STATE_ENERGY);
-            scanThread.WaitOne(10000, false);
-
-            if (scanEnergyResult.Count > 0)
-            {
-                LowpanChannelInfo[] scanEnergyArray = (LowpanChannelInfo[])scanEnergyResult.ToArray(typeof(LowpanChannelInfo));
-                scanEnergyResult.Clear();
-                return scanEnergyArray;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        
-        public LowpanBeaconInfo[] ScanBeacon()
-        {
-            wpanApi.SetMacScanState(SpinelScanState.SPINEL_SCAN_STATE_BEACON);          
-            scanThread.WaitOne(10000, false);
-
-            if (scanMacResult.Count > 0)        
-            {            
-                LowpanBeaconInfo[] scanMacArray = (LowpanBeaconInfo[])scanMacResult.ToArray(typeof(LowpanBeaconInfo));            
-                scanMacResult.Clear();
-                return scanMacArray;
-            }
-            else
-            {
-                return null;
-            }    
-        }
-
+                                  
         public void EnableLowPower()
         {
             throw new NotImplementedException();
@@ -351,7 +298,9 @@ namespace dotNETCore.OpenThread.NCP
 
             if (channel < 11 || channel > 26) throw new ArgumentException("Channel number should be in between 11 and 26");
 
-            var scanResult = ScanBeacon();
+
+
+            var scanResult = LowpanScanner.ScanBeacon();
 
             bool netExisted = false;
 
@@ -373,7 +322,7 @@ namespace dotNETCore.OpenThread.NCP
 
             LowpanIdentity.Channel = channel;
             LowpanIdentity.NetworkName = networkName;
-
+          
             if (!NetworkInterfaceUp()) throw new InvalidOperationException("Interface up exception");
 
             if (panid != 0xFFFF)
@@ -387,8 +336,6 @@ namespace dotNETCore.OpenThread.NCP
             }
 
             if (!ThreadStackUp()) throw new InvalidOperationException("Thread start exception");
-
-            this.NetRole = (SpinelNetRole)wpanApi.GetNetRole();
         }
                  
         public void Join(string networkName, byte channel, string masterkey, string xpanid, ushort panid)
@@ -432,25 +379,8 @@ namespace dotNETCore.OpenThread.NCP
         }
 
         public bool ShutDownNetwork()
-        {
-            //if (threadStackState == true)
-            //{
-            //    if (!ThreadDown()) return false;
-            //}
-
-            bool statete=wpanApi.GetNetIfUp();
-
-#if DEBUG
-
-            if (statete == true)
-            {
-               bool opaaa= wpanApi.SetNetIfUp(false);
-            }
-#endif
-            //if(networkInterfaceState== true)
-            //{
-            //    if (!NetworkInterfaceDown()) return false;                
-            //}
+        {        
+            wpanApi.SetNetIfUp(false);
 
             return true;
         }
@@ -487,7 +417,7 @@ namespace dotNETCore.OpenThread.NCP
             {
                 case SpinelProperties.SPINEL_PROP_LAST_STATUS:
                 
-                    lastStatus = (SpinelStatus)PropertyValue;
+                    lastStatus = (SpinelStatus)(uint)PropertyValue;
 
                     if (OnLowpanPropertyChanged != null)
                     {
@@ -508,56 +438,7 @@ namespace dotNETCore.OpenThread.NCP
                     }
 
                     break;
-
-                case SpinelProperties.SPINEL_PROP_MAC_SCAN_BEACON:
-
-                    ArrayList scanInfo = (ArrayList)PropertyValue;
-                    LowpanBeaconInfo lowpanBeaconInfo = new LowpanBeaconInfo();
-
-                    lowpanBeaconInfo.Channel = (byte)scanInfo[0];
-                    lowpanBeaconInfo.Rssi = (sbyte)scanInfo[1];
-
-                    ArrayList tempObj = scanInfo[2] as ArrayList;
-                    EUI64 mac = (EUI64)tempObj[0];
-
-                    lowpanBeaconInfo.HardwareAddress = new HardwareAddress(mac.bytes);
-                    lowpanBeaconInfo.ShortAddress = (ushort)tempObj[1];
-                    lowpanBeaconInfo.PanId = (ushort)tempObj[2];
-                    lowpanBeaconInfo.LQI = (byte)tempObj[3];
-
-                    tempObj = scanInfo[3] as ArrayList;
-
-                    lowpanBeaconInfo.Protocol = (uint)tempObj[0];
-                    lowpanBeaconInfo.Flags = (byte)tempObj[1];
-                    lowpanBeaconInfo.NetworkName = (string)tempObj[2];
-                    lowpanBeaconInfo.XpanId = (byte[])tempObj[3];
-
-                    scanMacResult.Add(lowpanBeaconInfo);
-                    break;
               
-                case SpinelProperties.SPINEL_PROP_MAC_ENERGY_SCAN_RESULT:
-
-                    ArrayList energyScan = (ArrayList)PropertyValue;
-
-                    LowpanChannelInfo lowpanChannelInfo = new LowpanChannelInfo();
-
-                    lowpanChannelInfo.Channel = (byte)energyScan[0];
-                    lowpanChannelInfo.Rssi = (sbyte)energyScan[1];
-                    scanEnergyResult.Add(lowpanChannelInfo);
-
-                    break;
-
-                case SpinelProperties.SPINEL_PROP_MAC_SCAN_STATE:
-
-                    SpinelScanState scanState = (SpinelScanState)(PropertyValue);
-
-                    if (scanState == SpinelScanState.SPINEL_SCAN_STATE_IDLE)
-                    {
-                        scanThread.Set();
-                    }
-
-                    break;
-
                 case SpinelProperties.SPINEL_PROP_NET_ROLE:
                     
                     SpinelNetRole newRole = (SpinelNetRole)(byte)(PropertyValue);

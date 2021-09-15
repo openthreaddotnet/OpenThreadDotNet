@@ -566,7 +566,7 @@ namespace dotNETCore.OpenThread.NCP
 
         protected internal sbyte GetPhyTxPower()
         {
-            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_CHAN);
+            FrameData frameData = PropertyGetValue(SpinelProperties.SPINEL_PROP_PHY_TX_POWER);
 
             try
             {
@@ -574,7 +574,7 @@ namespace dotNETCore.OpenThread.NCP
             }
             catch
             {
-                throw new SpinelProtocolExceptions("Phy Cca Threshold format violation");
+                throw new SpinelProtocolExceptions("TX POWER format violation");
             }
         }
 

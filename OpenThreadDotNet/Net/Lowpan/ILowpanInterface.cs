@@ -19,25 +19,23 @@ namespace dotNETCore.OpenThread.Net.Lowpan
         SpinelStatus LastStatus { get; }
         LowpanCredential LowpanCredential { get; set; }
         LowpanIdentity LowpanIdentity { get; set; }
+        LowpanScanner LowpanScanner { get; set; }
         string Name { get; }
         string NcpVersion { get; }
         bool NetworkInterfaceState { get; }
         uint PartitionId { get; }
         HardwareAddress HardwareAddress { get; }
         string ProtocolVersion { get; }
-        SpinelNetRole NetRole { get; set; }
-        byte[] ScanMask { get; set; }
+        SpinelNetRole NetRole { get; set; }        
         SpinelMcuPowerState PowerState { get; }
         byte[] SupportedChannels { get; }
         bool ThreadStackState { get; }
         string Vendor { get; }
         bool Connected { get; }
         bool Commissioned { get; }
-        
-        event LowpanRoleChanged OnLowpanNetRoleChanged;
+                
         event PacketReceivedEventHandler OnPacketReceived;
-        event LowpanIpChanged OnIpChanged;
-        
+                
         void Form(string networkName, byte channel, string masterkey, ushort panid);
         void Attach(string networkName, byte channel, string masterkey, string xpanid, ushort panid, bool requireExistingPeers = false);
         void Join(string networkName, byte channel, string masterkey, string xpanid, ushort panid);
@@ -50,8 +48,6 @@ namespace dotNETCore.OpenThread.Net.Lowpan
         void OnHostWake();
         void Open(string portName);        
         void Reset();
-        LowpanBeaconInfo[] ScanBeacon();
-        LowpanChannelInfo[] ScanEnergy();
         bool ThreadStackDown();
         bool ThreadStackUp();
         void SendAndWait(byte[] frame);
