@@ -1,13 +1,16 @@
 ﻿#if (NANOFRAMEWORK_1_0)
+using nanoFramework.OpenThread.NCP;
 namespace nanoFramework.OpenThread.Net.Lowpan
 {
 #else
+using dotNETCore.OpenThread.NCP;
 namespace dotNETCore.OpenThread.Net.Lowpan
 {
 #endif
     public class LowpanCredential
     {      
         private byte[] masterKey;
+        private WpanApi wpanApi;
 
         public byte[] MasterKey
         {
@@ -17,22 +20,21 @@ namespace dotNETCore.OpenThread.Net.Lowpan
             }
 
             set
-            {
-                masterKey = value;
-                //if (value != masterKey)
-                //{
-                //    if (wpanApi.DoMasterkey(value))
-                //    {
-                //        masterKey = value;
-                //    }
-                //}              
+            {              
+                if (value != masterKey)
+                {
+                    if (wpanApi.SetNetNetworkKey(value))
+                    {
+                        masterKey = value;
+                    }
+                }
             }
         }
 
-        public LowpanCredential(byte[] masterKey)
+        internal LowpanCredential(WpanApi wpanApi)
         {
-           // this.wpanApi = wpanApi;
-            this.masterKey = masterKey;
+            this.wpanApi = wpanApi;
+            wpanApi.GetNetNetworkKey();                
         }
     }
 }
