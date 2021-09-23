@@ -373,110 +373,110 @@ namespace dotNETCore.OpenThread.Spinel
         }
     }
 
-    public class SpinelProperties
+    public enum SpinelProperties : int
     {
 
 
         ////=========================================
         //// Spinel Properties
         ////=========================================
-        public const int SPINEL_PROP_LAST_STATUS = 0; ///** Format: `i` - Read-only
+        SPINEL_PROP_LAST_STATUS = 0, ///** Format: `i` - Read-only
 
-        public const int SPINEL_PROP_PROTOCOL_VERSION = 1; ///** Format: `ii` - Read-only
+        SPINEL_PROP_PROTOCOL_VERSION = 1, ///** Format: `ii` - Read-only
 
-        public const int SPINEL_PROP_NCP_VERSION = 2;// /** Format: `U` - Read-only
+        SPINEL_PROP_NCP_VERSION = 2,// /** Format: `U` - Read-only
 
-        public const int SPINEL_PROP_INTERFACE_TYPE = 3; // // Format: 'i' - Read-only
-        public const int SPINEL_PROP_VENDOR_ID = 4; // Format: 'i` - Read-only
-        public const int SPINEL_PROP_CAPS = 5;  // < capability list Format: 'A(i)` - Read-only
-        public const int SPINEL_PROP_INTERFACE_COUNT = 6; // < Interface count [C]
-        public const int SPINEL_PROP_POWER_STATE = 7;  // < PowerState [C] (deprecated, use `MCU_POWER_STATE` instead).
-        public const int SPINEL_PROP_HWADDR = 8; // NCP Hardware Address Format: 'E` - Read-only
-        public const int SPINEL_PROP_LOCK = 9; // < //< PropLock [b] (not supported)
-        public const int SPINEL_PROP_HBO_MEM_MAX = 10; ///< Max offload mem [S] (not supported)
-        public const int SPINEL_PROP_HBO_BLOCK_MAX = 11; ///< Max offload block [S] (not supported)
-        public const int SPINEL_PROP_HOST_POWER_STATE = 12;  // < PowerState [C]
-        public const int SPINEL_PROP_MCU_POWER_STATE = 13;  // < PowerState [C]
+        SPINEL_PROP_INTERFACE_TYPE = 3, // // Format: 'i' - Read-only
+        SPINEL_PROP_VENDOR_ID = 4, // Format: 'i` - Read-only
+        SPINEL_PROP_CAPS = 5,  // < capability list Format: 'A(i)` - Read-only
+        SPINEL_PROP_INTERFACE_COUNT = 6, // < Interface count [C]
+        SPINEL_PROP_POWER_STATE = 7,  // < PowerState [C] (deprecated, use `MCU_POWER_STATE` instead).
+        SPINEL_PROP_HWADDR = 8, // NCP Hardware Address Format: 'E` - Read-only
+        SPINEL_PROP_LOCK = 9, // < //< PropLock [b] (not supported)
+        SPINEL_PROP_HBO_MEM_MAX = 10, ///< Max offload mem [S] (not supported)
+        SPINEL_PROP_HBO_BLOCK_MAX = 11, ///< Max offload block [S] (not supported)
+        SPINEL_PROP_HOST_POWER_STATE = 12,  // < PowerState [C]
+        SPINEL_PROP_MCU_POWER_STATE = 13,  // < PowerState [C]
 
-        public const int SPINEL_PROP_PHY__BEGIN = 0x20;
-        public const int SPINEL_PROP_PHY_ENABLED = SPINEL_PROP_PHY__BEGIN + 0; // < [b]
-        public const int SPINEL_PROP_PHY_CHAN = SPINEL_PROP_PHY__BEGIN + 1; // < [C]
-        public const int SPINEL_PROP_PHY_CHAN_SUPPORTED = SPINEL_PROP_PHY__BEGIN + 2;  // < [A(C)]
-        public const int SPINEL_PROP_PHY_FREQ = SPINEL_PROP_PHY__BEGIN + 3;  // < kHz [L]
-        public const int SPINEL_PROP_PHY_CCA_THRESHOLD = SPINEL_PROP_PHY__BEGIN + 4;  // < dBm [c]
-        public const int SPINEL_PROP_PHY_TX_POWER = SPINEL_PROP_PHY__BEGIN + 5;  // < [c]
-        public const int SPINEL_PROP_PHY_RSSI = SPINEL_PROP_PHY__BEGIN + 6;  // < dBm [c]
-        public const int SPINEL_PROP_PHY_RX_SENSITIVITY = SPINEL_PROP_PHY__BEGIN + 7;  // < dBm [c]
-        public const int SPINEL_PROP_PHY_PCAP_ENABLED = SPINEL_PROP_PHY__BEGIN + 8;  ///< [b]
-        public const int SPINEL_PROP_PHY_CHAN_PREFERRED = SPINEL_PROP_PHY__BEGIN + 9;  ///< [A(C)]
-        public const int SPINEL_PROP_PHY_FEM_LNA_GAIN = SPINEL_PROP_PHY__BEGIN + 10; ///< dBm [c]
-        public const int SPINEL_PROP_PHY_CHAN_MAX_POWER = SPINEL_PROP_PHY__BEGIN + 11; ///Signal the max power for a channel Format: `Cc` First byte is the channel then the max transmit power, write-only.
-        public const int SPINEL_PROP_PHY_REGION_CODE = SPINEL_PROP_PHY__BEGIN + 12; /// Region code Format: `S` The ascii representation of the ISO 3166 alpha-2 code.
-        public const int SPINEL_PROP_PHY__END = 0x30;
+        SPINEL_PROP_PHY__BEGIN = 0x20,
+        SPINEL_PROP_PHY_ENABLED = SPINEL_PROP_PHY__BEGIN + 0, // < [b]
+        SPINEL_PROP_PHY_CHAN = SPINEL_PROP_PHY__BEGIN + 1, // < [C]
+        SPINEL_PROP_PHY_CHAN_SUPPORTED = SPINEL_PROP_PHY__BEGIN + 2,  // < [A(C)]
+        SPINEL_PROP_PHY_FREQ = SPINEL_PROP_PHY__BEGIN + 3,  // < kHz [L]
+        SPINEL_PROP_PHY_CCA_THRESHOLD = SPINEL_PROP_PHY__BEGIN + 4,  // < dBm [c]
+        SPINEL_PROP_PHY_TX_POWER = SPINEL_PROP_PHY__BEGIN + 5,  // < [c]
+        SPINEL_PROP_PHY_RSSI = SPINEL_PROP_PHY__BEGIN + 6,  // < dBm [c]
+        SPINEL_PROP_PHY_RX_SENSITIVITY = SPINEL_PROP_PHY__BEGIN + 7,  // < dBm [c]
+        SPINEL_PROP_PHY_PCAP_ENABLED = SPINEL_PROP_PHY__BEGIN + 8,  ///< [b]
+        SPINEL_PROP_PHY_CHAN_PREFERRED = SPINEL_PROP_PHY__BEGIN + 9,  ///< [A(C)]
+        SPINEL_PROP_PHY_FEM_LNA_GAIN = SPINEL_PROP_PHY__BEGIN + 10, ///< dBm [c]
+        SPINEL_PROP_PHY_CHAN_MAX_POWER = SPINEL_PROP_PHY__BEGIN + 11, ///Signal the max power for a channel Format: `Cc` First byte is the channel then the max transmit power, write-only.
+        SPINEL_PROP_PHY_REGION_CODE = SPINEL_PROP_PHY__BEGIN + 12, /// Region code Format: `S` The ascii representation of the ISO 3166 alpha-2 code.
+        SPINEL_PROP_PHY__END = 0x30,
 
-        public const int SPINEL_PROP_MAC__BEGIN = 0x30;
-        public const int SPINEL_PROP_MAC_SCAN_STATE = SPINEL_PROP_MAC__BEGIN + 0;//< [C]
-        public const int SPINEL_PROP_MAC_SCAN_MASK = SPINEL_PROP_MAC__BEGIN + 1;//< [A(C)]
-        public const int SPINEL_PROP_MAC_SCAN_PERIOD = SPINEL_PROP_MAC__BEGIN + 2;//< ms-per-channel [S]
-                                                                                  //< chan,rssi,(laddr,saddr,panid,lqi),(proto,xtra) [Cct(ESSC)t(i)]
-        public const int SPINEL_PROP_MAC_SCAN_BEACON = SPINEL_PROP_MAC__BEGIN + 3;
-        public const int SPINEL_PROP_MAC_15_4_LADDR = SPINEL_PROP_MAC__BEGIN + 4;//< [E]
-        public const int SPINEL_PROP_MAC_15_4_SADDR = SPINEL_PROP_MAC__BEGIN + 5;//< [S]
-        public const int SPINEL_PROP_MAC_15_4_PANID = SPINEL_PROP_MAC__BEGIN + 6;//< [S]
-        public const int SPINEL_PROP_MAC_RAW_STREAM_ENABLED = SPINEL_PROP_MAC__BEGIN + 7;//< [C]
-        public const int SPINEL_PROP_MAC_FILTER_MODE = SPINEL_PROP_MAC__BEGIN + 8;//< [C]
-        public const int SPINEL_PROP_MAC_ENERGY_SCAN_RESULT = SPINEL_PROP_MAC__BEGIN + 9;// `C`: Channel `c`: RSSI (in dBm)
+        SPINEL_PROP_MAC__BEGIN = 0x30,
+        SPINEL_PROP_MAC_SCAN_STATE = SPINEL_PROP_MAC__BEGIN + 0,//< [C]
+        SPINEL_PROP_MAC_SCAN_MASK = SPINEL_PROP_MAC__BEGIN + 1,//< [A(C)]
+        SPINEL_PROP_MAC_SCAN_PERIOD = SPINEL_PROP_MAC__BEGIN + 2,//< ms-per-channel [S]
+                                                                 //< chan,rssi,(laddr,saddr,panid,lqi),(proto,xtra) [Cct(ESSC)t(i)]
+        SPINEL_PROP_MAC_SCAN_BEACON = SPINEL_PROP_MAC__BEGIN + 3,
+        SPINEL_PROP_MAC_15_4_LADDR = SPINEL_PROP_MAC__BEGIN + 4,//< [E]
+        SPINEL_PROP_MAC_15_4_SADDR = SPINEL_PROP_MAC__BEGIN + 5,//< [S]
+        SPINEL_PROP_MAC_15_4_PANID = SPINEL_PROP_MAC__BEGIN + 6,//< [S]
+        SPINEL_PROP_MAC_RAW_STREAM_ENABLED = SPINEL_PROP_MAC__BEGIN + 7,//< [C]
+        SPINEL_PROP_MAC_FILTER_MODE = SPINEL_PROP_MAC__BEGIN + 8,//< [C]
+        SPINEL_PROP_MAC_ENERGY_SCAN_RESULT = SPINEL_PROP_MAC__BEGIN + 9,// `C`: Channel `c`: RSSI (in dBm)
 
 
-        public const int PROP_MAC__END = 0x40;
+        PROP_MAC__END = 0x40,
 
-        public const int SPINEL_PROP_NET__BEGIN = 0x40;
-        public const int SPINEL_PROP_NET_SAVED = SPINEL_PROP_NET__BEGIN + 0;//< [b]
-        public const int SPINEL_PROP_NET_IF_UP = SPINEL_PROP_NET__BEGIN + 1;//< [b]
-        public const int SPINEL_PROP_NET_STACK_UP = SPINEL_PROP_NET__BEGIN + 2;//< [C]
-        public const int SPINEL_PROP_NET_ROLE = SPINEL_PROP_NET__BEGIN + 3;//< [C]
-        public const int SPINEL_PROP_NET_NETWORK_NAME = SPINEL_PROP_NET__BEGIN + 4;//< [U]
-        public const int SPINEL_PROP_NET_XPANID = SPINEL_PROP_NET__BEGIN + 5;//< [D]
-        public const int SPINEL_PROP_NET_NETWORK_KEY = SPINEL_PROP_NET__BEGIN + 6;//< [D]
-        public const int SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER = SPINEL_PROP_NET__BEGIN + 7;//< [L]
-        public const int SPINEL_PROP_NET_PARTITION_ID = SPINEL_PROP_NET__BEGIN + 8;//< [L]
-        public const int SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING = SPINEL_PROP_NET__BEGIN + 9;//< [b]        
-        public const int SPINEL_PROP_NET_KEY_SWITCH_GUARDTIME = SPINEL_PROP_NET__BEGIN + 10;//< [L]
-        public const int SPINEL_PROP_NET_PSKC = SPINEL_PROP_NET__BEGIN + 11;//< [D]
-        public const int PROP_NET__END = 0x50;
+        SPINEL_PROP_NET__BEGIN = 0x40,
+        SPINEL_PROP_NET_SAVED = SPINEL_PROP_NET__BEGIN + 0,//< [b]
+        SPINEL_PROP_NET_IF_UP = SPINEL_PROP_NET__BEGIN + 1,//< [b]
+        SPINEL_PROP_NET_STACK_UP = SPINEL_PROP_NET__BEGIN + 2,//< [C]
+        SPINEL_PROP_NET_ROLE = SPINEL_PROP_NET__BEGIN + 3,//< [C]
+        SPINEL_PROP_NET_NETWORK_NAME = SPINEL_PROP_NET__BEGIN + 4,//< [U]
+        SPINEL_PROP_NET_XPANID = SPINEL_PROP_NET__BEGIN + 5,//< [D]
+        SPINEL_PROP_NET_NETWORK_KEY = SPINEL_PROP_NET__BEGIN + 6,//< [D]
+        SPINEL_PROP_NET_KEY_SEQUENCE_COUNTER = SPINEL_PROP_NET__BEGIN + 7,//< [L]
+        SPINEL_PROP_NET_PARTITION_ID = SPINEL_PROP_NET__BEGIN + 8,//< [L]
+        SPINEL_PROP_NET_REQUIRE_JOIN_EXISTING = SPINEL_PROP_NET__BEGIN + 9,//< [b]        
+        SPINEL_PROP_NET_KEY_SWITCH_GUARDTIME = SPINEL_PROP_NET__BEGIN + 10,//< [L]
+        SPINEL_PROP_NET_PSKC = SPINEL_PROP_NET__BEGIN + 11,//< [D]
+        PROP_NET__END = 0x50,
 
-        public const int SPINEL_PROP_THREAD__BEGIN = 0x50;
-        public const int SPINEL_PROP_THREAD_LEADER_ADDR = SPINEL_PROP_THREAD__BEGIN + 0;//< [6]
-        public const int SPINEL_PROP_THREAD_PARENT = SPINEL_PROP_THREAD__BEGIN + 1;//< LADDR, SADDR [ES]
-        public const int SPINEL_PROP_THREAD_CHILD_TABLE = SPINEL_PROP_THREAD__BEGIN + 2;//< [A(t(ES))] /** Format: [A(t(ESLLCCcCc)] - Read only
-        public const int SPINEL_PROP_THREAD_LEADER_RID = SPINEL_PROP_THREAD__BEGIN + 3;//< [C]
-        public const int SPINEL_PROP_THREAD_LEADER_WEIGHT = SPINEL_PROP_THREAD__BEGIN + 4;//< [C]
-        public const int SPINEL_PROP_THREAD_LOCAL_LEADER_WEIGHT = SPINEL_PROP_THREAD__BEGIN + 5;//< [C]
-        public const int SPINEL_PROP_THREAD_NETWORK_DATA = SPINEL_PROP_THREAD__BEGIN + 6;//< [D]
-        public const int SPINEL_PROP_THREAD_NETWORK_DATA_VERSION = SPINEL_PROP_THREAD__BEGIN + 7;//< [S]
-        public const int SPINEL_PROP_THREAD_STABLE_NETWORK_DATA = SPINEL_PROP_THREAD__BEGIN + 8;//< [D]
-        public const int SPINEL_PROP_THREAD_STABLE_NETWORK_DATA_VERSION = SPINEL_PROP_THREAD__BEGIN + 9;//< [S]
-                                                                                                        //< array(ipv6prefix,prefixlen,stable,flags) [A(t(6CbC))]
-        public const int SPINEL_PROP_THREAD_ON_MESH_NETS = SPINEL_PROP_THREAD__BEGIN + 10;
+        SPINEL_PROP_THREAD__BEGIN = 0x50,
+        SPINEL_PROP_THREAD_LEADER_ADDR = SPINEL_PROP_THREAD__BEGIN + 0,//< [6]
+        SPINEL_PROP_THREAD_PARENT = SPINEL_PROP_THREAD__BEGIN + 1,//< LADDR, SADDR [ES]
+        SPINEL_PROP_THREAD_CHILD_TABLE = SPINEL_PROP_THREAD__BEGIN + 2,//< [A(t(ES))] /** Format: [A(t(ESLLCCcCc)] - Read only
+        SPINEL_PROP_THREAD_LEADER_RID = SPINEL_PROP_THREAD__BEGIN + 3,//< [C]
+        SPINEL_PROP_THREAD_LEADER_WEIGHT = SPINEL_PROP_THREAD__BEGIN + 4,//< [C]
+        SPINEL_PROP_THREAD_LOCAL_LEADER_WEIGHT = SPINEL_PROP_THREAD__BEGIN + 5,//< [C]
+        SPINEL_PROP_THREAD_NETWORK_DATA = SPINEL_PROP_THREAD__BEGIN + 6,//< [D]
+        SPINEL_PROP_THREAD_NETWORK_DATA_VERSION = SPINEL_PROP_THREAD__BEGIN + 7,//< [S]
+        SPINEL_PROP_THREAD_STABLE_NETWORK_DATA = SPINEL_PROP_THREAD__BEGIN + 8,//< [D]
+        SPINEL_PROP_THREAD_STABLE_NETWORK_DATA_VERSION = SPINEL_PROP_THREAD__BEGIN + 9,//< [S]
+                                                                                       //< array(ipv6prefix,prefixlen,stable,flags) [A(t(6CbC))]
+        SPINEL_PROP_THREAD_ON_MESH_NETS = SPINEL_PROP_THREAD__BEGIN + 10,
         //< array(ipv6prefix,prefixlen,stable,flags) [A(t(6CbC))]
-        public const int SPINEL_PROP_THREAD_OFF_MESH_ROUTES = SPINEL_PROP_THREAD__BEGIN + 11;
-        public const int SPINEL_PROP_THREAD_ASSISTING_PORTS = SPINEL_PROP_THREAD__BEGIN + 12;//< array(portn) [A(S)]
-        public const int SPINEL_PROP_THREAD_ALLOW_LOCAL_NET_DATA_CHANGE = SPINEL_PROP_THREAD__BEGIN + 13;//< [b]
-        public const int SPINEL_PROP_THREAD_MODE = SPINEL_PROP_THREAD__BEGIN + 14;
+        SPINEL_PROP_THREAD_OFF_MESH_ROUTES = SPINEL_PROP_THREAD__BEGIN + 11,
+        SPINEL_PROP_THREAD_ASSISTING_PORTS = SPINEL_PROP_THREAD__BEGIN + 12,//< array(portn) [A(S)]
+        SPINEL_PROP_THREAD_ALLOW_LOCAL_NET_DATA_CHANGE = SPINEL_PROP_THREAD__BEGIN + 13,//< [b]
+        SPINEL_PROP_THREAD_MODE = SPINEL_PROP_THREAD__BEGIN + 14,
 
-        public const int SPINEL_PROP_IPV6__BEGIN = 0x60;
+        SPINEL_PROP_IPV6__BEGIN = 0x60,
 
         /// Link-Local IPv6 Address
         /** Format: `6` - Read only
          *
          */
-        public const int SPINEL_PROP_IPV6_LL_ADDR = SPINEL_PROP_IPV6__BEGIN + 0; ///< [6]
+        SPINEL_PROP_IPV6_LL_ADDR = SPINEL_PROP_IPV6__BEGIN + 0, ///< [6]
 
-        /// Mesh Local IPv6 Address
+                                                                /// Mesh Local IPv6 Address
         /** Format: `6` - Read only
          *
          */
-        public const int SPINEL_PROP_IPV6_ML_ADDR = SPINEL_PROP_IPV6__BEGIN + 1;
+        SPINEL_PROP_IPV6_ML_ADDR = SPINEL_PROP_IPV6__BEGIN + 1,
 
         /// Mesh Local Prefix
         /** Format: `6C` - Read-write
@@ -487,7 +487,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   `C` : Prefix length (64 bit for Thread).
          *
          */
-        public const int SPINEL_PROP_IPV6_ML_PREFIX = SPINEL_PROP_IPV6__BEGIN + 2;
+        SPINEL_PROP_IPV6_ML_PREFIX = SPINEL_PROP_IPV6__BEGIN + 2,
 
         /// IPv6 (Unicast) Address Table
         /** Format: `A(t(6CLLC))`
@@ -502,10 +502,10 @@ namespace dotNETCore.OpenThread.Spinel
          *  `L`: Preferred Lifetime
          *
          */
-        public const int SPINEL_PROP_IPV6_ADDRESS_TABLE = SPINEL_PROP_IPV6__BEGIN + 3;
+        SPINEL_PROP_IPV6_ADDRESS_TABLE = SPINEL_PROP_IPV6__BEGIN + 3,
 
         /// IPv6 Route Table - Deprecated
-        public const int SPINEL_PROP_IPV6_ROUTE_TABLE = SPINEL_PROP_IPV6__BEGIN + 4;
+        SPINEL_PROP_IPV6_ROUTE_TABLE = SPINEL_PROP_IPV6__BEGIN + 4,
 
         /// IPv6 ICMP Ping Offload
         /** Format: `b`
@@ -515,7 +515,7 @@ namespace dotNETCore.OpenThread.Spinel
          *
          * Default value is `false`.
          */
-        public const int SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD = SPINEL_PROP_IPV6__BEGIN + 5;
+        SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD = SPINEL_PROP_IPV6__BEGIN + 5,
 
         /// IPv6 Multicast Address Table
         /** Format: `A(t(6))`
@@ -523,7 +523,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property provides all multicast addresses.
          *
          */
-        public const int SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE = SPINEL_PROP_IPV6__BEGIN + 6;
+        SPINEL_PROP_IPV6_MULTICAST_ADDRESS_TABLE = SPINEL_PROP_IPV6__BEGIN + 6,
 
         /// IPv6 ICMP Ping Offload
         /** Format: `C`
@@ -543,33 +543,33 @@ namespace dotNETCore.OpenThread.Spinel
          * Default value is `NET_IPV6_ICMP_PING_OFFLOAD_DISABLED`.
          *
          */
-        public const int SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD_MODE = SPINEL_PROP_IPV6__BEGIN + 7; ///< [b]
+        SPINEL_PROP_IPV6_ICMP_PING_OFFLOAD_MODE = SPINEL_PROP_IPV6__BEGIN + 7, ///< [b]
 
 
-        public const int SPINEL_PROP_STREAM__BEGIN = 0x70;
-        public const int SPINEL_PROP_STREAM_DEBUG = SPINEL_PROP_STREAM__BEGIN + 0; //# <  Format: `U` (stream, read only)
-        public const int SPINEL_PROP_STREAM_RAW = SPINEL_PROP_STREAM__BEGIN + 1; // # < Format: `dD` (stream, read only)
-        public const int SPINEL_PROP_STREAM_NET = SPINEL_PROP_STREAM__BEGIN + 2; // # < Format: `dD` (stream, read only)
-        public const int SPINEL_PROP_STREAM_NET_INSECURE = SPINEL_PROP_STREAM__BEGIN + 3;//  # Format: `dD` (stream, read only)
-        public const int SPINEL_PROP_STREAM_LOG = SPINEL_PROP_STREAM__BEGIN + 4;//  # Format: `UD` (stream, read only)
-        public const int PROP_STREAM__END = 0x80;
+        SPINEL_PROP_STREAM__BEGIN = 0x70,
+        SPINEL_PROP_STREAM_DEBUG = SPINEL_PROP_STREAM__BEGIN + 0, //# <  Format: `U` (stream, read only)
+        SPINEL_PROP_STREAM_RAW = SPINEL_PROP_STREAM__BEGIN + 1, // # < Format: `dD` (stream, read only)
+        SPINEL_PROP_STREAM_NET = SPINEL_PROP_STREAM__BEGIN + 2, // # < Format: `dD` (stream, read only)
+        SPINEL_PROP_STREAM_NET_INSECURE = SPINEL_PROP_STREAM__BEGIN + 3,//  # Format: `dD` (stream, read only)
+        SPINEL_PROP_STREAM_LOG = SPINEL_PROP_STREAM__BEGIN + 4,//  # Format: `UD` (stream, read only)
+        PROP_STREAM__END = 0x80,
 
-        //public const int PROP_THREAD_EXT__BEGIN = 0x1500;
-        //public const int PROP_THREAD_CHILD_TIMEOUT = PROP_THREAD_EXT__BEGIN + 0;//  // < [L]
-        //public const int PROP_THREAD_RLOC16 = PROP_THREAD_EXT__BEGIN + 1;//  // < [S]
-        //public const int PROP_THREAD_ROUTER_UPGRADE_THRESHOLD = PROP_THREAD_EXT__BEGIN + 2;  // < [C]
-        //public const int PROP_THREAD_CONTEXT_REUSE_DELAY = PROP_THREAD_EXT__BEGIN + 3;  // < [L]
-        //public const int PROP_THREAD_NETWORK_ID_TIMEOUT = PROP_THREAD_EXT__BEGIN + 4;  // < [b]
-        //public const int PROP_THREAD_ACTIVE_ROUTER_IDS = PROP_THREAD_EXT__BEGIN + 5;  // < [A(b)]
-        //public const int PROP_THREAD_RLOC16_DEBUG_PASSTHRU = PROP_THREAD_EXT__BEGIN + 6;  // < [b]
-        //public const int PROP_THREAD_ROUTER_ROLE_ENABLED = PROP_THREAD_EXT__BEGIN + 7;  // < [b]
-        //public const int PROP_THREAD_ROUTER_DOWNGRADE_THRESHOLD = PROP_THREAD_EXT__BEGIN + 8;  // < [C]
-        //public const int PROP_THREAD_ROUTER_SELECTION_JITTER = PROP_THREAD_EXT__BEGIN + 9;  // < [C]
-        //public const int PROP_THREAD_PREFERRED_ROUTER_ID = PROP_THREAD_EXT__BEGIN + 10;  // < [C]
-        //public const int PROP_THREAD_NEIGHBOR_TABLE = PROP_THREAD_EXT__BEGIN + 11;  // < [A(t(ESLCcCbLL))]
-        //public const int PROP_THREAD_CHILD_COUNT_MAX = PROP_THREAD_EXT__BEGIN + 12;  // < [C]
+        //  PROP_THREAD_EXT__BEGIN = 0x1500,
+        //  PROP_THREAD_CHILD_TIMEOUT = PROP_THREAD_EXT__BEGIN + 0,//  // < [L]
+        //  PROP_THREAD_RLOC16 = PROP_THREAD_EXT__BEGIN + 1,//  // < [S]
+        //  PROP_THREAD_ROUTER_UPGRADE_THRESHOLD = PROP_THREAD_EXT__BEGIN + 2,  // < [C]
+        //  PROP_THREAD_CONTEXT_REUSE_DELAY = PROP_THREAD_EXT__BEGIN + 3,  // < [L]
+        //  PROP_THREAD_NETWORK_ID_TIMEOUT = PROP_THREAD_EXT__BEGIN + 4,  // < [b]
+        //  PROP_THREAD_ACTIVE_ROUTER_IDS = PROP_THREAD_EXT__BEGIN + 5,  // < [A(b)]
+        //  PROP_THREAD_RLOC16_DEBUG_PASSTHRU = PROP_THREAD_EXT__BEGIN + 6,  // < [b]
+        //  PROP_THREAD_ROUTER_ROLE_ENABLED = PROP_THREAD_EXT__BEGIN + 7,  // < [b]
+        //  PROP_THREAD_ROUTER_DOWNGRADE_THRESHOLD = PROP_THREAD_EXT__BEGIN + 8,  // < [C]
+        //  PROP_THREAD_ROUTER_SELECTION_JITTER = PROP_THREAD_EXT__BEGIN + 9,  // < [C]
+        //  PROP_THREAD_PREFERRED_ROUTER_ID = PROP_THREAD_EXT__BEGIN + 10,  // < [C]
+        //  PROP_THREAD_NEIGHBOR_TABLE = PROP_THREAD_EXT__BEGIN + 11,  // < [A(t(ESLCcCbLL))]
+        //  PROP_THREAD_CHILD_COUNT_MAX = PROP_THREAD_EXT__BEGIN + 12,  // < [C]
 
-        public const int SPINEL_PROP_THREAD_EXT__BEGIN = 0x1500;
+        SPINEL_PROP_THREAD_EXT__BEGIN = 0x1500,
 
         /// Thread Child Timeout
         /** Format: `L`
@@ -577,31 +577,31 @@ namespace dotNETCore.OpenThread.Spinel
          *
          *  Used when operating in the Child role.
          */
-        public const int SPINEL_PROP_THREAD_CHILD_TIMEOUT = SPINEL_PROP_THREAD_EXT__BEGIN + 0;
+        SPINEL_PROP_THREAD_CHILD_TIMEOUT = SPINEL_PROP_THREAD_EXT__BEGIN + 0,
 
         /// Thread RLOC16
         /** Format: `S`
          *
          */
-        public const int SPINEL_PROP_THREAD_RLOC16 = SPINEL_PROP_THREAD_EXT__BEGIN + 1;
+        SPINEL_PROP_THREAD_RLOC16 = SPINEL_PROP_THREAD_EXT__BEGIN + 1,
 
         /// Thread Router Upgrade Threshold
         /** Format: `C`
          *
          */
-        public const int SPINEL_PROP_THREAD_ROUTER_UPGRADE_THRESHOLD = SPINEL_PROP_THREAD_EXT__BEGIN + 2;
+        SPINEL_PROP_THREAD_ROUTER_UPGRADE_THRESHOLD = SPINEL_PROP_THREAD_EXT__BEGIN + 2,
 
         /// Thread Context Reuse Delay
         /** Format: `L`
          *
          */
-        public const int SPINEL_PROP_THREAD_CONTEXT_REUSE_DELAY = SPINEL_PROP_THREAD_EXT__BEGIN + 3;
+        SPINEL_PROP_THREAD_CONTEXT_REUSE_DELAY = SPINEL_PROP_THREAD_EXT__BEGIN + 3,
 
         /// Thread Network ID Timeout
         /** Format: `C`
          *
          */
-        public const int SPINEL_PROP_THREAD_NETWORK_ID_TIMEOUT = SPINEL_PROP_THREAD_EXT__BEGIN + 4;
+        SPINEL_PROP_THREAD_NETWORK_ID_TIMEOUT = SPINEL_PROP_THREAD_EXT__BEGIN + 4,
 
         /// List of active thread router ids
         /** Format: `A(C)`
@@ -611,7 +611,7 @@ namespace dotNETCore.OpenThread.Spinel
          * a leader.
          *
          */
-        public const int SPINEL_PROP_THREAD_ACTIVE_ROUTER_IDS = SPINEL_PROP_THREAD_EXT__BEGIN + 5;
+        SPINEL_PROP_THREAD_ACTIVE_ROUTER_IDS = SPINEL_PROP_THREAD_EXT__BEGIN + 5,
 
         /// Forward IPv6 packets that use RLOC16 addresses to HOST.
         /** Format: `b`
@@ -622,7 +622,7 @@ namespace dotNETCore.OpenThread.Spinel
          * Default is false.
          *
          */
-        public const int SPINEL_PROP_THREAD_RLOC16_DEBUG_PASSTHRU = SPINEL_PROP_THREAD_EXT__BEGIN + 6;
+        SPINEL_PROP_THREAD_RLOC16_DEBUG_PASSTHRU = SPINEL_PROP_THREAD_EXT__BEGIN + 6,
 
         /// Router Role Enabled
         /** Format `b`
@@ -632,19 +632,19 @@ namespace dotNETCore.OpenThread.Spinel
          * a re-attach process as an end-device.
          *
          */
-        public const int SPINEL_PROP_THREAD_ROUTER_ROLE_ENABLED = SPINEL_PROP_THREAD_EXT__BEGIN + 7;
+        SPINEL_PROP_THREAD_ROUTER_ROLE_ENABLED = SPINEL_PROP_THREAD_EXT__BEGIN + 7,
 
         /// Thread Router Downgrade Threshold
         /** Format: `C`
          *
          */
-        public const int SPINEL_PROP_THREAD_ROUTER_DOWNGRADE_THRESHOLD = SPINEL_PROP_THREAD_EXT__BEGIN + 8;
+        SPINEL_PROP_THREAD_ROUTER_DOWNGRADE_THRESHOLD = SPINEL_PROP_THREAD_EXT__BEGIN + 8,
 
         /// Thread Router Selection Jitter
         /** Format: `C`
          *
          */
-        public const int SPINEL_PROP_THREAD_ROUTER_SELECTION_JITTER = SPINEL_PROP_THREAD_EXT__BEGIN + 9;
+        SPINEL_PROP_THREAD_ROUTER_SELECTION_JITTER = SPINEL_PROP_THREAD_EXT__BEGIN + 9,
 
         /// Thread Preferred Router Id
         /** Format: `C` - Write only
@@ -656,7 +656,7 @@ namespace dotNETCore.OpenThread.Spinel
          * disabled.
          *
          */
-        public const int SPINEL_PROP_THREAD_PREFERRED_ROUTER_ID = SPINEL_PROP_THREAD_EXT__BEGIN + 10;
+        SPINEL_PROP_THREAD_PREFERRED_ROUTER_ID = SPINEL_PROP_THREAD_EXT__BEGIN + 10,
 
         /// Thread Neighbor Table
         /** Format: `A(t(ESLCcCbLLc))` - Read only
@@ -675,7 +675,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `c`: The last RSSI (in dBm)
          *
          */
-        public const int SPINEL_PROP_THREAD_NEIGHBOR_TABLE = SPINEL_PROP_THREAD_EXT__BEGIN + 11;
+        SPINEL_PROP_THREAD_NEIGHBOR_TABLE = SPINEL_PROP_THREAD_EXT__BEGIN + 11,
 
         /// Thread Max Child Count
         /** Format: `C`
@@ -685,19 +685,19 @@ namespace dotNETCore.OpenThread.Spinel
          * has been stopped.
          *
          */
-        public const int SPINEL_PROP_THREAD_CHILD_COUNT_MAX = SPINEL_PROP_THREAD_EXT__BEGIN + 12;
+        SPINEL_PROP_THREAD_CHILD_COUNT_MAX = SPINEL_PROP_THREAD_EXT__BEGIN + 12,
 
         /// Leader Network Data
         /** Format: `D` - Read only
          *
          */
-        public const int SPINEL_PROP_THREAD_LEADER_NETWORK_DATA = SPINEL_PROP_THREAD_EXT__BEGIN + 13;
+        SPINEL_PROP_THREAD_LEADER_NETWORK_DATA = SPINEL_PROP_THREAD_EXT__BEGIN + 13,
 
         /// Stable Leader Network Data
         /** Format: `D` - Read only
          *
          */
-        public const int SPINEL_PROP_THREAD_STABLE_LEADER_NETWORK_DATA = SPINEL_PROP_THREAD_EXT__BEGIN + 14;
+        SPINEL_PROP_THREAD_STABLE_LEADER_NETWORK_DATA = SPINEL_PROP_THREAD_EXT__BEGIN + 14,
 
         /// Thread Joiner Data
         /** Format `A(T(ULE))`
@@ -706,7 +706,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property is being deprecated by SPINEL_PROP_MESHCOP_COMMISSIONER_JOINERS.
          *
          */
-        public const int SPINEL_PROP_THREAD_JOINERS = SPINEL_PROP_THREAD_EXT__BEGIN + 15;
+        SPINEL_PROP_THREAD_JOINERS = SPINEL_PROP_THREAD_EXT__BEGIN + 15,
 
         /// Thread Commissioner Enable
         /** Format `b`
@@ -716,7 +716,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property is being deprecated by SPINEL_PROP_MESHCOP_COMMISSIONER_STATE.
          *
          */
-        public const int SPINEL_PROP_THREAD_COMMISSIONER_ENABLED = SPINEL_PROP_THREAD_EXT__BEGIN + 16;
+        SPINEL_PROP_THREAD_COMMISSIONER_ENABLED = SPINEL_PROP_THREAD_EXT__BEGIN + 16,
 
         /// Thread TMF proxy enable
         /** Format `b`
@@ -725,7 +725,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property is deprecated.
          *
          */
-        public const int SPINEL_PROP_THREAD_TMF_PROXY_ENABLED = SPINEL_PROP_THREAD_EXT__BEGIN + 17;
+        SPINEL_PROP_THREAD_TMF_PROXY_ENABLED = SPINEL_PROP_THREAD_EXT__BEGIN + 17,
 
         /// Thread TMF proxy stream
         /** Format `dSS`
@@ -734,7 +734,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property is deprecated. Please see `SPINEL_PROP_THREAD_UDP_FORWARD_STREAM`.
          *
          */
-        public const int SPINEL_PROP_THREAD_TMF_PROXY_STREAM = SPINEL_PROP_THREAD_EXT__BEGIN + 18;
+        SPINEL_PROP_THREAD_TMF_PROXY_STREAM = SPINEL_PROP_THREAD_EXT__BEGIN + 18,
 
         /// Thread "joiner" flag used during discovery scan operation
         /** Format `b`
@@ -744,7 +744,7 @@ namespace dotNETCore.OpenThread.Spinel
          * Default value is `false`.
          *
          */
-        public const int SPINEL_PROP_THREAD_DISCOVERY_SCAN_JOINER_FLAG = SPINEL_PROP_THREAD_EXT__BEGIN + 19;
+        SPINEL_PROP_THREAD_DISCOVERY_SCAN_JOINER_FLAG = SPINEL_PROP_THREAD_EXT__BEGIN + 19,
 
         /// Enable EUI64 filtering for discovery scan operation.
         /** Format `b`
@@ -752,7 +752,7 @@ namespace dotNETCore.OpenThread.Spinel
          * Default value is `false`
          *
          */
-        public const int SPINEL_PROP_THREAD_DISCOVERY_SCAN_ENABLE_FILTERING = SPINEL_PROP_THREAD_EXT__BEGIN + 20;
+        SPINEL_PROP_THREAD_DISCOVERY_SCAN_ENABLE_FILTERING = SPINEL_PROP_THREAD_EXT__BEGIN + 20,
 
         /// PANID used for Discovery scan operation (used for PANID filtering).
         /** Format: `S`
@@ -760,7 +760,7 @@ namespace dotNETCore.OpenThread.Spinel
          * Default value is 0xffff (Broadcast PAN) to disable PANID filtering
          *
          */
-        public const int SPINEL_PROP_THREAD_DISCOVERY_SCAN_PANID = SPINEL_PROP_THREAD_EXT__BEGIN + 21;
+        SPINEL_PROP_THREAD_DISCOVERY_SCAN_PANID = SPINEL_PROP_THREAD_EXT__BEGIN + 21,
 
         /// Thread (out of band) steering data for MLE Discovery Response.
         /** Format `E` - Write only
@@ -778,7 +778,7 @@ namespace dotNETCore.OpenThread.Spinel
          *    data/bloom filter.
          *
          */
-        public const int SPINEL_PROP_THREAD_STEERING_DATA = SPINEL_PROP_THREAD_EXT__BEGIN + 22;
+        SPINEL_PROP_THREAD_STEERING_DATA = SPINEL_PROP_THREAD_EXT__BEGIN + 22,
 
         /// Thread Router Table.
         /** Format: `A(t(ESCCCCCCb)` - Read only
@@ -796,7 +796,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `b`: Link established with Router ID or not.
          *
          */
-        public const int SPINEL_PROP_THREAD_ROUTER_TABLE = SPINEL_PROP_THREAD_EXT__BEGIN + 23;
+        SPINEL_PROP_THREAD_ROUTER_TABLE = SPINEL_PROP_THREAD_EXT__BEGIN + 23,
 
         /// Thread Active Operational Dataset
         /** Format: `A(t(iD))` - Read-Write
@@ -827,7 +827,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   SPINEL_PROP_DATASET_SECURITY_POLICY
          *
          */
-        public const int SPINEL_PROP_THREAD_ACTIVE_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 24;
+        SPINEL_PROP_THREAD_ACTIVE_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 24,
 
         /// Thread Pending Operational Dataset
         /** Format: `A(t(iD))` - Read-Write
@@ -843,7 +843,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   SPINEL_PROP_DATASET_DELAY_TIMER
          *
          */
-        public const int SPINEL_PROP_THREAD_PENDING_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 25;
+        SPINEL_PROP_THREAD_PENDING_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 25,
 
         /// Send MGMT_SET Thread Active Operational Dataset
         /** Format: `A(t(iD))` - Write only
@@ -860,7 +860,7 @@ namespace dotNETCore.OpenThread.Spinel
          *    SPINEL_PROP_DATASET_RAW_TLVS
          *
          */
-        public const int SPINEL_PROP_THREAD_MGMT_SET_ACTIVE_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 26;
+        SPINEL_PROP_THREAD_MGMT_SET_ACTIVE_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 26,
 
         /// Send MGMT_SET Thread Pending Operational Dataset
         /** Format: `A(t(iD))` - Write only
@@ -873,7 +873,7 @@ namespace dotNETCore.OpenThread.Spinel
          *    SPINEL_PROP_DATASET_RAW_TLVS
          *
          */
-        public const int SPINEL_PROP_THREAD_MGMT_SET_PENDING_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 27;
+        SPINEL_PROP_THREAD_MGMT_SET_PENDING_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 27,
 
         /// Operational Dataset Active Timestamp
         /** Format: `X` - No direct read or write
@@ -888,7 +888,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   SPINEL_PROP_THREAD_MGMT_GET_PENDING_DATASET
          *
          */
-        public const int SPINEL_PROP_DATASET_ACTIVE_TIMESTAMP = SPINEL_PROP_THREAD_EXT__BEGIN + 28;
+        SPINEL_PROP_DATASET_ACTIVE_TIMESTAMP = SPINEL_PROP_THREAD_EXT__BEGIN + 28,
 
         /// Operational Dataset Pending Timestamp
         /** Format: `X` - No direct read or write
@@ -900,7 +900,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   SPINEL_PROP_THREAD_MGMT_GET_PENDING_DATASET
          *
          */
-        public const int SPINEL_PROP_DATASET_PENDING_TIMESTAMP = SPINEL_PROP_THREAD_EXT__BEGIN + 29;
+        SPINEL_PROP_DATASET_PENDING_TIMESTAMP = SPINEL_PROP_THREAD_EXT__BEGIN + 29,
 
         /// Operational Dataset Delay Timer
         /** Format: `L` - No direct read or write
@@ -915,7 +915,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   SPINEL_PROP_THREAD_MGMT_GET_PENDING_DATASET
          *
          */
-        public const int SPINEL_PROP_DATASET_DELAY_TIMER = SPINEL_PROP_THREAD_EXT__BEGIN + 30;
+        SPINEL_PROP_DATASET_DELAY_TIMER = SPINEL_PROP_THREAD_EXT__BEGIN + 30,
 
         /// Operational Dataset Security Policy
         /** Format: `SC` - No direct read or write
@@ -934,7 +934,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   `C` : Security Policy Flags (as specified in Thread 1.1 Section 8.10.1.15)
          *
          */
-        public const int SPINEL_PROP_DATASET_SECURITY_POLICY = SPINEL_PROP_THREAD_EXT__BEGIN + 31;
+        SPINEL_PROP_DATASET_SECURITY_POLICY = SPINEL_PROP_THREAD_EXT__BEGIN + 31,
 
         /// Operational Dataset Additional Raw TLVs
         /** Format: `D` - No direct read or write
@@ -949,7 +949,7 @@ namespace dotNETCore.OpenThread.Spinel
          *   SPINEL_PROP_THREAD_MGMT_GET_PENDING_DATASET
          *
          */
-        public const int SPINEL_PROP_DATASET_RAW_TLVS = SPINEL_PROP_THREAD_EXT__BEGIN + 32;
+        SPINEL_PROP_DATASET_RAW_TLVS = SPINEL_PROP_THREAD_EXT__BEGIN + 32,
 
         /// Child table addresses
         /** Format: `A(t(ESA(6)))` - Read only
@@ -964,7 +964,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `A(6)`: List of IPv6 addresses registered by the child (if any)
          *
          */
-        public const int SPINEL_PROP_THREAD_CHILD_TABLE_ADDRESSES = SPINEL_PROP_THREAD_EXT__BEGIN + 33;
+        SPINEL_PROP_THREAD_CHILD_TABLE_ADDRESSES = SPINEL_PROP_THREAD_EXT__BEGIN + 33,
 
         /// Neighbor Table Frame and Message Error Rates
         /** Format: `A(t(ESSScc))`
@@ -988,7 +988,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `c`: Last RSSI (in dBm)
          *
          */
-        public const int SPINEL_PROP_THREAD_NEIGHBOR_TABLE_ERROR_RATES = SPINEL_PROP_THREAD_EXT__BEGIN + 34;
+        SPINEL_PROP_THREAD_NEIGHBOR_TABLE_ERROR_RATES = SPINEL_PROP_THREAD_EXT__BEGIN + 34,
 
         /// EID (Endpoint Identifier) IPv6 Address Cache Table
         /** Format `A(t(6SC))`
@@ -1002,7 +1002,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `C` : Age (order of use, 0 indicates most recently used entry)
          *
          */
-        public const int SPINEL_PROP_THREAD_ADDRESS_CACHE_TABLE = SPINEL_PROP_THREAD_EXT__BEGIN + 35;
+        SPINEL_PROP_THREAD_ADDRESS_CACHE_TABLE = SPINEL_PROP_THREAD_EXT__BEGIN + 35,
 
         /// Thread UDP forward stream
         /** Format `dS6S`
@@ -1016,7 +1016,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `S`: Local UDP port
          *
          */
-        public const int SPINEL_PROP_THREAD_UDP_FORWARD_STREAM = SPINEL_PROP_THREAD_EXT__BEGIN + 36;
+        SPINEL_PROP_THREAD_UDP_FORWARD_STREAM = SPINEL_PROP_THREAD_EXT__BEGIN + 36,
 
         /// Send MGMT_GET Thread Active Operational Dataset
         /** Format: `A(t(iD))` - Write only
@@ -1036,7 +1036,7 @@ namespace dotNETCore.OpenThread.Spinel
          *    SPINEL_PROP_DATASET_DEST_ADDRESS
          *
          */
-        public const int SPINEL_PROP_THREAD_MGMT_GET_ACTIVE_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 37;
+        SPINEL_PROP_THREAD_MGMT_GET_ACTIVE_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 37,
 
         /// Send MGMT_GET Thread Pending Operational Dataset
         /** Format: `A(t(iD))` - Write only
@@ -1048,7 +1048,7 @@ namespace dotNETCore.OpenThread.Spinel
          * of MGMT_PENDING_GET command.
          *
          */
-        public const int SPINEL_PROP_THREAD_MGMT_GET_PENDING_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 38;
+        SPINEL_PROP_THREAD_MGMT_GET_PENDING_DATASET = SPINEL_PROP_THREAD_EXT__BEGIN + 38,
 
         /// Operational Dataset (MGMT_GET) Destination IPv6 Address
         /** Format: `6` - No direct read or write
@@ -1062,31 +1062,31 @@ namespace dotNETCore.OpenThread.Spinel
          *   SPINEL_PROP_THREAD_MGMT_GET_PENDING_DATASET
          *
          */
-        public const int SPINEL_PROP_DATASET_DEST_ADDRESS = SPINEL_PROP_THREAD_EXT__BEGIN + 39;
-        public const int PROP_THREAD_EXT__END = 0x1600;
+        SPINEL_PROP_DATASET_DEST_ADDRESS = SPINEL_PROP_THREAD_EXT__BEGIN + 39,
+        PROP_THREAD_EXT__END = 0x1600,
 
-        public const int PROP_MESHCOP_EXT__BEGIN = 0x1600;
-        public const int PROP_MESHCOP_JOINER_ENABLE = PROP_MESHCOP_EXT__BEGIN + 0;  // < [b]
-        public const int PROP_MESHCOP_JOINER_CREDENTIAL = PROP_MESHCOP_EXT__BEGIN + 1;  // < [D]
-        public const int PROP_MESHCOP_JOINER_URL = PROP_MESHCOP_EXT__BEGIN + 2;  // < [U]
-        public const int PROP_MESHCOP_BORDER_AGENT_ENABLE = PROP_MESHCOP_EXT__BEGIN + 3;  // < [b]
-        public const int PROP_MESHCOP_EXT__END = 0x1700;
+        PROP_MESHCOP_EXT__BEGIN = 0x1600,
+        PROP_MESHCOP_JOINER_ENABLE = PROP_MESHCOP_EXT__BEGIN + 0,  // < [b]
+        PROP_MESHCOP_JOINER_CREDENTIAL = PROP_MESHCOP_EXT__BEGIN + 1,  // < [D]
+        PROP_MESHCOP_JOINER_URL = PROP_MESHCOP_EXT__BEGIN + 2,  // < [U]
+        PROP_MESHCOP_BORDER_AGENT_ENABLE = PROP_MESHCOP_EXT__BEGIN + 3,  // < [b]
+        PROP_MESHCOP_EXT__END = 0x1700,
 
-        //public const int PROP_IPV6__BEGIN = 0x60;
-        //public const int PROP_IPV6_LL_ADDR = PROP_IPV6__BEGIN + 0; // // < [6]
-        //public const int PROP_IPV6_ML_ADDR = PROP_IPV6__BEGIN + 1; // // < [6C]
-        //public const int PROP_IPV6_ML_PREFIX = PROP_IPV6__BEGIN + 2; // // < [6C]                                                                 
+        //  PROP_IPV6__BEGIN = 0x60,
+        //  PROP_IPV6_LL_ADDR = PROP_IPV6__BEGIN + 0, // // < [6]
+        //  PROP_IPV6_ML_ADDR = PROP_IPV6__BEGIN + 1, // // < [6C]
+        //  PROP_IPV6_ML_PREFIX = PROP_IPV6__BEGIN + 2, // // < [6C]                                                                 
         ////// < array(ipv6addr,prefixlen,valid,preferred,flags) [A(t(6CLLC))]
-        //public const int PROP_IPV6_ADDRESS_TABLE = PROP_IPV6__BEGIN + 3;
+        //  PROP_IPV6_ADDRESS_TABLE = PROP_IPV6__BEGIN + 3,
         ////// < array(ipv6prefix,prefixlen,iface,flags) [A(t(6CCC))]
-        //public const int PROP_IPV6_ROUTE_TABLE = PROP_IPV6__BEGIN + 4;
-        //public const int PROP_IPv6_ICMP_PING_OFFLOAD = PROP_IPV6__BEGIN + 5;//  // < [b]
+        //  PROP_IPV6_ROUTE_TABLE = PROP_IPV6__BEGIN + 4,
+        //  PROP_IPv6_ICMP_PING_OFFLOAD = PROP_IPV6__BEGIN + 5,//  // < [b]
 
-        public const int SPINEL_PROP_CNTR__BEGIN = 1280;
+        SPINEL_PROP_CNTR__BEGIN = 1280,
 
         //// Counter reset behavior
         //// Format: `C`
-        public const int SPINEL_PROP_CNTR_RESET = SPINEL_PROP_CNTR__BEGIN + 0;
+        SPINEL_PROP_CNTR_RESET = SPINEL_PROP_CNTR__BEGIN + 0,
 
         //// The total number of transmissions.
         //// Format: `L` (Read-only) */
@@ -1206,10 +1206,10 @@ namespace dotNETCore.OpenThread.Spinel
         //     `S`, (ArpBuffers)             The number of buffers in the ARP send queue.
         //     `S`, (CoapClientMessages)     The number of messages in the CoAP client send queue.
         //     `S`  (CoapClientBuffers)      The number of buffers in the CoAP client send queue.
-        public const int SPINEL_PROP_MSG_BUFFER_COUNTERS = SPINEL_PROP_CNTR__BEGIN + 400;
-        public const int SPINEL_PROP_CNTR__END = 0x800;
+        SPINEL_PROP_MSG_BUFFER_COUNTERS = SPINEL_PROP_CNTR__BEGIN + 400,
+        SPINEL_PROP_CNTR__END = 0x800,
 
-        public const int SPINEL_PROP_OPENTHREAD__BEGIN = 0x1900;
+        SPINEL_PROP_OPENTHREAD__BEGIN = 0x1900,
 
         /// Channel Manager - Channel Change New Channel
         /** Format: `C` (read-write)
@@ -1224,7 +1224,7 @@ namespace dotNETCore.OpenThread.Spinel
          * (previously requested) channel change.
          *
          */
-        public const int SPINEL_PROP_CHANNEL_MANAGER_NEW_CHANNEL = SPINEL_PROP_OPENTHREAD__BEGIN + 0;
+        SPINEL_PROP_CHANNEL_MANAGER_NEW_CHANNEL = SPINEL_PROP_OPENTHREAD__BEGIN + 0,
 
         /// Channel Manager - Channel Change Delay
         /** Format 'S'
@@ -1240,7 +1240,7 @@ namespace dotNETCore.OpenThread.Spinel
          * network.
          *
          */
-        public const int SPINEL_PROP_CHANNEL_MANAGER_DELAY = SPINEL_PROP_OPENTHREAD__BEGIN + 1;
+        SPINEL_PROP_CHANNEL_MANAGER_DELAY = SPINEL_PROP_OPENTHREAD__BEGIN + 1,
 
         /// Channel Manager Supported Channels
         /** Format 'A(C)'
@@ -1250,7 +1250,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property specifies the list of supported channels.
          *
          */
-        public const int SPINEL_PROP_CHANNEL_MANAGER_SUPPORTED_CHANNELS = SPINEL_PROP_OPENTHREAD__BEGIN + 2;
+        SPINEL_PROP_CHANNEL_MANAGER_SUPPORTED_CHANNELS = SPINEL_PROP_OPENTHREAD__BEGIN + 2,
 
         /// Channel Manager Favored Channels
         /** Format 'A(C)'
@@ -1260,7 +1260,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property specifies the list of favored channels (when `ChannelManager` is asked to select channel)
          *
          */
-        public const int SPINEL_PROP_CHANNEL_MANAGER_FAVORED_CHANNELS = SPINEL_PROP_OPENTHREAD__BEGIN + 3;
+        SPINEL_PROP_CHANNEL_MANAGER_FAVORED_CHANNELS = SPINEL_PROP_OPENTHREAD__BEGIN + 3,
 
         /// Channel Manager Channel Select Trigger
         /** Format 'b'
@@ -1286,7 +1286,7 @@ namespace dotNETCore.OpenThread.Spinel
          * Reading this property always yields `false`.
          *
          */
-        public const int SPINEL_PROP_CHANNEL_MANAGER_CHANNEL_SELECT = SPINEL_PROP_OPENTHREAD__BEGIN + 4;
+        SPINEL_PROP_CHANNEL_MANAGER_CHANNEL_SELECT = SPINEL_PROP_OPENTHREAD__BEGIN + 4,
 
         /// Channel Manager Auto Channel Selection Enabled
         /** Format 'b'
@@ -1299,7 +1299,7 @@ namespace dotNETCore.OpenThread.Spinel
          * is specified by `SPINEL_PROP_CHANNEL_MANAGER_AUTO_SELECT_INTERVAL`.
          *
          */
-        public const int SPINEL_PROP_CHANNEL_MANAGER_AUTO_SELECT_ENABLED = SPINEL_PROP_OPENTHREAD__BEGIN + 5;
+        SPINEL_PROP_CHANNEL_MANAGER_AUTO_SELECT_ENABLED = SPINEL_PROP_OPENTHREAD__BEGIN + 5,
 
         /// Channel Manager Auto Channel Selection Interval
         /** Format 'L'
@@ -1310,7 +1310,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property specifies the auto-channel-selection check interval (in seconds).
          *
          */
-        public const int SPINEL_PROP_CHANNEL_MANAGER_AUTO_SELECT_INTERVAL = SPINEL_PROP_OPENTHREAD__BEGIN + 6;
+        SPINEL_PROP_CHANNEL_MANAGER_AUTO_SELECT_INTERVAL = SPINEL_PROP_OPENTHREAD__BEGIN + 6,
 
         /// Thread network time.
         /** Format: `Xc` - Read only
@@ -1321,7 +1321,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `c`: Time synchronization status.
          *
          */
-        public const int SPINEL_PROP_THREAD_NETWORK_TIME = SPINEL_PROP_OPENTHREAD__BEGIN + 7;
+        SPINEL_PROP_THREAD_NETWORK_TIME = SPINEL_PROP_OPENTHREAD__BEGIN + 7,
 
         /// Thread time synchronization period
         /** Format: `S` - Read-Write
@@ -1331,7 +1331,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `S`: Time synchronization period, in seconds.
          *
          */
-        public const int SPINEL_PROP_TIME_SYNC_PERIOD = SPINEL_PROP_OPENTHREAD__BEGIN + 8;
+        SPINEL_PROP_TIME_SYNC_PERIOD = SPINEL_PROP_OPENTHREAD__BEGIN + 8,
 
         /// Thread Time synchronization XTAL accuracy threshold for Router
         /** Format: `S` - Read-Write
@@ -1341,7 +1341,7 @@ namespace dotNETCore.OpenThread.Spinel
          *  `S`: The XTAL accuracy threshold for Router, in PPM.
          *
          */
-        public const int SPINEL_PROP_TIME_SYNC_XTAL_THRESHOLD = SPINEL_PROP_OPENTHREAD__BEGIN + 9;
+        SPINEL_PROP_TIME_SYNC_XTAL_THRESHOLD = SPINEL_PROP_OPENTHREAD__BEGIN + 9,
 
         /// Child Supervision Interval
         /** Format: `S` - Read-Write
@@ -1358,7 +1358,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property is available for FTD build only.
          *
          */
-        public const int SPINEL_PROP_CHILD_SUPERVISION_INTERVAL = SPINEL_PROP_OPENTHREAD__BEGIN + 10;
+        SPINEL_PROP_CHILD_SUPERVISION_INTERVAL = SPINEL_PROP_OPENTHREAD__BEGIN + 10,
 
         /// Child Supervision Check Timeout
         /** Format: `S` - Read-Write
@@ -1376,7 +1376,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property is available for FTD and MTD builds.
          *
          */
-        public const int SPINEL_PROP_CHILD_SUPERVISION_CHECK_TIMEOUT = SPINEL_PROP_OPENTHREAD__BEGIN + 11;
+        SPINEL_PROP_CHILD_SUPERVISION_CHECK_TIMEOUT = SPINEL_PROP_OPENTHREAD__BEGIN + 11,
 
         // RCP (NCP in radio only mode) version
         /** Format `U` - Read only
@@ -1388,7 +1388,7 @@ namespace dotNETCore.OpenThread.Spinel
          * enabled).
          *
          */
-        public const int SPINEL_PROP_RCP_VERSION = SPINEL_PROP_OPENTHREAD__BEGIN + 12;
+        SPINEL_PROP_RCP_VERSION = SPINEL_PROP_OPENTHREAD__BEGIN + 12,
 
         /// Thread Parent Response info
         /** Format: `ESccCCCb` - Asynchronous event only
@@ -1406,7 +1406,7 @@ namespace dotNETCore.OpenThread.Spinel
          * This property is available for FTD build only.
          *
          */
-        public const int SPINEL_PROP_PARENT_RESPONSE_INFO = SPINEL_PROP_OPENTHREAD__BEGIN + 13;
+        SPINEL_PROP_PARENT_RESPONSE_INFO = SPINEL_PROP_OPENTHREAD__BEGIN + 13,
 
         /// SLAAC enabled
         /** Format `b` - Read-Write
@@ -1417,6 +1417,6 @@ namespace dotNETCore.OpenThread.Spinel
          * disabled any previously added SLAAC address is removed.
          *
          */
-        public const int SPINEL_PROP_SLAAC_ENABLED = SPINEL_PROP_OPENTHREAD__BEGIN + 14;
+        SPINEL_PROP_SLAAC_ENABLED = SPINEL_PROP_OPENTHREAD__BEGIN + 14,
     }
 }

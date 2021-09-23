@@ -2936,7 +2936,7 @@ namespace dotNETCore.OpenThread.NCP
         {
             uint propertyId = frameData.PropertyId;
 
-            switch (propertyId)
+            switch ((SpinelProperties)propertyId)
             {
                 case SpinelProperties.SPINEL_PROP_LAST_STATUS:              
                 case SpinelProperties.SPINEL_PROP_STREAM_NET:
@@ -2961,7 +2961,7 @@ namespace dotNETCore.OpenThread.NCP
 
             if(frameData.TID == 0x80)
             {
-                switch (frameData.PropertyId)
+                switch ((SpinelProperties)frameData.PropertyId)
                 {
                     case SpinelProperties.SPINEL_PROP_IPV6_ADDRESS_TABLE:                       
                     case SpinelProperties.SPINEL_PROP_NET_ROLE:                        
@@ -3022,18 +3022,18 @@ namespace dotNETCore.OpenThread.NCP
             //  receivedPacketWaitHandle.Reset();
         }
 
-        private object PropertyChangeValue(int commandId, int propertyId, byte[] propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT, bool waitResponse = true)
+        private object PropertyChangeValue(int commandId, SpinelProperties propertyId, byte[] propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT, bool waitResponse = true)
         {
             FrameData responseFrame = null;
             isSyncFrameExpecting = true;
-            byte[] payload = mEncoder.EncodeValue(propertyId);
+            byte[] payload = mEncoder.EncodeValue(((int)propertyId));
 
             if (propertyFormat != null)
             {
                 payload = Utilities.CombineArrays(payload, propertyValue);
             }
 
-            int uid = Utilities.GetUID(propertyId, tid);
+            int uid = Utilities.GetUID(((int)propertyId), tid);
 
             lock (txLocker)
             {
@@ -3128,47 +3128,47 @@ namespace dotNETCore.OpenThread.NCP
             }
         }
 
-        private FrameData PropertyGetValue(int propertyId, byte tid = SpinelCommands.HEADER_DEFAULT)
+        private FrameData PropertyGetValue(SpinelProperties propertyId, byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             return PropertyChangeValue(SpinelCommands.CMD_PROP_VALUE_GET, propertyId, null, null, tid) as FrameData;
         }
 
-        private FrameData PropertySetValue(int propertyId, ushort propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
+        private FrameData PropertySetValue(SpinelProperties propertyId, ushort propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
 
             return PropertySetValue(propertyId, propertyValueArray, propertyFormat, tid);
         }
 
-        private FrameData PropertySetValue(int propertyId, byte propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
+        private FrameData PropertySetValue(SpinelProperties propertyId, byte propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
 
             return PropertySetValue(propertyId, propertyValueArray, propertyFormat, tid);
         }
 
-        private FrameData PropertySetValue(int propertyId, sbyte propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
+        private FrameData PropertySetValue(SpinelProperties propertyId, sbyte propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
 
             return PropertySetValue(propertyId, propertyValueArray, propertyFormat, tid);
         }
 
-        private FrameData PropertySetValue(int propertyId, string propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
+        private FrameData PropertySetValue(SpinelProperties propertyId, string propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
 
             return PropertySetValue(propertyId, propertyValueArray, propertyFormat, tid);
         }
 
-        private FrameData PropertySetValue(int propertyId, uint propertyValue, string propertyFormat = "L", byte tid = SpinelCommands.HEADER_DEFAULT)
+        private FrameData PropertySetValue(SpinelProperties propertyId, uint propertyValue, string propertyFormat = "L", byte tid = SpinelCommands.HEADER_DEFAULT)
         {
             byte[] propertyValueArray = mEncoder.EncodeValue(propertyValue, propertyFormat);
 
             return PropertySetValue(propertyId, propertyValueArray, propertyFormat, tid);
         }
 
-        private FrameData PropertySetValue(int propertyId, byte[] propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT, bool waitResponse = true)
+        private FrameData PropertySetValue(SpinelProperties propertyId, byte[] propertyValue, string propertyFormat = "B", byte tid = SpinelCommands.HEADER_DEFAULT, bool waitResponse = true)
         {
             return PropertyChangeValue(SpinelCommands.CMD_PROP_VALUE_SET, propertyId, propertyValue, propertyFormat, tid, waitResponse) as FrameData;
         }

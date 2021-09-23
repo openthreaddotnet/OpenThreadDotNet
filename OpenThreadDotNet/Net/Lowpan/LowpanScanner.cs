@@ -95,7 +95,7 @@ namespace dotNETCore.OpenThread.Net.Lowpan
 
         private void WpanApi_OnPropertyChanged(uint PropertyId, object PropertyValue)
         {
-            switch (PropertyId)
+            switch ((SpinelProperties)PropertyId)
             {               
                 case SpinelProperties.SPINEL_PROP_MAC_SCAN_BEACON:
 

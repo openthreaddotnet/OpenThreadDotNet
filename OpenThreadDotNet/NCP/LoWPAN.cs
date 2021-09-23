@@ -412,8 +412,8 @@ namespace dotNETCore.OpenThread.NCP
         }
 
         private void PropertyChanged(uint PropertyId, object PropertyValue)
-        {
-            switch (PropertyId)
+        {            
+            switch ((SpinelProperties)PropertyId)
             {
                 case SpinelProperties.SPINEL_PROP_LAST_STATUS:
                 
@@ -421,7 +421,7 @@ namespace dotNETCore.OpenThread.NCP
 
                     if (OnLowpanPropertyChanged != null)
                     {
-                        OnLowpanPropertyChanged(PropertyId);
+                        OnLowpanPropertyChanged((SpinelProperties)PropertyId);
                     }
 
                     break;
@@ -449,7 +449,7 @@ namespace dotNETCore.OpenThread.NCP
 
                         if (OnLowpanPropertyChanged != null)
                         {
-                            OnLowpanPropertyChanged(PropertyId);
+                            OnLowpanPropertyChanged((SpinelProperties)PropertyId);
                         }
                     }
 
@@ -468,7 +468,7 @@ namespace dotNETCore.OpenThread.NCP
 
                     if (OnLowpanPropertyChanged != null)
                     {
-                        OnLowpanPropertyChanged(PropertyId);
+                        OnLowpanPropertyChanged((SpinelProperties)PropertyId);
                     }
 
                     break;
@@ -487,7 +487,7 @@ namespace dotNETCore.OpenThread.NCP
 
                     if (OnLowpanPropertyChanged != null)
                     {
-                        OnLowpanPropertyChanged(PropertyId);
+                        OnLowpanPropertyChanged((SpinelProperties)PropertyId);
                     }
 
                     break;
@@ -499,7 +499,7 @@ namespace dotNETCore.OpenThread.NCP
 
                     if (OnLowpanPropertyChanged != null)
                     {
-                        OnLowpanPropertyChanged(PropertyId);
+                        OnLowpanPropertyChanged((SpinelProperties)PropertyId);
                     }
 
                     break;
@@ -510,7 +510,7 @@ namespace dotNETCore.OpenThread.NCP
 
                     if (OnLowpanPropertyChanged != null)
                     {
-                        OnLowpanPropertyChanged(PropertyId);
+                        OnLowpanPropertyChanged((SpinelProperties)PropertyId);
                     }
 
                     break;

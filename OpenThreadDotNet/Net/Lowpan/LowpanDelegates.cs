@@ -18,7 +18,7 @@ namespace dotNETCore.OpenThread.Net.Lowpan
     public delegate void onLowpanIdentityChanged(LowpanIdentity value);
     public delegate void onLowpanReceiveFromCommissioner(out byte[] packet);
     public delegate void LowpanLastStatusHandler(SpinelStatus value);
-    public delegate void LowpanPropertyChangedHandler(uint PropertyId);
+    public delegate void LowpanPropertyChangedHandler(SpinelProperties PropertyId);
 
     public delegate void PacketReceivedEventHandler(byte[] buffer);
 

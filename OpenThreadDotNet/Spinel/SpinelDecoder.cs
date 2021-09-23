@@ -316,8 +316,8 @@ namespace dotNETCore.OpenThread.Spinel
 
                     int struct_end = GetIndexOfEndingBrace(spinelFormat, indexFormat + 1);
                     string struct_format = spinelFormat.Substring(indexFormat + 2, struct_end-indexFormat-2);
-                    ReadUint16();
-                    //ushort struct_len = ReadUint16();             
+                    //ReadUint16();
+                    ushort struct_len = ReadUint16();             
                     result.Add(ReadFields(struct_format));
                     indexFormat = struct_end + 1;
                  

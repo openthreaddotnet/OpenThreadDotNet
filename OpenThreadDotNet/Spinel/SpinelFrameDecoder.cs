@@ -32,19 +32,10 @@ namespace dotNETCore.OpenThread.Spinel
             }
 
             uint command = mDecoder.FrameCommand;
-            uint propertyId = mDecoder.FramePropertyId;
-
-            //if (properyId == SpinelProperties.SPINEL_PROP_THREAD_CHILD_TABLE)
-            //{
-            //    if (command == SpinelCommands.RSP_PROP_VALUE_INSERTED || command == SpinelCommands.RSP_PROP_VALUE_REMOVED)
-            //    {
-            //        return null;
-            //    }
-            //}
-
+            uint propertyId = mDecoder.FramePropertyId;        
             object tempObj = null;
 
-            switch (propertyId)
+            switch ((SpinelProperties)propertyId)
             {
                 //********************************************************************************
                 //
@@ -289,7 +280,7 @@ namespace dotNETCore.OpenThread.Spinel
 
 
                 case SpinelProperties.SPINEL_PROP_THREAD_CHILD_TABLE:
-                    tempObj = mDecoder.ReadFields("A(t(ESLLCCcCc)");
+                    tempObj = mDecoder.ReadFields("A(ESLLCCcCc)");
                     break;
 
                 case SpinelProperties.SPINEL_PROP_THREAD_NEIGHBOR_TABLE:
